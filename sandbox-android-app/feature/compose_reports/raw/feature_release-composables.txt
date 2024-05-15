@@ -1,0 +1,4 @@
+restartable scheme("[androidx.compose.ui.UiComposable]") fun MyComposable(
+  stable modifier: Modifier
+  unstable testClass: TestDataClass
+)
