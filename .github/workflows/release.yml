@@ -1,8 +1,9 @@
 name: Release
+
 on:
   push:
     tags:
-      - 'v*'
+      - 'release/[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build:
@@ -12,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
 
       - name: Cache Gradle and wrapper
         uses: actions/cache@v2
@@ -26,61 +27,31 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: Set up NPM
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-          registry-url: 'https://registry.npmjs.org'
             
       - name: Grant Permission to Execute
+        working-directory: ./compose-guard
         run: chmod +x gradlew
 
       - name: 🏗 Build with Gradle 🛠️
+        working-directory: ./compose-guard
         run: ./gradlew build --stacktrace
 
-      - name: Publish Library on Maven Central
-        run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
-        env:
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-
       - name: Publish Gradle Plugin
+        working-directory: ./compose-guard
         run: |
           echo "Publishing Gradle Plugin🚀"
-          ./gradlew :gradle-plugin:publishPlugins
+          ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PLUGIN_PORTAL_KEY }}
           GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PLUGIN_PORTAL_SECRET }}
 
-      - name: Publish CLI Application 🚀
-        run: |
-          npm ci
-          npm install
-          npm install jdeploy -g
-          jdeploy publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
       - name: Create Release ✅
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN_GITHUB }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           draft: true
           prerelease: false
-          
-      - name: Upload CLI JAR ⬆️
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: cli/build/libs/cli.jar
-          asset_name: composeReport2Html.jar
-          asset_content_type: application/jar

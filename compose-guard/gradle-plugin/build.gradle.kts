@@ -1,12 +1,20 @@
 val GROUP: String by project
-val POM_NAME: String by project
 val VERSION_NAME: String by project
-val POM_DESCRIPTION: String by project
+val YEAR: String by project
+val DISPLAY_NAME: String by project
+val DESCRIPTION: String by project
+val PROJECT_URL: String by project
+val DEVELOPER_USERNAME: String by project
+val DEVELOPER_NAME: String by project
+val DEVELOPER_URL: String by project
+val PROJECT_CONNECTION: String by project
+val DEVELOPER_CONNECTION: String by project
+
 
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    alias(libs.plugins.gradle.plugin.publish)
+    alias(libs.plugins.mavenPublish)
     alias(libs.plugins.testkit)
 }
 
@@ -16,9 +24,6 @@ repositories {
     gradlePluginPortal()
     maven(url = "https://plugins.gradle.org/m2/")
 }
-
-group = GROUP
-version = VERSION_NAME
 
 dependencies {
     compileOnly(gradleApi())
@@ -43,11 +48,11 @@ tasks.getByName<Test>("test") {
 gradlePlugin {
     plugins {
         create("reportGenPlugin") {
-            id = "com.joetr.compose.guard"
-            displayName = POM_NAME
-            description = POM_DESCRIPTION
+            id = GROUP
+            displayName = DISPLAY_NAME
+            description = DESCRIPTION
+            version = VERSION_NAME
             implementationClass = "com.joetr.compose.guard.ReportGenPlugin"
-            tags.set(listOf("android", "compose", "report", "jetpackcompose", "composecompiler"))
         }
     }
 }

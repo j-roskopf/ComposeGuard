@@ -43,7 +43,7 @@ interface ComposeCompilerCheckExtension {
          */
         fun create(target: Project) =
             target.extensions.create<ComposeCompilerCheckExtension>(NAME).apply {
-                outputDirectory.convention(target.buildDir.resolve("compose_reports"))
+                outputDirectory.convention(target.layout.buildDirectory.asFile.get().resolve("compose_reports"))
             }
 
         /**

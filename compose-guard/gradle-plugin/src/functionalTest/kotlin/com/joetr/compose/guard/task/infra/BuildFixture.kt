@@ -96,7 +96,6 @@ class BuildFixture : AbstractGradleProject() {
                     withKotlin(script = script)
                 }
 
-                // todo joer probably won't work on CI
                 withFile("local.properties", "sdk.dir=${System.getProperty("user.home")}/Library/Android/sdk")
             }
 

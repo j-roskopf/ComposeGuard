@@ -11,8 +11,3 @@ Adds 3 tasks:
   - Generates new metrics and compares against golden values
 * `composeCompilerClean`
   - Deletes all compiler metrics
-    
-
-TODO
-better 'checks API'
-publishing / CI
