@@ -79,8 +79,6 @@ gradlePlugin {
     plugins {
         create("reportGenPlugin") {
             id = GROUP
-            displayName = DISPLAY_NAME
-            description = DESCRIPTION
             version = VERSION_NAME
             implementationClass = "com.joetr.compose.guard.ReportGenPlugin"
         }
