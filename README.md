@@ -11,3 +11,8 @@ Adds 3 tasks:
   - Generates new metrics and compares against golden values
 * `composeCompilerClean`
   - Deletes all compiler metrics
+
+TODO
+* https://github.com/Kotlin/binary-compatibility-validator
+* explicitApi()
+* detekt

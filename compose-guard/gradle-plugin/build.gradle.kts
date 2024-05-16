@@ -45,6 +45,36 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
+mavenPublishing {
+    coordinates(GROUP, "gradle-plugin", VERSION_NAME)
+
+    pom {
+        name.set(DISPLAY_NAME)
+        description.set(DESCRIPTION)
+        inceptionYear.set(YEAR)
+        url.set(PROJECT_URL)
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/license/mit")
+                distribution.set("https://opensource.org/license/mit")
+            }
+        }
+        developers {
+            developer {
+                id.set(DEVELOPER_USERNAME)
+                name.set(DEVELOPER_NAME)
+                url.set(DEVELOPER_URL)
+            }
+        }
+        scm {
+            url.set(PROJECT_URL)
+            connection.set(PROJECT_CONNECTION)
+            developerConnection.set(DEVELOPER_CONNECTION)
+        }
+    }
+}
+
 gradlePlugin {
     plugins {
         create("reportGenPlugin") {
