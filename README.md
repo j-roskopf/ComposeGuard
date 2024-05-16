@@ -17,7 +17,7 @@ Adds 3 tasks:
 This is required to test.
 
 * Install gnupg - https://formulae.brew.sh/formula/gnupg
-* Generate a key - https://central.sonatype.org/publish/requirements/gpg/#installing-gnupg
+* Generate a key - https://central.sonatype.org/publish/requirements/gpg/#generating-a-key-pair
   * `gpg --full-generate-key`
 * List keys and grab newly generated key (40 digits)
   * `gpg --list-keys`

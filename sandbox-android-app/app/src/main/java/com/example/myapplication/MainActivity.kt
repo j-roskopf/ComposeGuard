@@ -32,6 +32,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     MyComposable(
         modifier = modifier,
         testClass = testClass,
+        nonDefaultParameter = 2,
     )
 }
 

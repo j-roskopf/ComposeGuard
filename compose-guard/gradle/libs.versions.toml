@@ -17,7 +17,7 @@ kotlinx-html-jvm = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.
 kotlinx-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version.ref = "kotlinxCli" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-junit =  { module = "junit:junit", version = "4.13.2" }
+junit-four =  { module = "junit:junit", version = "4.13.2" }
 assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version = "0.25" }
 testkit-support = { module =  "com.autonomousapps:gradle-testkit-support", version = "0.15"}
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }

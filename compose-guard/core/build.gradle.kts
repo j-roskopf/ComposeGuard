@@ -54,4 +54,6 @@ mavenPublishing {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.junit.four)
 }

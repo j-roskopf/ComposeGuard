@@ -1,4 +1,5 @@
 restartable scheme("[androidx.compose.ui.UiComposable]") fun MyComposable(
-  stable modifier: Modifier
+  stable modifier: Modifier? = @static Companion
   unstable testClass: TestDataClass
+  stable nonDefaultParameter: Int
 )
