@@ -24,6 +24,8 @@
 package com.joetr.compose.guard.core.parser
 
 import com.joetr.compose.guard.core.exception.ParsingException
+import com.joetr.compose.guard.core.mapper.ConditionMapper
+import com.joetr.compose.guard.core.mapper.StabilityStatusMapper
 import com.joetr.compose.guard.core.model.RawContent
 import com.joetr.compose.guard.core.model.composables.ComposableDetail
 import com.joetr.compose.guard.core.model.composables.ComposablesReport
@@ -87,7 +89,9 @@ object ComposableReportParser : Parser<String, ComposablesReport> {
 
         val params =
             REGEX_COMPOSABLE_PARAMETERS.findAll(function).map { it.groupValues }.filter { it.isNotEmpty() }
-                .map { ComposableDetail.Parameter(com.joetr.compose.guard.core.mapper.ConditionMapper.from(it[1]), it[2]) }.toList()
+                .map {
+                    ComposableDetail.Parameter(ConditionMapper.from(it[1]), StabilityStatusMapper.from(it[0]), it[2])
+                }.toList()
 
         return ComposableDetail(
             functionName = functionName,
