@@ -2,7 +2,6 @@ val GROUP: String by project
 val VERSION_NAME: String by project
 val YEAR: String by project
 val DISPLAY_NAME: String by project
-val DESCRIPTION: String by project
 val PROJECT_URL: String by project
 val DEVELOPER_USERNAME: String by project
 val DEVELOPER_NAME: String by project

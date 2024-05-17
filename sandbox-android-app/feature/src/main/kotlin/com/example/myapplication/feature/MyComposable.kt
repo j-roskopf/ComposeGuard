@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun MyComposable(modifier: Modifier, testClass: TestDataClass) {
+fun MyComposable(modifier: Modifier = Modifier, testClass: TestDataClass = TestDataClass("default"), nonDefaultParameter: Int) {
     Text(
         modifier = modifier,
-        text = testClass.name,
+        text = testClass.name.plus(nonDefaultParameter),
     )
 }
 

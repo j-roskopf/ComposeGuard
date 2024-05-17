@@ -119,13 +119,52 @@ class ComposeCompilerReportCheckTaskTest {
         // assert check fails with new unstable class
         val checkTask = ":android:releaseComposeCompilerCheck"
         val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New unstable classes were added!")
         assertThat(checkResult.output).contains(
+            "ClassDetail(className=AnotherUnstableClass, stability=UNSTABLE, runtimeStability=UNSTABLE, " +
+                "fields=[Field(status=stable, details=var unstable: String)], " +
+                "rawContent=RawContent(content=unstable class AnotherUnstableClass {",
+        )
+        assertThat(checkResult.output).contains("stable var unstable: String")
+        assertThat(checkResult.output).contains("<runtime stability> = Unstable")
+        assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
+    fun `can detect when new dynamic properties were added`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // generate golden
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // add new unstable class
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
             """
-            New unstable classes were added! ClassDetail(className=AnotherUnstableClass, stability=UNSTABLE, runtimeStability=UNSTABLE, fields=[Field(status=stable, details=var unstable: String)], rawContent=RawContent(content=unstable class AnotherUnstableClass {
-              stable var unstable: String
-              <runtime stability> = Unstable
-            }))
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class Test(var name: String)
+
+            @Composable
+            // added default parameter
+            fun TestComposable(test: Test = Test("default")) {
+                Text(text = test.name)
+            }
             """.trimIndent(),
+        )
+
+        // assert check fails with new unstable class
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New @dynamic parameters were added!")
+        assertThat(
+            checkResult.output,
+        ).contains(
+            "FunctionAndParameter(functionName=TestComposable, parameterName=test, parameterType=Test? = @dynamic Test(\"default\"))",
         )
         assertThat(checkResult).task(checkTask).failed()
     }

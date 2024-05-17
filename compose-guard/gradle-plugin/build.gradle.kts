@@ -33,7 +33,7 @@ dependencies {
 
     implementation(project(":core"))
 
-    functionalTestImplementation(libs.junit)
+    functionalTestImplementation(libs.junit.four)
     functionalTestImplementation(libs.assertk)
     //functionalTestImplementation(libs.testkit.support)
     // todo joer remove if changes get upstreamed - https://github.com/autonomousapps/dependency-analysis-gradle-plugin/pull/1187
@@ -78,9 +78,7 @@ mavenPublishing {
 gradlePlugin {
     plugins {
         create("reportGenPlugin") {
-            id = "com.joetr.compose.guard.report.plugin"
-            displayName = DISPLAY_NAME
-            description = DESCRIPTION
+            id = GROUP
             version = VERSION_NAME
             implementationClass = "com.joetr.compose.guard.ReportGenPlugin"
         }

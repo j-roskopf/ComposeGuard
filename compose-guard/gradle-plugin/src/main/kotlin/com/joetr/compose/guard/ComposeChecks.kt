@@ -24,6 +24,8 @@
 package com.joetr.compose.guard
 
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
+import com.joetr.compose.guard.core.model.StabilityStatus
+import com.joetr.compose.guard.core.model.composables.ComposableDetail
 import org.gradle.api.GradleException
 
 object ComposeChecks {
@@ -31,8 +33,55 @@ object ComposeChecks {
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
     ) {
+        checkDynamicDefaultExpressions(checkedMetrics, goldenMetrics)
         checkUnstableClasses(checkedMetrics, goldenMetrics)
         checkSkippableButNotRestartableComposables(checkedMetrics, goldenMetrics)
+    }
+
+    private fun checkDynamicDefaultExpressions(
+        checkedMetrics: ComposeCompilerMetricsProvider,
+        goldenMetrics: ComposeCompilerMetricsProvider,
+    ) {
+        val checkedParametersMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
+        checkedMetrics.getComposablesReport().composables.forEach { composable ->
+            composable.params.filter {
+                it.stabilityStatus == StabilityStatus.DYNAMIC
+            }.forEach { param ->
+                checkedParametersMap[
+                    ComposableDetail.FunctionAndParameter(
+                        functionName = composable.functionName,
+                        parameterName = param.name,
+                        parameterType = param.type,
+                    ),
+                ] = param.stabilityStatus.toString()
+            }
+        }
+
+        val goldenParametersMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
+        goldenMetrics.getComposablesReport().composables.forEach { composable ->
+            composable.params.filter {
+                it.stabilityStatus == StabilityStatus.DYNAMIC
+            }.forEach { param ->
+                goldenParametersMap[
+                    ComposableDetail.FunctionAndParameter(
+                        functionName = composable.functionName,
+                        parameterName = param.name,
+                        parameterType = param.type,
+                    ),
+                ] = param.stabilityStatus.toString()
+            }
+        }
+
+        checkedParametersMap.keys.removeAll(goldenParametersMap.keys)
+
+        if (checkedParametersMap.isNotEmpty()) {
+            throw GradleException(
+                "New @dynamic parameters were added! \n" +
+                    checkedParametersMap.keys.joinToString(separator = ",") + "\n" +
+                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "#default-parameter-expressions-that-are-dynamic",
+            )
+        }
     }
 
     private fun checkSkippableButNotRestartableComposables(
@@ -46,8 +95,10 @@ object ComposeChecks {
                 checkedMetrics.getComposablesReport().restartableButNotSkippableComposables -
                     goldenMetrics.getComposablesReport().restartableButNotSkippableComposables.toSet()
             throw GradleException(
-                "New Composables were added that are restartable but not skippable! " +
-                    difference.joinToString(","),
+                "New Composables were added that are restartable but not skippable! \n" +
+                    difference.joinToString(",") + "\n" +
+                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "#functions-that-are-restartable-but-not-skippable",
             )
         }
     }
@@ -61,7 +112,10 @@ object ComposeChecks {
                 checkedMetrics.getClassesReport().unstableClasses -
                     goldenMetrics.getClassesReport().unstableClasses.toSet()
             throw GradleException(
-                "New unstable classes were added! ${difference.joinToString(",")}",
+                "New unstable classes were added! \n" +
+                    difference.joinToString(",") + "\n" +
+                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "#classes-that-are-unstable",
             )
         }
     }

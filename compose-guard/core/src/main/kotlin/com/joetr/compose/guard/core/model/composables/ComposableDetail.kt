@@ -25,6 +25,7 @@ package com.joetr.compose.guard.core.model.composables
 
 import com.joetr.compose.guard.core.model.Condition
 import com.joetr.compose.guard.core.model.RawContent
+import com.joetr.compose.guard.core.model.StabilityStatus
 
 /**
  * Model for holding Detail of a composable function
@@ -49,7 +50,7 @@ data class ComposableDetail(
      * @property condition Stability condition of a parameter
      * @property details Name and type details of a parameter
      */
-    data class Parameter(val condition: Condition, val details: String) {
+    data class Parameter(val condition: Condition, val stabilityStatus: StabilityStatus, val details: String) {
         private val nameAndType by lazy {
             details.split(":").map { it.trim() }.let { (name, type) -> name to type }
         }
@@ -64,4 +65,10 @@ data class ComposableDetail(
          */
         val type: String get() = nameAndType.second
     }
+
+    data class FunctionAndParameter(
+        val functionName: String,
+        val parameterName: String,
+        val parameterType: String,
+    )
 }
