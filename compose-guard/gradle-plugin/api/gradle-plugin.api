@@ -1,0 +1,58 @@
+public final class com/joetr/compose/guard/ComposeChecks {
+	public static final field INSTANCE Lcom/joetr/compose/guard/ComposeChecks;
+	public final fun check (Lcom/joetr/compose/guard/core/ComposeCompilerMetricsProvider;Lcom/joetr/compose/guard/core/ComposeCompilerMetricsProvider;)V
+}
+
+public abstract interface class com/joetr/compose/guard/ComposeCompilerCheckExtension {
+	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerCheckExtension$Companion;
+	public fun getComposeRawMetricsOutputDirectory ()Ljava/io/File;
+	public abstract fun getOutputDirectory ()Lorg/gradle/api/provider/Property;
+}
+
+public final class com/joetr/compose/guard/ComposeCompilerCheckExtension$Companion {
+	public final fun create (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerCheckExtension;
+	public final fun get (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerCheckExtension;
+}
+
+public abstract interface class com/joetr/compose/guard/ComposeCompilerReportExtension {
+	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerReportExtension$Companion;
+	public fun getComposeRawMetricsOutputDirectory ()Ljava/io/File;
+	public abstract fun getOutputDirectory ()Lorg/gradle/api/provider/Property;
+}
+
+public final class com/joetr/compose/guard/ComposeCompilerReportExtension$Companion {
+	public final fun create (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerReportExtension;
+	public final fun get (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerReportExtension;
+}
+
+public final class com/joetr/compose/guard/KeysKt {
+	public static final field KEY_CHECK_GEN Ljava/lang/String;
+	public static final field KEY_GOLDEN_GEN Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/ReportGenPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public abstract class com/joetr/compose/guard/task/ComposeCompilerReportCheckTask : org/gradle/api/DefaultTask {
+	public fun <init> ()V
+	public final fun check ()V
+	public abstract fun getCompileKotlinTasks ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOutputDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+}
+
+public abstract class com/joetr/compose/guard/task/ComposeCompilerReportCleanTask : org/gradle/api/DefaultTask {
+	public fun <init> ()V
+	public final fun generate ()V
+}
+
+public abstract class com/joetr/compose/guard/task/ComposeCompilerReportGenerateTask : org/gradle/api/DefaultTask {
+	public fun <init> ()V
+	public final fun generate ()V
+	public abstract fun getCompileKotlinTasks ()Lorg/gradle/api/provider/Property;
+	public abstract fun getComposeRawMetricsOutputDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+	public abstract fun getOutputDirectory ()Lorg/gradle/api/file/DirectoryProperty;
+}
+

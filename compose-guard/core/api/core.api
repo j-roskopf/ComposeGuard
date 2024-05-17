@@ -1,0 +1,282 @@
+public abstract interface class com/joetr/compose/guard/core/ComposeCompilerMetricsProvider {
+	public abstract fun getClassesReport ()Lcom/joetr/compose/guard/core/model/classes/ClassesReport;
+	public abstract fun getComposablesReport ()Lcom/joetr/compose/guard/core/model/composables/ComposablesReport;
+	public abstract fun getDetailedStatistics ()Lcom/joetr/compose/guard/core/model/DetailedStatistics;
+	public abstract fun getOverallStatistics ()Ljava/util/Map;
+}
+
+public final class com/joetr/compose/guard/core/ComposeCompilerMetricsProviderKt {
+	public static final fun ComposeCompilerMetricsProvider (Lcom/joetr/compose/guard/core/ComposeCompilerRawReportProvider;)Lcom/joetr/compose/guard/core/ComposeCompilerMetricsProvider;
+}
+
+public abstract interface class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider {
+	public abstract fun getBriefStatisticsJsonFiles ()Ljava/util/List;
+	public abstract fun getClassesReportFiles ()Ljava/util/List;
+	public abstract fun getComposableReportFiles ()Ljava/util/List;
+	public abstract fun getDetailedStatisticsCsvFiles ()Ljava/util/List;
+}
+
+public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider$FromDirectory : com/joetr/compose/guard/core/ComposeCompilerRawReportProvider {
+	public fun <init> (Ljava/io/File;)V
+	public fun getBriefStatisticsJsonFiles ()Ljava/util/List;
+	public fun getClassesReportFiles ()Ljava/util/List;
+	public fun getComposableReportFiles ()Ljava/util/List;
+	public fun getDetailedStatisticsCsvFiles ()Ljava/util/List;
+}
+
+public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider$FromIndividualFiles : com/joetr/compose/guard/core/ComposeCompilerRawReportProvider {
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
+	public fun getBriefStatisticsJsonFiles ()Ljava/util/List;
+	public fun getClassesReportFiles ()Ljava/util/List;
+	public fun getComposableReportFiles ()Ljava/util/List;
+	public fun getDetailedStatisticsCsvFiles ()Ljava/util/List;
+}
+
+public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProviderKt {
+	public static final fun validateComposeCompilerRawReportProvider (Lcom/joetr/compose/guard/core/ComposeCompilerRawReportProvider;)V
+}
+
+public final class com/joetr/compose/guard/core/ComposeMetricsContentProvider {
+	public fun <init> (Lcom/joetr/compose/guard/core/ComposeCompilerRawReportProvider;)V
+	public final fun getBriefStatisticsContents ()Ljava/util/List;
+	public final fun getClassesReportContents ()Ljava/lang/String;
+	public final fun getComposablesReportContents ()Ljava/lang/String;
+	public final fun getDetailedStatisticsCsvRows ()Ljava/util/List;
+}
+
+public final class com/joetr/compose/guard/core/exception/ParsingException : java/lang/RuntimeException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContent ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/file/ReportAndMetricsFileFinder {
+	public fun <init> (Ljava/io/File;)V
+	public final fun findBriefStatisticsJsonFile ()Ljava/util/List;
+	public final fun findClassesReportTxtFile ()Ljava/util/List;
+	public final fun findComposablesReportTxtFile ()Ljava/util/List;
+	public final fun findDetailsStatisticsCsvFile ()Ljava/util/List;
+}
+
+public final class com/joetr/compose/guard/core/mapper/ConditionMapper {
+	public static final field INSTANCE Lcom/joetr/compose/guard/core/mapper/ConditionMapper;
+	public final fun from (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/Condition;
+}
+
+public final class com/joetr/compose/guard/core/mapper/StabilityStatusMapper {
+	public static final field INSTANCE Lcom/joetr/compose/guard/core/mapper/StabilityStatusMapper;
+	public final fun from (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/StabilityStatus;
+}
+
+public final class com/joetr/compose/guard/core/model/Condition : java/lang/Enum {
+	public static final field MISSING Lcom/joetr/compose/guard/core/model/Condition;
+	public static final field STABLE Lcom/joetr/compose/guard/core/model/Condition;
+	public static final field UNSTABLE Lcom/joetr/compose/guard/core/model/Condition;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/Condition;
+	public static fun values ()[Lcom/joetr/compose/guard/core/model/Condition;
+}
+
+public final class com/joetr/compose/guard/core/model/DetailedStatistics {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/joetr/compose/guard/core/model/DetailedStatistics;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/DetailedStatistics;Ljava/util/List;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/DetailedStatistics;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeaders ()Ljava/util/List;
+	public final fun getItems ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/Item {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/Item;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/Item;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/Item;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/RawContent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/RawContent;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/RawContent;Ljava/lang/String;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/RawContent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/RowItems {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/joetr/compose/guard/core/model/RowItems;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/RowItems;Ljava/util/List;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/RowItems;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getItem ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/StabilityStatus : java/lang/Enum {
+	public static final field DYNAMIC Lcom/joetr/compose/guard/core/model/StabilityStatus;
+	public static final field MISSING Lcom/joetr/compose/guard/core/model/StabilityStatus;
+	public static final field STATIC Lcom/joetr/compose/guard/core/model/StabilityStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/StabilityStatus;
+	public static fun values ()[Lcom/joetr/compose/guard/core/model/StabilityStatus;
+}
+
+public final class com/joetr/compose/guard/core/model/classes/ClassDetail {
+	public fun <init> (Ljava/lang/String;Lcom/joetr/compose/guard/core/model/Condition;Lcom/joetr/compose/guard/core/model/Condition;Ljava/util/List;Lcom/joetr/compose/guard/core/model/RawContent;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/joetr/compose/guard/core/model/Condition;
+	public final fun component3 ()Lcom/joetr/compose/guard/core/model/Condition;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Lcom/joetr/compose/guard/core/model/RawContent;
+	public final fun copy (Ljava/lang/String;Lcom/joetr/compose/guard/core/model/Condition;Lcom/joetr/compose/guard/core/model/Condition;Ljava/util/List;Lcom/joetr/compose/guard/core/model/RawContent;)Lcom/joetr/compose/guard/core/model/classes/ClassDetail;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/classes/ClassDetail;Ljava/lang/String;Lcom/joetr/compose/guard/core/model/Condition;Lcom/joetr/compose/guard/core/model/Condition;Ljava/util/List;Lcom/joetr/compose/guard/core/model/RawContent;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/classes/ClassDetail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClassName ()Ljava/lang/String;
+	public final fun getFields ()Ljava/util/List;
+	public final fun getRawContent ()Lcom/joetr/compose/guard/core/model/RawContent;
+	public final fun getRuntimeStability ()Lcom/joetr/compose/guard/core/model/Condition;
+	public final fun getStability ()Lcom/joetr/compose/guard/core/model/Condition;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/classes/ClassDetail$Field {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/classes/ClassDetail$Field;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/classes/ClassDetail$Field;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/classes/ClassDetail$Field;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDetails ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getStatus ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/classes/ClassesReport {
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/List;)Lcom/joetr/compose/guard/core/model/classes/ClassesReport;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/classes/ClassesReport;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/classes/ClassesReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClasses ()Ljava/util/List;
+	public final fun getErrors ()Ljava/util/List;
+	public final fun getStableClasses ()Ljava/util/List;
+	public final fun getUnstableClasses ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/composables/ComposableDetail {
+	public fun <init> (Ljava/lang/String;ZZZLjava/util/List;Lcom/joetr/compose/guard/core/model/RawContent;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Lcom/joetr/compose/guard/core/model/RawContent;
+	public final fun copy (Ljava/lang/String;ZZZLjava/util/List;Lcom/joetr/compose/guard/core/model/RawContent;)Lcom/joetr/compose/guard/core/model/composables/ComposableDetail;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/composables/ComposableDetail;Ljava/lang/String;ZZZLjava/util/List;Lcom/joetr/compose/guard/core/model/RawContent;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/composables/ComposableDetail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionName ()Ljava/lang/String;
+	public final fun getParams ()Ljava/util/List;
+	public final fun getRawContent ()Lcom/joetr/compose/guard/core/model/RawContent;
+	public fun hashCode ()I
+	public final fun isInline ()Z
+	public final fun isRestartable ()Z
+	public final fun isSkippable ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/composables/ComposableDetail$FunctionAndParameter {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/composables/ComposableDetail$FunctionAndParameter;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/composables/ComposableDetail$FunctionAndParameter;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/composables/ComposableDetail$FunctionAndParameter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionName ()Ljava/lang/String;
+	public final fun getParameterName ()Ljava/lang/String;
+	public final fun getParameterType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/composables/ComposableDetail$Parameter {
+	public fun <init> (Lcom/joetr/compose/guard/core/model/Condition;Lcom/joetr/compose/guard/core/model/StabilityStatus;Ljava/lang/String;ZLjava/lang/String;)V
+	public final fun component1 ()Lcom/joetr/compose/guard/core/model/Condition;
+	public final fun component2 ()Lcom/joetr/compose/guard/core/model/StabilityStatus;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Lcom/joetr/compose/guard/core/model/Condition;Lcom/joetr/compose/guard/core/model/StabilityStatus;Ljava/lang/String;ZLjava/lang/String;)Lcom/joetr/compose/guard/core/model/composables/ComposableDetail$Parameter;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/composables/ComposableDetail$Parameter;Lcom/joetr/compose/guard/core/model/Condition;Lcom/joetr/compose/guard/core/model/StabilityStatus;Ljava/lang/String;ZLjava/lang/String;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/composables/ComposableDetail$Parameter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCondition ()Lcom/joetr/compose/guard/core/model/Condition;
+	public final fun getDetails ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getRaw ()Ljava/lang/String;
+	public final fun getStabilityStatus ()Lcom/joetr/compose/guard/core/model/StabilityStatus;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getUnused ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/model/composables/ComposablesReport {
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/List;)Lcom/joetr/compose/guard/core/model/composables/ComposablesReport;
+	public static synthetic fun copy$default (Lcom/joetr/compose/guard/core/model/composables/ComposablesReport;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcom/joetr/compose/guard/core/model/composables/ComposablesReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getComposables ()Ljava/util/List;
+	public final fun getErrors ()Ljava/util/List;
+	public final fun getNonIssuesComposables ()Ljava/util/List;
+	public final fun getRestartableButNotSkippableComposables ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/parser/ClassReportParser : com/joetr/compose/guard/core/parser/Parser {
+	public static final field INSTANCE Lcom/joetr/compose/guard/core/parser/ClassReportParser;
+	public synthetic fun parse (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun parse (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/classes/ClassesReport;
+}
+
+public final class com/joetr/compose/guard/core/parser/ComposableReportParser : com/joetr/compose/guard/core/parser/Parser {
+	public static final field INSTANCE Lcom/joetr/compose/guard/core/parser/ComposableReportParser;
+	public synthetic fun parse (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun parse (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/composables/ComposablesReport;
+}
+
+public abstract interface class com/joetr/compose/guard/core/parser/Parser {
+	public abstract fun parse (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/joetr/compose/guard/core/utils/CamelCaseToWordKt {
+	public static final fun camelCaseToWord (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class com/joetr/compose/guard/core/utils/FileUtilsKt {
+	public static final fun cleanupDirectory (Ljava/io/File;)V
+	public static final fun ensureDirectory (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
+	public static final fun ensureFileExists (Ljava/io/File;Lkotlin/jvm/functions/Function0;)Ljava/io/File;
+}
+

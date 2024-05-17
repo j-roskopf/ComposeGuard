@@ -6,6 +6,7 @@ val VERSION_NAME: String by project
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     alias(libs.plugins.spotless)
+    alias(libs.plugins.compatibility.validator)
     alias(libs.plugins.mavenPublish) apply false
 }
 

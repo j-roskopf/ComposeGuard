@@ -30,4 +30,4 @@ junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref 
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 testkit = { id = "com.autonomousapps.testkit", version = "0.10" }
-
+compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.15.0-Beta.2"}

@@ -1,0 +1,1012 @@
+public abstract class com/autonomousapps/kit/AbstractGradleProject {
+	public static final field Companion Lcom/autonomousapps/kit/AbstractGradleProject$Companion;
+	public static final field FUNC_TEST_INCLUDED_BUILD_REPOS Ljava/util/List;
+	public static final field FUNC_TEST_REPO Ljava/lang/String;
+	public static final field PLUGIN_UNDER_TEST_VERSION Ljava/lang/String;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getRootDir ()Ljava/nio/file/Path;
+	protected fun newGradleProjectBuilder ()Lcom/autonomousapps/kit/GradleProject$Builder;
+	protected fun newGradleProjectBuilder (Lcom/autonomousapps/kit/GradleProject$DslKind;)Lcom/autonomousapps/kit/GradleProject$Builder;
+}
+
+public final class com/autonomousapps/kit/AbstractGradleProject$Companion {
+}
+
+public final class com/autonomousapps/kit/File {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getPath ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/GradleBuilder {
+	public static final field INSTANCE Lcom/autonomousapps/kit/GradleBuilder;
+	public static final fun build (Ljava/io/File;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun build (Ljava/nio/file/Path;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun build (Lorg/gradle/util/GradleVersion;Ljava/io/File;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun build (Lorg/gradle/util/GradleVersion;Ljava/nio/file/Path;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun buildAndFail (Ljava/io/File;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun buildAndFail (Ljava/nio/file/Path;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun buildAndFail (Lorg/gradle/util/GradleVersion;Ljava/io/File;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun buildAndFail (Lorg/gradle/util/GradleVersion;Ljava/nio/file/Path;[Ljava/lang/String;)Lorg/gradle/testkit/runner/BuildResult;
+	public static final fun runner (Lorg/gradle/util/GradleVersion;Ljava/io/File;[Ljava/lang/String;)Lorg/gradle/testkit/runner/GradleRunner;
+	public static final fun runner (Lorg/gradle/util/GradleVersion;Ljava/nio/file/Path;[Ljava/lang/String;)Lorg/gradle/testkit/runner/GradleRunner;
+}
+
+public final class com/autonomousapps/kit/GradleProject {
+	public fun <init> (Ljava/io/File;Lcom/autonomousapps/kit/GradleProject$DslKind;Lcom/autonomousapps/kit/Subproject;Lcom/autonomousapps/kit/RootProject;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/io/File;Lcom/autonomousapps/kit/GradleProject$DslKind;Lcom/autonomousapps/kit/Subproject;Lcom/autonomousapps/kit/RootProject;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun artifacts (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun artifacts (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public static synthetic fun artifacts$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun buildDir (Lcom/autonomousapps/kit/Subproject;)Ljava/nio/file/Path;
+	public final fun buildDir (Lcom/autonomousapps/kit/Subproject;Ljava/lang/String;)Ljava/nio/file/Path;
+	public final fun buildDir (Ljava/lang/String;)Ljava/nio/file/Path;
+	public final fun buildDir (Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
+	public static synthetic fun buildDir$default (Lcom/autonomousapps/kit/GradleProject;Lcom/autonomousapps/kit/Subproject;Ljava/lang/String;ILjava/lang/Object;)Ljava/nio/file/Path;
+	public static synthetic fun buildDir$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/nio/file/Path;
+	public final fun findArtifact (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun findArtifact (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public static synthetic fun findArtifact$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun findIncludedBuild (Ljava/lang/String;)Lcom/autonomousapps/kit/GradleProject;
+	public final fun getArtifact (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun getArtifact (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public static synthetic fun getArtifact$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun getBuildSrc ()Lcom/autonomousapps/kit/Subproject;
+	public final fun getDslKind ()Lcom/autonomousapps/kit/GradleProject$DslKind;
+	public final fun getIncludedBuild (Ljava/lang/String;)Lcom/autonomousapps/kit/GradleProject;
+	public final fun getIncludedBuilds ()Ljava/util/List;
+	public final fun getRootDir ()Ljava/io/File;
+	public final fun getRootProject ()Lcom/autonomousapps/kit/RootProject;
+	public final fun getSubprojects ()Ljava/util/List;
+	public final fun projectDir (Lcom/autonomousapps/kit/Subproject;)Ljava/nio/file/Path;
+	public final fun projectDir (Ljava/lang/String;)Ljava/nio/file/Path;
+	public final fun singleArtifact (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun singleArtifact (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public static synthetic fun singleArtifact$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/artifacts/BuildArtifact;
+	public final fun write ()Lcom/autonomousapps/kit/GradleProject;
+	public final fun writer ()Lcom/autonomousapps/kit/GradleProjectWriter;
+}
+
+public final class com/autonomousapps/kit/GradleProject$Builder {
+	public fun <init> (Ljava/io/File;)V
+	public fun <init> (Ljava/io/File;Lcom/autonomousapps/kit/GradleProject$DslKind;)V
+	public synthetic fun <init> (Ljava/io/File;Lcom/autonomousapps/kit/GradleProject$DslKind;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun build ()Lcom/autonomousapps/kit/GradleProject;
+	public final fun withAndroidLibProject (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/autonomousapps/kit/GradleProject$Builder;
+	public final fun withAndroidSubproject (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/autonomousapps/kit/GradleProject$Builder;
+	public final fun withBuildSrc (Lkotlin/jvm/functions/Function1;)Lcom/autonomousapps/kit/GradleProject$Builder;
+	public final fun withIncludedBuild (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/autonomousapps/kit/GradleProject$Builder;
+	public final fun withRootProject (Lkotlin/jvm/functions/Function1;)Lcom/autonomousapps/kit/GradleProject$Builder;
+	public final fun withSubproject (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/autonomousapps/kit/GradleProject$Builder;
+	public final fun write ()Lcom/autonomousapps/kit/GradleProject;
+}
+
+public final class com/autonomousapps/kit/GradleProject$DslKind : java/lang/Enum {
+	public static final field GROOVY Lcom/autonomousapps/kit/GradleProject$DslKind;
+	public static final field KOTLIN Lcom/autonomousapps/kit/GradleProject$DslKind;
+	public final fun getBuildFile ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getInitFile ()Ljava/lang/String;
+	public final fun getSettingsFile ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/autonomousapps/kit/GradleProject$DslKind;
+	public static fun values ()[Lcom/autonomousapps/kit/GradleProject$DslKind;
+}
+
+public final class com/autonomousapps/kit/GradleProjectWriter {
+	public fun <init> (Lcom/autonomousapps/kit/GradleProject;)V
+	public final fun write ()V
+}
+
+public final class com/autonomousapps/kit/RootProject : com/autonomousapps/kit/Subproject {
+	public fun <init> (Ljava/lang/String;Lcom/autonomousapps/kit/gradle/GradleProperties;Lcom/autonomousapps/kit/gradle/SettingsScript;Lcom/autonomousapps/kit/gradle/BuildScript;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/autonomousapps/kit/gradle/GradleProperties;Lcom/autonomousapps/kit/gradle/SettingsScript;Lcom/autonomousapps/kit/gradle/BuildScript;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getGradleProperties ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun getSettingsScript ()Lcom/autonomousapps/kit/gradle/SettingsScript;
+}
+
+public final class com/autonomousapps/kit/RootProject$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/RootProject;
+	public final fun getBuildScript ()Lcom/autonomousapps/kit/gradle/BuildScript;
+	public final fun getFiles ()Ljava/util/List;
+	public final fun getGradleProperties ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun getSettingsScript ()Lcom/autonomousapps/kit/gradle/SettingsScript;
+	public final fun getSources ()Ljava/util/List;
+	public final fun getVariant ()Ljava/lang/String;
+	public final fun setBuildScript (Lcom/autonomousapps/kit/gradle/BuildScript;)V
+	public final fun setGradleProperties (Lcom/autonomousapps/kit/gradle/GradleProperties;)V
+	public final fun setSettingsScript (Lcom/autonomousapps/kit/gradle/SettingsScript;)V
+	public final fun setSources (Ljava/util/List;)V
+	public final fun setVariant (Ljava/lang/String;)V
+	public final fun withBuildScript (Lkotlin/jvm/functions/Function1;)V
+	public final fun withFile (Lcom/autonomousapps/kit/File;)V
+	public final fun withFile (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun withVersionCatalog (Lcom/autonomousapps/kit/File;)V
+	public final fun withVersionCatalog (Ljava/lang/String;)V
+	public final fun withVersionCatalog (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class com/autonomousapps/kit/Source {
+	public static final field Companion Lcom/autonomousapps/kit/Source$Companion;
+	public static final field DEFAULT_SOURCE_SET Ljava/lang/String;
+	public fun <init> (Lcom/autonomousapps/kit/SourceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Lcom/autonomousapps/kit/SourceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Lcom/autonomousapps/kit/SourceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcom/autonomousapps/kit/SourceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getForceLanguage ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPath ()Ljava/lang/String;
+	public final fun getSource ()Ljava/lang/String;
+	public final fun getSourceSet ()Ljava/lang/String;
+	public final fun getSourceType ()Lcom/autonomousapps/kit/SourceType;
+	public static final fun groovy (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public static final fun groovyGradleDsl (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public static final fun java (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public static final fun kotlin (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public static final fun kotlinGradleDsl (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public static final fun scala (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/Source$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/Source;
+	public final fun getDirPath ()Ljava/lang/String;
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getForceLanguage ()Ljava/lang/String;
+	public final fun getSourceCode ()Ljava/lang/String;
+	public final fun getSourceSet ()Ljava/lang/String;
+	public final fun getSourceType ()Lcom/autonomousapps/kit/SourceType;
+	public final fun setDirPath (Ljava/lang/String;)V
+	public final fun setFileName (Ljava/lang/String;)V
+	public final fun setForceLanguage (Ljava/lang/String;)V
+	public final fun setSourceCode (Ljava/lang/String;)V
+	public final fun setSourceSet (Ljava/lang/String;)V
+	public final fun setSourceType (Lcom/autonomousapps/kit/SourceType;)V
+	public final fun withGroovy (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withGroovyGradleDsl (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withJava (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withKotlin (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withKotlinGradleDsl (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withPath (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withScala (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withSourceSet (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun withSourceSet (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public static synthetic fun withSourceSet$default (Lcom/autonomousapps/kit/Source$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/Source$Builder;
+}
+
+public final class com/autonomousapps/kit/Source$Companion {
+	public final fun groovy (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun groovyGradleDsl (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun java (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun kotlin (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun kotlinGradleDsl (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+	public final fun scala (Ljava/lang/String;)Lcom/autonomousapps/kit/Source$Builder;
+}
+
+public final class com/autonomousapps/kit/SourceType : java/lang/Enum {
+	public static final field GRADLE_GROOVY_DSL Lcom/autonomousapps/kit/SourceType;
+	public static final field GRADLE_KOTLIN_DSL Lcom/autonomousapps/kit/SourceType;
+	public static final field GROOVY Lcom/autonomousapps/kit/SourceType;
+	public static final field JAVA Lcom/autonomousapps/kit/SourceType;
+	public static final field KOTLIN Lcom/autonomousapps/kit/SourceType;
+	public static final field SCALA Lcom/autonomousapps/kit/SourceType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getFileExtension ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/autonomousapps/kit/SourceType;
+	public static fun values ()[Lcom/autonomousapps/kit/SourceType;
+}
+
+public class com/autonomousapps/kit/Subproject {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/BuildScript;Ljava/util/List;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/BuildScript;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBuildScript ()Lcom/autonomousapps/kit/gradle/BuildScript;
+	public final fun getFiles ()Ljava/util/List;
+	public final fun getIncludedBuild ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSources ()Ljava/util/List;
+	public final fun getVariant ()Ljava/lang/String;
+	public fun hashCode ()I
+}
+
+public final class com/autonomousapps/kit/Subproject$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/Subproject;
+	public final fun getBuildScript ()Lcom/autonomousapps/kit/gradle/BuildScript;
+	public final fun getFiles ()Ljava/util/List;
+	public final fun getIncludedBuild ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSources ()Ljava/util/List;
+	public final fun getVariant ()Ljava/lang/String;
+	public final fun setBuildScript (Lcom/autonomousapps/kit/gradle/BuildScript;)V
+	public final fun setFiles (Ljava/util/List;)V
+	public final fun setIncludedBuild (Ljava/lang/String;)V
+	public final fun setName (Ljava/lang/String;)V
+	public final fun setSources (Ljava/util/List;)V
+	public final fun setVariant (Ljava/lang/String;)V
+	public final fun withBuildScript (Lkotlin/jvm/functions/Function1;)V
+	public final fun withFile (Lcom/autonomousapps/kit/File;)V
+	public final fun withFile (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class com/autonomousapps/kit/android/AndroidColorRes {
+	public static final field Companion Lcom/autonomousapps/kit/android/AndroidColorRes$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/android/AndroidColorRes;
+	public static final field EMPTY Lcom/autonomousapps/kit/android/AndroidColorRes;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/android/AndroidColorRes$AndroidColor {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/android/AndroidColorRes$Companion {
+}
+
+public final class com/autonomousapps/kit/android/AndroidLayout {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getFilename ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/android/AndroidManifest {
+	public static final field Companion Lcom/autonomousapps/kit/android/AndroidManifest$Companion;
+	public static final field DEFAULT_APP Lcom/autonomousapps/kit/android/AndroidManifest;
+	public fun <init> (Ljava/lang/String;)V
+	public static final fun app (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static final fun app (Ljava/lang/String;Ljava/util/List;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static final fun appWithoutPackage (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static final fun defaultLib (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun getContent ()Ljava/lang/String;
+	public static final fun of (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static final fun simpleApp ()Lcom/autonomousapps/kit/android/AndroidManifest;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/android/AndroidManifest$Companion {
+	public final fun app (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun app (Ljava/lang/String;Ljava/util/List;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static synthetic fun app$default (Lcom/autonomousapps/kit/android/AndroidManifest$Companion;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static synthetic fun app$default (Lcom/autonomousapps/kit/android/AndroidManifest$Companion;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun appWithoutPackage (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public static synthetic fun appWithoutPackage$default (Lcom/autonomousapps/kit/android/AndroidManifest$Companion;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun defaultLib (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun of (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun simpleApp ()Lcom/autonomousapps/kit/android/AndroidManifest;
+}
+
+public final class com/autonomousapps/kit/android/AndroidStringRes {
+	public static final field Companion Lcom/autonomousapps/kit/android/AndroidStringRes$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/android/AndroidStringRes;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getContent ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/android/AndroidStringRes$Companion {
+}
+
+public final class com/autonomousapps/kit/android/AndroidStyleRes {
+	public static final field Companion Lcom/autonomousapps/kit/android/AndroidStyleRes$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getContent ()Ljava/lang/String;
+	public static final fun getDEFAULT ()Lcom/autonomousapps/kit/android/AndroidStyleRes;
+	public static final fun getEMPTY ()Lcom/autonomousapps/kit/android/AndroidStyleRes;
+	public static final fun of (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidStyleRes;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/android/AndroidStyleRes$Companion {
+	public final fun getDEFAULT ()Lcom/autonomousapps/kit/android/AndroidStyleRes;
+	public final fun getEMPTY ()Lcom/autonomousapps/kit/android/AndroidStyleRes;
+	public final fun of (Ljava/lang/String;)Lcom/autonomousapps/kit/android/AndroidStyleRes;
+}
+
+public final class com/autonomousapps/kit/android/AndroidSubproject : com/autonomousapps/kit/Subproject {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/BuildScript;Ljava/util/List;Ljava/util/List;Lcom/autonomousapps/kit/android/AndroidManifest;Lcom/autonomousapps/kit/android/AndroidStyleRes;Lcom/autonomousapps/kit/android/AndroidStringRes;Lcom/autonomousapps/kit/android/AndroidColorRes;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/BuildScript;Ljava/util/List;Ljava/util/List;Lcom/autonomousapps/kit/android/AndroidManifest;Lcom/autonomousapps/kit/android/AndroidStyleRes;Lcom/autonomousapps/kit/android/AndroidStringRes;Lcom/autonomousapps/kit/android/AndroidColorRes;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getColors ()Lcom/autonomousapps/kit/android/AndroidColorRes;
+	public final fun getLayouts ()Ljava/util/List;
+	public final fun getManifest ()Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun getStrings ()Lcom/autonomousapps/kit/android/AndroidStringRes;
+	public final fun getStyles ()Lcom/autonomousapps/kit/android/AndroidStyleRes;
+}
+
+public final class com/autonomousapps/kit/android/AndroidSubproject$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/android/AndroidSubproject;
+	public final fun getBuildScript ()Lcom/autonomousapps/kit/gradle/BuildScript;
+	public final fun getColors ()Lcom/autonomousapps/kit/android/AndroidColorRes;
+	public final fun getFiles ()Ljava/util/List;
+	public final fun getLayouts ()Ljava/util/List;
+	public final fun getManifest ()Lcom/autonomousapps/kit/android/AndroidManifest;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSources ()Ljava/util/List;
+	public final fun getStrings ()Lcom/autonomousapps/kit/android/AndroidStringRes;
+	public final fun getStyles ()Lcom/autonomousapps/kit/android/AndroidStyleRes;
+	public final fun getVariant ()Ljava/lang/String;
+	public final fun setBuildScript (Lcom/autonomousapps/kit/gradle/BuildScript;)V
+	public final fun setColors (Lcom/autonomousapps/kit/android/AndroidColorRes;)V
+	public final fun setLayouts (Ljava/util/List;)V
+	public final fun setManifest (Lcom/autonomousapps/kit/android/AndroidManifest;)V
+	public final fun setName (Ljava/lang/String;)V
+	public final fun setSources (Ljava/util/List;)V
+	public final fun setStrings (Lcom/autonomousapps/kit/android/AndroidStringRes;)V
+	public final fun setStyles (Lcom/autonomousapps/kit/android/AndroidStyleRes;)V
+	public final fun setVariant (Ljava/lang/String;)V
+	public final fun withBuildScript (Lkotlin/jvm/functions/Function1;)V
+	public final fun withFile (Lcom/autonomousapps/kit/File;)V
+	public final fun withFile (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class com/autonomousapps/kit/artifacts/BuildArtifact {
+	public fun <init> (Ljava/nio/file/Path;)V
+	public final fun exists ()Z
+	public final fun getAsFile ()Ljava/io/File;
+	public final fun getAsPath ()Ljava/nio/file/Path;
+	public final fun getExtension ()Ljava/lang/String;
+	public final fun isDirectory ()Z
+	public final fun isRegularFile ()Z
+	public final fun isSymbolicLink ()Z
+	public final fun notExists ()Z
+}
+
+public final class com/autonomousapps/kit/artifacts/FileType : java/lang/Enum {
+	public static final field Companion Lcom/autonomousapps/kit/artifacts/FileType$Companion;
+	public static final field DIRECTORY Lcom/autonomousapps/kit/artifacts/FileType;
+	public static final field REGULAR_FILE Lcom/autonomousapps/kit/artifacts/FileType;
+	public static final field SYMLINK Lcom/autonomousapps/kit/artifacts/FileType;
+	public static final field UNKNOWN Lcom/autonomousapps/kit/artifacts/FileType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getHumanReadableName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/autonomousapps/kit/artifacts/FileType;
+	public static fun values ()[Lcom/autonomousapps/kit/artifacts/FileType;
+}
+
+public final class com/autonomousapps/kit/artifacts/FileType$Companion {
+	public final fun from (Lcom/autonomousapps/kit/artifacts/BuildArtifact;[Ljava/nio/file/LinkOption;)Lcom/autonomousapps/kit/artifacts/FileType;
+	public final fun from (Ljava/nio/file/Path;[Ljava/nio/file/LinkOption;)Lcom/autonomousapps/kit/artifacts/FileType;
+}
+
+public final class com/autonomousapps/kit/gradle/BuildScript {
+	public fun <init> ()V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/BuildscriptBlock;Lcom/autonomousapps/kit/gradle/Plugins;Ljava/lang/String;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/Repositories;Lcom/autonomousapps/kit/gradle/android/AndroidBlock;Lcom/autonomousapps/kit/gradle/SourceSets;Lcom/autonomousapps/kit/gradle/Dependencies;Lcom/autonomousapps/kit/gradle/Java;Lcom/autonomousapps/kit/gradle/Kotlin;Ljava/lang/String;ZZ)V
+	public synthetic fun <init> (Lcom/autonomousapps/kit/gradle/BuildscriptBlock;Lcom/autonomousapps/kit/gradle/Plugins;Ljava/lang/String;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/Repositories;Lcom/autonomousapps/kit/gradle/android/AndroidBlock;Lcom/autonomousapps/kit/gradle/SourceSets;Lcom/autonomousapps/kit/gradle/Dependencies;Lcom/autonomousapps/kit/gradle/Java;Lcom/autonomousapps/kit/gradle/Kotlin;Ljava/lang/String;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAdditions ()Ljava/lang/String;
+	public final fun getAndroid ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun getBuildscript ()Lcom/autonomousapps/kit/gradle/BuildscriptBlock;
+	public final fun getDependencies ()Lcom/autonomousapps/kit/gradle/Dependencies;
+	public final fun getGroup ()Ljava/lang/String;
+	public final fun getJava ()Lcom/autonomousapps/kit/gradle/Java;
+	public final fun getKotlin ()Lcom/autonomousapps/kit/gradle/Kotlin;
+	public final fun getPlugins ()Lcom/autonomousapps/kit/gradle/Plugins;
+	public final fun getRepositories ()Lcom/autonomousapps/kit/gradle/Repositories;
+	public final fun getSourceSets ()Lcom/autonomousapps/kit/gradle/SourceSets;
+	public final fun getVersion ()Ljava/lang/String;
+	public final fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/BuildScript$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/gradle/BuildScript;
+	public final fun dependencies (Ljava/lang/Iterable;)V
+	public final fun dependencies ([Lcom/autonomousapps/kit/gradle/Dependency;)V
+	public final fun getAdditions ()Ljava/lang/String;
+	public final fun getAndroid ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun getBuildscript ()Lcom/autonomousapps/kit/gradle/BuildscriptBlock;
+	public final fun getDependencies ()Ljava/util/List;
+	public final fun getGroup ()Ljava/lang/String;
+	public final fun getJava ()Lcom/autonomousapps/kit/gradle/Java;
+	public final fun getKotlin ()Lcom/autonomousapps/kit/gradle/Kotlin;
+	public final fun getPlugins ()Ljava/util/List;
+	public final fun getRepositories ()Ljava/util/List;
+	public final fun getSourceSets ()Ljava/util/List;
+	public final fun getVersion ()Ljava/lang/String;
+	public final fun plugins (Ljava/lang/Iterable;)V
+	public final fun plugins ([Lcom/autonomousapps/kit/gradle/Plugin;)V
+	public final fun setAdditions (Ljava/lang/String;)V
+	public final fun setAndroid (Lcom/autonomousapps/kit/gradle/android/AndroidBlock;)V
+	public final fun setBuildscript (Lcom/autonomousapps/kit/gradle/BuildscriptBlock;)V
+	public final fun setDependencies (Ljava/util/List;)V
+	public final fun setGroup (Ljava/lang/String;)V
+	public final fun setJava (Lcom/autonomousapps/kit/gradle/Java;)V
+	public final fun setKotlin (Lcom/autonomousapps/kit/gradle/Kotlin;)V
+	public final fun setPlugins (Ljava/util/List;)V
+	public final fun setRepositories (Ljava/util/List;)V
+	public final fun setSourceSets (Ljava/util/List;)V
+	public final fun setVersion (Ljava/lang/String;)V
+	public final fun sourceSets (Ljava/lang/Iterable;)V
+	public final fun sourceSets ([Ljava/lang/String;)V
+	public final fun withGroovy (Ljava/lang/String;)V
+	public final fun withKotlin (Ljava/lang/String;)V
+}
+
+public final class com/autonomousapps/kit/gradle/BuildscriptBlock : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/BuildscriptBlock$Companion;
+	public fun <init> (Lcom/autonomousapps/kit/gradle/Repositories;Lcom/autonomousapps/kit/gradle/Dependencies;)V
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public static final fun defaultAndroidBuildscriptBlock (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/BuildscriptBlock;
+	public fun getName ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/BuildscriptBlock$Companion {
+	public final fun defaultAndroidBuildscriptBlock (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/BuildscriptBlock;
+}
+
+public final class com/autonomousapps/kit/gradle/Dependencies : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Dependencies$Companion;
+	public static final field EMPTY Lcom/autonomousapps/kit/gradle/Dependencies;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> ([Lcom/autonomousapps/kit/gradle/Dependency;)V
+	public fun getName ()Ljava/lang/String;
+	public final fun isEmpty ()Z
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Dependencies$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/Dependency : com/autonomousapps/kit/render/Element$Line {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Dependency$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun androidPlugin (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun annotationProcessor (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun api (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun classpath (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun compileOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun compileOnlyApi (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun getConfiguration ()Ljava/lang/String;
+	public final fun getIdentifier ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public static final fun implementation (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun project (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun project (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun raw (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public static final fun runtimeOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public fun start (I)Ljava/lang/String;
+	public static final fun testCompileOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun testImplementation (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static final fun testRuntimeOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public fun toString ()Ljava/lang/String;
+	public static final fun versionCatalog (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+}
+
+public final class com/autonomousapps/kit/gradle/Dependency$Companion {
+	public final fun androidPlugin (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public static synthetic fun androidPlugin$default (Lcom/autonomousapps/kit/gradle/Dependency$Companion;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun annotationProcessor (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun api (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun classpath (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun compileOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun compileOnlyApi (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun implementation (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun project (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun project (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun raw (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun runtimeOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun testCompileOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun testImplementation (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun testRuntimeOnly (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+	public final fun versionCatalog (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Dependency;
+}
+
+public final class com/autonomousapps/kit/gradle/DependencyResolutionManagement : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;
+	public fun <init> (Lcom/autonomousapps/kit/gradle/Repositories;)V
+	public fun getName ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/DependencyResolutionManagement$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/Feature : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Feature$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getName ()Ljava/lang/String;
+	public final fun getSourceSetName ()Ljava/lang/String;
+	public static final fun ofName (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Feature;
+	public static final fun ofName (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Feature;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Feature$Companion {
+	public final fun ofName (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Feature;
+	public final fun ofName (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Feature;
+	public static synthetic fun ofName$default (Lcom/autonomousapps/kit/gradle/Feature$Companion;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/gradle/Feature;
+}
+
+public final class com/autonomousapps/kit/gradle/GradleProperties {
+	public static final field CONFIGURATION_CACHE_STABLE Ljava/lang/String;
+	public static final field CONFIGURATION_CACHE_UNSTABLE Ljava/lang/String;
+	public static final field Companion Lcom/autonomousapps/kit/gradle/GradleProperties$Companion;
+	public static final field ISOLATED_PROJECTS_UNSTABLE Ljava/lang/String;
+	public static final field KOTLIN_STDLIB_NO_DEFAULT_DEPS Ljava/lang/String;
+	public static final field NON_TRANSITIVE_R Ljava/lang/String;
+	public fun <init> (Ljava/util/List;)V
+	public static final fun enableConfigurationCache ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public static final fun enableIsolatedProjects ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public static final fun kotlinStdlibNoDefaultDeps ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public static final fun minimalAndroidProperties ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public static final fun minimalJvmProperties ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public static final fun of ([Ljava/lang/CharSequence;)Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun plus (Lcom/autonomousapps/kit/gradle/GradleProperties;)Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun plus (Ljava/lang/CharSequence;)Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun plus (Ljava/lang/Iterable;)Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/GradleProperties$Companion {
+	public final fun enableConfigurationCache ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun enableIsolatedProjects ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun getJVM_ARGS ()Ljava/lang/String;
+	public final fun getUSE_ANDROID_X ()Ljava/lang/String;
+	public final fun kotlinStdlibNoDefaultDeps ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun minimalAndroidProperties ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun minimalJvmProperties ()Lcom/autonomousapps/kit/gradle/GradleProperties;
+	public final fun of ([Ljava/lang/CharSequence;)Lcom/autonomousapps/kit/gradle/GradleProperties;
+}
+
+public final class com/autonomousapps/kit/gradle/GroupVersion : com/autonomousapps/kit/render/Element$Line {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Java : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Java$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getFeatures ()Ljava/util/List;
+	public fun getName ()Ljava/lang/String;
+	public static final fun ofFeatures (Ljava/util/List;)Lcom/autonomousapps/kit/gradle/Java;
+	public static final fun ofFeatures ([Lcom/autonomousapps/kit/gradle/Feature;)Lcom/autonomousapps/kit/gradle/Java;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Java$Companion {
+	public final fun ofFeatures (Ljava/util/List;)Lcom/autonomousapps/kit/gradle/Java;
+	public final fun ofFeatures ([Lcom/autonomousapps/kit/gradle/Feature;)Lcom/autonomousapps/kit/gradle/Java;
+}
+
+public final class com/autonomousapps/kit/gradle/JvmToolchain : com/autonomousapps/kit/render/Element$Line {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/JvmToolchain$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/gradle/JvmToolchain;
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/JvmToolchain$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/Kotlin : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Kotlin$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/gradle/Kotlin;
+	public fun <init> ()V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/JvmToolchain;)V
+	public synthetic fun <init> (Lcom/autonomousapps/kit/gradle/JvmToolchain;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getName ()Ljava/lang/String;
+	public static final fun ofTarget (I)Lcom/autonomousapps/kit/gradle/Kotlin;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Kotlin$Companion {
+	public final fun ofTarget (I)Lcom/autonomousapps/kit/gradle/Kotlin;
+}
+
+public final class com/autonomousapps/kit/gradle/Plugin : com/autonomousapps/kit/render/Element$Line {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Plugin$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun getAntlr ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getApplication ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getApply ()Z
+	public static final fun getGroovy ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getGroovyGradle ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getId ()Ljava/lang/String;
+	public static final fun getJacocoReportAggregation ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getJava ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getJavaGradle ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getJavaLibrary ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getJavaTestFixtures ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getJvmTestSuite ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun getScala ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getVersion ()Ljava/lang/String;
+	public static final fun getWar ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun of (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun of (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Plugin;
+	public static final fun of (Ljava/lang/String;Ljava/lang/String;Z)Lcom/autonomousapps/kit/gradle/Plugin;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Plugin$Companion {
+	public final fun getAntlr ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getApplication ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getGroovy ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getGroovyGradle ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getJacocoReportAggregation ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getJava ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getJavaGradle ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getJavaLibrary ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getJavaTestFixtures ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getJvmTestSuite ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getScala ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun getWar ()Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun of (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun of (Ljava/lang/String;Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Plugin;
+	public final fun of (Ljava/lang/String;Ljava/lang/String;Z)Lcom/autonomousapps/kit/gradle/Plugin;
+	public static synthetic fun of$default (Lcom/autonomousapps/kit/gradle/Plugin$Companion;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lcom/autonomousapps/kit/gradle/Plugin;
+}
+
+public final class com/autonomousapps/kit/gradle/PluginManagement : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/PluginManagement$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/gradle/PluginManagement;
+	public fun <init> (Lcom/autonomousapps/kit/gradle/Repositories;)V
+	public fun getName ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/PluginManagement$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/Plugins : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Plugins$Companion;
+	public static final field EMPTY Lcom/autonomousapps/kit/gradle/Plugins;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> ([Lcom/autonomousapps/kit/gradle/Plugin;)V
+	public fun getName ()Ljava/lang/String;
+	public final fun isEmpty ()Z
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Plugins$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/Repositories : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Repositories$Companion;
+	public static final field DEFAULT_DEPENDENCIES Lcom/autonomousapps/kit/gradle/Repositories;
+	public static final field DEFAULT_PLUGINS Lcom/autonomousapps/kit/gradle/Repositories;
+	public static final field EMPTY Lcom/autonomousapps/kit/gradle/Repositories;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> ([Lcom/autonomousapps/kit/gradle/Repository;)V
+	public fun getName ()Ljava/lang/String;
+	public final fun isEmpty ()Z
+	public final fun plus (Lcom/autonomousapps/kit/gradle/Repositories;)Lcom/autonomousapps/kit/gradle/Repositories;
+	public final fun plus (Ljava/lang/Iterable;)Lcom/autonomousapps/kit/gradle/Repositories;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Repositories$Companion {
+}
+
+public abstract class com/autonomousapps/kit/gradle/Repository : com/autonomousapps/kit/render/Element$Line {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/Repository$Companion;
+	public static final field DEFAULT Ljava/util/List;
+	public static final field DEFAULT_PLUGINS Ljava/util/List;
+	public static final field FUNC_TEST Lcom/autonomousapps/kit/gradle/Repository;
+	public static final field FUNC_TEST_INCLUDED_BUILDS Ljava/util/List;
+	public static final field GOOGLE Lcom/autonomousapps/kit/gradle/Repository;
+	public static final field GRADLE_PLUGIN_PORTAL Lcom/autonomousapps/kit/gradle/Repository;
+	public static final field LIBS Lcom/autonomousapps/kit/gradle/Repository;
+	public static final field MAVEN_CENTRAL Lcom/autonomousapps/kit/gradle/Repository;
+	public static final field MAVEN_LOCAL Lcom/autonomousapps/kit/gradle/Repository;
+	public static final field SNAPSHOTS Lcom/autonomousapps/kit/gradle/Repository;
+	public static final fun ofMaven (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Repository;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/Repository$Companion {
+	public final fun ofMaven (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/Repository;
+}
+
+public final class com/autonomousapps/kit/gradle/SettingsScript {
+	public fun <init> ()V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;)V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;)V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;Ljava/lang/String;)V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/Plugins;)V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/Plugins;Ljava/util/Set;)V
+	public fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/Plugins;Ljava/util/Set;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcom/autonomousapps/kit/gradle/PluginManagement;Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;Ljava/lang/String;Lcom/autonomousapps/kit/gradle/Plugins;Ljava/util/Set;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAdditions ()Ljava/lang/String;
+	public final fun getDependencyResolutionManagement ()Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;
+	public final fun getPluginManagement ()Lcom/autonomousapps/kit/gradle/PluginManagement;
+	public final fun getPlugins ()Lcom/autonomousapps/kit/gradle/Plugins;
+	public final fun getRootProjectName ()Ljava/lang/String;
+	public final fun getSubprojects ()Ljava/util/Set;
+	public final fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public final fun setAdditions (Ljava/lang/String;)V
+	public final fun setDependencyResolutionManagement (Lcom/autonomousapps/kit/gradle/DependencyResolutionManagement;)V
+	public final fun setPluginManagement (Lcom/autonomousapps/kit/gradle/PluginManagement;)V
+	public final fun setPlugins (Lcom/autonomousapps/kit/gradle/Plugins;)V
+	public final fun setRootProjectName (Ljava/lang/String;)V
+	public final fun setSubprojects (Ljava/util/Set;)V
+}
+
+public final class com/autonomousapps/kit/gradle/SourceSet : com/autonomousapps/kit/render/Element$Line {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/SourceSet$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getName ()Ljava/lang/String;
+	public static final fun ofName (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/SourceSet;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/SourceSet$Companion {
+	public final fun ofName (Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/SourceSet;
+}
+
+public final class com/autonomousapps/kit/gradle/SourceSets : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/SourceSets$Companion;
+	public static final field EMPTY Lcom/autonomousapps/kit/gradle/SourceSets;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getName ()Ljava/lang/String;
+	public final fun getSourceSets ()Ljava/util/List;
+	public final fun isEmpty ()Z
+	public static final fun ofNames (Ljava/lang/Iterable;)Lcom/autonomousapps/kit/gradle/SourceSets;
+	public static final fun ofNames ([Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/SourceSets;
+	public final fun plus (Lcom/autonomousapps/kit/gradle/SourceSets;)Lcom/autonomousapps/kit/gradle/SourceSets;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/SourceSets$Companion {
+	public final fun ofNames (Ljava/lang/Iterable;)Lcom/autonomousapps/kit/gradle/SourceSets;
+	public final fun ofNames ([Ljava/lang/String;)Lcom/autonomousapps/kit/gradle/SourceSets;
+}
+
+public final class com/autonomousapps/kit/gradle/VersionCatalogFile {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/VersionCatalogFile$Companion;
+	public static final field DEFAULT_PATH Ljava/lang/String;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getContent ()Ljava/lang/String;
+	public final fun setContent (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/VersionCatalogFile$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/gradle/VersionCatalogFile;
+	public final fun getBundles ()Ljava/util/List;
+	public final fun getLibraries ()Ljava/util/List;
+	public final fun getPlugins ()Ljava/util/List;
+	public final fun getVersions ()Ljava/util/List;
+	public final fun setBundles (Ljava/util/List;)V
+	public final fun setLibraries (Ljava/util/List;)V
+	public final fun setPlugins (Ljava/util/List;)V
+	public final fun setVersions (Ljava/util/List;)V
+}
+
+public final class com/autonomousapps/kit/gradle/VersionCatalogFile$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/android/AndroidBlock : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/android/AndroidBlock$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;I)V
+	public fun <init> (Ljava/lang/String;ILcom/autonomousapps/kit/gradle/android/DefaultConfig;)V
+	public fun <init> (Ljava/lang/String;ILcom/autonomousapps/kit/gradle/android/DefaultConfig;Lcom/autonomousapps/kit/gradle/android/CompileOptions;)V
+	public fun <init> (Ljava/lang/String;ILcom/autonomousapps/kit/gradle/android/DefaultConfig;Lcom/autonomousapps/kit/gradle/android/CompileOptions;Lcom/autonomousapps/kit/gradle/android/KotlinOptions;)V
+	public synthetic fun <init> (Ljava/lang/String;ILcom/autonomousapps/kit/gradle/android/DefaultConfig;Lcom/autonomousapps/kit/gradle/android/CompileOptions;Lcom/autonomousapps/kit/gradle/android/KotlinOptions;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun defaultAndroidAppBlock ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static final fun defaultAndroidAppBlock (Z)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static final fun defaultAndroidAppBlock (ZLjava/lang/String;)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static final fun defaultAndroidLibBlock ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static final fun defaultAndroidLibBlock (Z)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static final fun defaultAndroidLibBlock (ZLjava/lang/String;)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun getCompileOptions ()Lcom/autonomousapps/kit/gradle/android/CompileOptions;
+	public final fun getCompileSdkVersion ()I
+	public final fun getDefaultConfig ()Lcom/autonomousapps/kit/gradle/android/DefaultConfig;
+	public final fun getKotlinOptions ()Lcom/autonomousapps/kit/gradle/android/KotlinOptions;
+	public fun getName ()Ljava/lang/String;
+	public final fun getNamespace ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public final fun setCompileOptions (Lcom/autonomousapps/kit/gradle/android/CompileOptions;)V
+	public final fun setCompileSdkVersion (I)V
+	public final fun setDefaultConfig (Lcom/autonomousapps/kit/gradle/android/DefaultConfig;)V
+	public final fun setKotlinOptions (Lcom/autonomousapps/kit/gradle/android/KotlinOptions;)V
+	public final fun setNamespace (Ljava/lang/String;)V
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/android/AndroidBlock$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun getCompileOptions ()Lcom/autonomousapps/kit/gradle/android/CompileOptions;
+	public final fun getCompileSdkVersion ()I
+	public final fun getDefaultConfig ()Lcom/autonomousapps/kit/gradle/android/DefaultConfig;
+	public final fun getKotlinOptions ()Lcom/autonomousapps/kit/gradle/android/KotlinOptions;
+	public final fun getNamespace ()Ljava/lang/String;
+	public final fun setCompileOptions (Lcom/autonomousapps/kit/gradle/android/CompileOptions;)V
+	public final fun setCompileSdkVersion (I)V
+	public final fun setDefaultConfig (Lcom/autonomousapps/kit/gradle/android/DefaultConfig;)V
+	public final fun setKotlinOptions (Lcom/autonomousapps/kit/gradle/android/KotlinOptions;)V
+	public final fun setNamespace (Ljava/lang/String;)V
+}
+
+public final class com/autonomousapps/kit/gradle/android/AndroidBlock$Companion {
+	public final fun defaultAndroidAppBlock ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun defaultAndroidAppBlock (Z)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun defaultAndroidAppBlock (ZLjava/lang/String;)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static synthetic fun defaultAndroidAppBlock$default (Lcom/autonomousapps/kit/gradle/android/AndroidBlock$Companion;ZLjava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun defaultAndroidLibBlock ()Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun defaultAndroidLibBlock (Z)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public final fun defaultAndroidLibBlock (ZLjava/lang/String;)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+	public static synthetic fun defaultAndroidLibBlock$default (Lcom/autonomousapps/kit/gradle/android/AndroidBlock$Companion;ZLjava/lang/String;ILjava/lang/Object;)Lcom/autonomousapps/kit/gradle/android/AndroidBlock;
+}
+
+public final class com/autonomousapps/kit/gradle/android/CompileOptions : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/android/CompileOptions$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/gradle/android/CompileOptions;
+	public fun <init> ()V
+	public fun <init> (Lorg/gradle/api/JavaVersion;)V
+	public fun <init> (Lorg/gradle/api/JavaVersion;Lorg/gradle/api/JavaVersion;)V
+	public synthetic fun <init> (Lorg/gradle/api/JavaVersion;Lorg/gradle/api/JavaVersion;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getName ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/android/CompileOptions$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/android/DefaultConfig : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/android/DefaultConfig$Companion;
+	public static final field DEFAULT_APP Lcom/autonomousapps/kit/gradle/android/DefaultConfig;
+	public static final field DEFAULT_LIB Lcom/autonomousapps/kit/gradle/android/DefaultConfig;
+	public fun <init> (IIILjava/lang/String;)V
+	public fun <init> (Ljava/lang/String;IIILjava/lang/String;)V
+	public fun <init> (Ljava/lang/String;IIILjava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;IIILjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getApplicationId ()Ljava/lang/String;
+	public final fun getMinSdkVersion ()I
+	public fun getName ()Ljava/lang/String;
+	public final fun getTargetSdkVersion ()I
+	public final fun getTestInstrumentationRunner ()Ljava/lang/String;
+	public final fun getVersionCode ()I
+	public final fun getVersionName ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public final fun setApplicationId (Ljava/lang/String;)V
+	public final fun setMinSdkVersion (I)V
+	public final fun setTargetSdkVersion (I)V
+	public final fun setTestInstrumentationRunner (Ljava/lang/String;)V
+	public final fun setVersionCode (I)V
+	public final fun setVersionName (Ljava/lang/String;)V
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/android/DefaultConfig$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/autonomousapps/kit/gradle/android/DefaultConfig;
+	public final fun getApplicationId ()Ljava/lang/String;
+	public final fun getMinSdkVersion ()Ljava/lang/Integer;
+	public final fun getTargetSdkVersion ()Ljava/lang/Integer;
+	public final fun getTestInstrumentationRunner ()Ljava/lang/String;
+	public final fun getVersionCode ()Ljava/lang/Integer;
+	public final fun getVersionName ()Ljava/lang/String;
+	public final fun setApplicationId (Ljava/lang/String;)V
+	public final fun setMinSdkVersion (Ljava/lang/Integer;)V
+	public final fun setTargetSdkVersion (Ljava/lang/Integer;)V
+	public final fun setTestInstrumentationRunner (Ljava/lang/String;)V
+	public final fun setVersionCode (Ljava/lang/Integer;)V
+	public final fun setVersionName (Ljava/lang/String;)V
+}
+
+public final class com/autonomousapps/kit/gradle/android/DefaultConfig$Companion {
+}
+
+public final class com/autonomousapps/kit/gradle/android/KotlinOptions : com/autonomousapps/kit/render/Element$Block {
+	public static final field Companion Lcom/autonomousapps/kit/gradle/android/KotlinOptions$Companion;
+	public static final field DEFAULT Lcom/autonomousapps/kit/gradle/android/KotlinOptions;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getName ()Ljava/lang/String;
+	public fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public fun start (I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/gradle/android/KotlinOptions$Companion {
+}
+
+public abstract interface class com/autonomousapps/kit/render/Element {
+	public abstract fun render (Lcom/autonomousapps/kit/render/Scribe;)Ljava/lang/String;
+	public abstract fun start (I)Ljava/lang/String;
+}
+
+public abstract interface class com/autonomousapps/kit/render/Element$Block : com/autonomousapps/kit/render/Element {
+	public abstract fun getName ()Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/render/Element$Block$DefaultImpls {
+	public static fun start (Lcom/autonomousapps/kit/render/Element$Block;I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/render/Element$DefaultImpls {
+	public static fun start (Lcom/autonomousapps/kit/render/Element;I)Ljava/lang/String;
+}
+
+public abstract interface class com/autonomousapps/kit/render/Element$Line : com/autonomousapps/kit/render/Element {
+}
+
+public final class com/autonomousapps/kit/render/Element$Line$DefaultImpls {
+	public static fun start (Lcom/autonomousapps/kit/render/Element$Line;I)Ljava/lang/String;
+}
+
+public final class com/autonomousapps/kit/render/Scribe : java/lang/AutoCloseable {
+	public fun <init> ()V
+	public fun <init> (Lcom/autonomousapps/kit/GradleProject$DslKind;)V
+	public fun <init> (Lcom/autonomousapps/kit/GradleProject$DslKind;I)V
+	public synthetic fun <init> (Lcom/autonomousapps/kit/GradleProject$DslKind;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+	public final fun getDslKind ()Lcom/autonomousapps/kit/GradleProject$DslKind;
+	public final fun getIndent ()I
+}
+
+public final class com/autonomousapps/kit/utils/Files {
+	public static final fun buildFileForName (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;)Ljava/io/File;
+	public static final fun buildPathForName (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
+	public static synthetic fun buildPathForName$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/nio/file/Path;
+	public static final fun resolveFromName (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;)Ljava/io/File;
+	public static final fun resolveFromRoot (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;)Ljava/io/File;
+	public static final fun resolveFromRoot (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;)Ljava/io/File;
+	public static synthetic fun resolveFromRoot$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/io/File;
+	public static final fun resolveFromSingleSubproject (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;)Ljava/io/File;
+	public static final fun rootBuildDir (Lcom/autonomousapps/kit/GradleProject;)Ljava/io/File;
+	public static final fun rootBuildDir (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;)Ljava/io/File;
+	public static synthetic fun rootBuildDir$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;ILjava/lang/Object;)Ljava/io/File;
+	public static final fun rootBuildPath (Lcom/autonomousapps/kit/GradleProject;)Ljava/nio/file/Path;
+	public static final fun rootBuildPath (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;)Ljava/nio/file/Path;
+	public static synthetic fun rootBuildPath$default (Lcom/autonomousapps/kit/GradleProject;Ljava/lang/String;ILjava/lang/Object;)Ljava/nio/file/Path;
+	public static final fun singleSubprojectBuildFile (Lcom/autonomousapps/kit/GradleProject;)Ljava/io/File;
+	public static final fun singleSubprojectBuildPath (Lcom/autonomousapps/kit/GradleProject;)Ljava/nio/file/Path;
+}
+

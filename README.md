@@ -29,6 +29,13 @@ signing.password=PASSWORD_USED_TO_GENERATE_KEY
 signing.secretKeyRingFile=/Users/YOURUSERNAME/.gnupg/composeguard.gpg (or wherever you stored the keyring you generated earlier)
 ```
 
+## Binary Compatibility Validator
+
+This project uses [this](https://github.com/Kotlin/binary-compatibility-validator) tool to ensure the public binary API wasn't changed in a way that makes it binary incompatible.
+
+The tool allows dumping binary API of a JVM part of a Kotlin library that is public in the sense of Kotlin visibilities.
+
+To generate a new binary dump, run `./gradlew apiDump` in the root of the project.
+
 TODO
-* https://github.com/Kotlin/binary-compatibility-validator
 * detekt
