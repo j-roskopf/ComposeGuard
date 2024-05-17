@@ -132,8 +132,16 @@ class ComposeCompilerMetricsProviderTest {
                 it.stabilityStatus == StabilityStatus.MISSING
             }
 
+        val amountOfUnusedProperties =
+            metrics.getComposablesReport().composables.flatMap {
+                it.params
+            }.count {
+                it.unused
+            }
+
         assert(amountOfDynamicProperties == 1)
         assert(amountOfStaticProperties == 1)
         assert(amountOfMissingProperties == 1)
+        assert(amountOfUnusedProperties == 1)
     }
 }
