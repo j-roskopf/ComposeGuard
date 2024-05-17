@@ -25,18 +25,16 @@ package com.joetr.compose.guard
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
-import com.joetr.compose.guard.task.executingComposeCompilerCheckGradleTask
-import com.joetr.compose.guard.task.executingComposeCompilerReportGenerationGradleTask
-import com.joetr.compose.guard.task.registerComposeCompilerReportCheckTaskForVariant
-import com.joetr.compose.guard.task.registerComposeCompilerReportCleanTaskForVariant
-import com.joetr.compose.guard.task.registerComposeCompilerReportGenTaskForVariant
+import com.android.build.api.variant.Variant
+import com.joetr.compose.guard.task.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-class ReportGenPlugin : Plugin<Project> {
+public class ReportGenPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         ComposeCompilerReportExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
@@ -121,4 +119,61 @@ class ReportGenPlugin : Plugin<Project> {
                 "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$outputPath",
             )
     }
+}
+
+private fun Project.registerComposeCompilerReportGenTaskForVariant(variant: Variant): TaskProvider<ComposeCompilerReportGenerateTask> {
+    val taskName = variant.name + "ComposeCompilerGenerate"
+    val compileKotlinTaskName = compileKotlinTaskNameFromVariant(variant)
+    val reportExtension = ComposeCompilerReportExtension.get(project)
+
+    val task = tasks.register(taskName, ComposeCompilerReportGenerateTask::class.java)
+
+    task.get().compileKotlinTasks.set(compileKotlinTaskName)
+    task.get().composeRawMetricsOutputDirectory.set(reportExtension.composeRawMetricsOutputDirectory)
+    task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
+
+    return task
+}
+
+/**
+ * Returns true if currently executing task is about generating compose compiler report
+ */
+private fun Project.executingComposeCompilerReportGenerationGradleTask() =
+    runCatching {
+        property(KEY_GOLDEN_GEN)
+    }.getOrNull() == "true"
+
+private fun Project.executingComposeCompilerCheckGradleTask() =
+    runCatching {
+        property(KEY_CHECK_GEN)
+    }.getOrNull() == "true"
+
+private fun Project.registerComposeCompilerReportCheckTaskForVariant(variant: Variant): TaskProvider<ComposeCompilerReportCheckTask> {
+    val taskName = variant.name + "ComposeCompilerCheck"
+    val compileKotlinTaskName = compileKotlinTaskNameFromVariant(variant)
+
+    val task = tasks.register(taskName, ComposeCompilerReportCheckTask::class.java)
+
+    val reportExtension = ComposeCompilerReportExtension.get(project)
+
+    task.get().compileKotlinTasks.set(compileKotlinTaskName)
+    task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
+
+    return task
+}
+
+/**
+ * Returns a task name for compile<VARIANT>Kotlin with [variant]
+ */
+private fun compileKotlinTaskNameFromVariant(variant: Variant): String {
+    val variantName = variant.name.let { it[0].uppercaseChar() + it.substring(1) }
+    return "compile${variantName}Kotlin"
+}
+
+private fun Project.registerComposeCompilerReportCleanTaskForVariant(): TaskProvider<ComposeCompilerReportCleanTask> {
+    val taskName = "composeCompilerClean"
+
+    val task = tasks.register(taskName, ComposeCompilerReportCleanTask::class.java)
+
+    return task
 }

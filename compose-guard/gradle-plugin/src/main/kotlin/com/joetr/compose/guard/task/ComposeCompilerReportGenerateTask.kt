@@ -23,33 +23,28 @@
  */
 package com.joetr.compose.guard.task
 
-import com.android.build.api.variant.Variant
-import com.joetr.compose.guard.ComposeCompilerReportExtension
+import com.joetr.compose.guard.KEY_GOLDEN_GEN
 import com.joetr.compose.guard.core.utils.cleanupDirectory
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.TaskProvider
 import org.gradle.tooling.GradleConnector
 
-const val KEY_GOLDEN_GEN = "composeCompiler.reportGen.enable"
-
-abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
+public abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
     @get:Input
-    abstract val compileKotlinTasks: Property<String>
+    public abstract val compileKotlinTasks: Property<String>
 
     @get:OutputDirectory
-    abstract val composeRawMetricsOutputDirectory: DirectoryProperty
+    public abstract val composeRawMetricsOutputDirectory: DirectoryProperty
 
     @get:OutputDirectory
-    abstract val outputDirectory: DirectoryProperty
+    public abstract val outputDirectory: DirectoryProperty
 
     @TaskAction
-    fun generate() {
+    public fun generate() {
         val outputDirectory = outputDirectory.get().asFile
         cleanupDirectory(outputDirectory)
 
@@ -75,39 +70,4 @@ abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
                     .run()
             }
     }
-}
-
-fun Project.registerComposeCompilerReportGenTaskForVariant(variant: Variant): TaskProvider<ComposeCompilerReportGenerateTask> {
-    val taskName = variant.name + "ComposeCompilerGenerate"
-    val compileKotlinTaskName = compileKotlinTaskNameFromVariant(variant)
-    val reportExtension = ComposeCompilerReportExtension.get(project)
-
-    val task = tasks.register(taskName, ComposeCompilerReportGenerateTask::class.java)
-
-    task.get().compileKotlinTasks.set(compileKotlinTaskName)
-    task.get().composeRawMetricsOutputDirectory.set(reportExtension.composeRawMetricsOutputDirectory)
-    task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
-
-    return task
-}
-
-/**
- * Returns true if currently executing task is about generating compose compiler report
- */
-fun Project.executingComposeCompilerReportGenerationGradleTask() =
-    runCatching {
-        property(KEY_GOLDEN_GEN)
-    }.getOrNull() == "true"
-
-fun Project.executingComposeCompilerCheckGradleTask() =
-    runCatching {
-        property(KEY_CHECK_GEN)
-    }.getOrNull() == "true"
-
-/**
- * Returns a task name for compile<VARIANT>Kotlin with [variant]
- */
-fun compileKotlinTaskNameFromVariant(variant: Variant): String {
-    val variantName = variant.name.let { it[0].uppercaseChar() + it.substring(1) }
-    return "compile${variantName}Kotlin"
 }

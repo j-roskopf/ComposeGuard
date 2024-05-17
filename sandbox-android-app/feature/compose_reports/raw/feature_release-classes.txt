@@ -1,4 +1,0 @@
-unstable class TestDataClass {
-  stable var name: String
-  <runtime stability> = Unstable
-}

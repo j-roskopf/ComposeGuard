@@ -32,21 +32,13 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.getByType
 
-abstract class ComposeCompilerReportCleanTask : DefaultTask() {
+public abstract class ComposeCompilerReportCleanTask : DefaultTask() {
     @TaskAction
-    fun generate() {
+    public fun generate() {
         val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
         val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
 
         cleanupDirectory(genExtension.outputDirectory.get())
         cleanupDirectory(checkExtension.outputDirectory.get())
     }
-}
-
-fun Project.registerComposeCompilerReportCleanTaskForVariant(): TaskProvider<ComposeCompilerReportCleanTask> {
-    val taskName = "composeCompilerClean"
-
-    val task = tasks.register(taskName, ComposeCompilerReportCleanTask::class.java)
-
-    return task
 }
