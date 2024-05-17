@@ -181,4 +181,45 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(generateResult).task(generateTask).succeeded()
         assertThat(checkResult).task(checkTask).succeeded()
     }
+
+    @Test
+    fun `can detect when new unstable classes were added and old ones were deleted`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // generate golden
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // add new unstable class
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+            
+            // this is the new class
+            data class AnotherUnstableClass(var unstable: String)
+
+            @Composable
+            fun TestComposable(test: AnotherUnstableClass) {
+                Text(text = test.unstable)
+            }
+            """.trimIndent(),
+        )
+
+        // assert check fails with new unstable class
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New unstable classes were added!")
+        assertThat(checkResult.output).contains(
+            "ClassDetail(className=AnotherUnstableClass, stability=UNSTABLE, runtimeStability=UNSTABLE, " +
+                "fields=[Field(status=stable, details=var unstable: String)], " +
+                "rawContent=RawContent(content=unstable class AnotherUnstableClass {",
+        )
+        assertThat(checkResult.output).contains("stable var unstable: String")
+        assertThat(checkResult.output).contains("<runtime stability> = Unstable")
+        assertThat(checkResult).task(checkTask).failed()
+    }
 }

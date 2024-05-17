@@ -82,7 +82,7 @@ public object ComposableReportParser : Parser<String, ComposablesReport> {
         return ComposablesReport(composables, errors.toList())
     }
 
-    internal fun getComposableFunctions(content: String): List<String> {
+    private fun getComposableFunctions(content: String): List<String> {
         val lines = content.split("\n").filter { it.isNotBlank() }
 
         val composableFunIndexes =

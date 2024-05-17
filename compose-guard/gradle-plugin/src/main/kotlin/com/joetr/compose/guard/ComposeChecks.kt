@@ -107,13 +107,25 @@ public object ComposeChecks {
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
     ) {
-        if (checkedMetrics.getClassesReport().unstableClasses.size > goldenMetrics.getClassesReport().unstableClasses.size) {
-            val difference =
-                checkedMetrics.getClassesReport().unstableClasses -
-                    goldenMetrics.getClassesReport().unstableClasses.toSet()
+        val goldenUnstableClassesMap =
+            goldenMetrics.getClassesReport().unstableClasses.associateBy {
+                it.className
+            }
+
+        val checkedUnstableClassesMap =
+            checkedMetrics.getClassesReport().unstableClasses.associateBy {
+                it.className
+            }.toMutableMap()
+
+        // remove all golden values from checked
+        checkedUnstableClassesMap.keys.removeAll(goldenUnstableClassesMap.keys)
+
+        if (checkedUnstableClassesMap.keys.isNotEmpty()) {
             throw GradleException(
                 "New unstable classes were added! \n" +
-                    difference.joinToString(",") + "\n" +
+                    checkedUnstableClassesMap.map {
+                        it.value
+                    }.joinToString(",") + "\n" +
                     "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
                     "#classes-that-are-unstable",
             )
