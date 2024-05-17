@@ -49,7 +49,7 @@ public class ReportAndMetricsFileFinder(directory: File) {
         return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_REPORT_TXT) }
     }
 
-    public  fun findClassesReportTxtFile(): List<File> {
+    public fun findClassesReportTxtFile(): List<File> {
         return allFiles.filter { it.name.endsWith(FileSuffixes.CLASSES_REPORT_TXT) }
     }
 
