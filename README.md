@@ -18,7 +18,7 @@ This is required to test.
 
 * Install gnupg - https://formulae.brew.sh/formula/gnupg
 * Generate a key - https://central.sonatype.org/publish/requirements/gpg/#generating-a-key-pair
-  * `gpg --full-generate-key`
+  * `gpg --full-generate-key` 
 * List keys and grab newly generated key (40 digits)
   * `gpg --list-keys`
 * `gpg --export-secret-keys THE_KEY_THAT_YOU_JUST_GENERATED > composeguard.gpg`
@@ -31,5 +31,4 @@ signing.secretKeyRingFile=/Users/YOURUSERNAME/.gnupg/composeguard.gpg (or wherev
 
 TODO
 * https://github.com/Kotlin/binary-compatibility-validator
-* explicitApi()
 * detekt

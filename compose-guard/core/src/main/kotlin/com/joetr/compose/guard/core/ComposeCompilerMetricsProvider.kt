@@ -35,33 +35,32 @@ import kotlinx.serialization.json.Json
 /**
  * Provides metrics and reports of a Compose compiler
  */
-interface ComposeCompilerMetricsProvider {
+public interface ComposeCompilerMetricsProvider {
     /**
      * Returns key-value pairs from composable metrics
      */
-    fun getOverallStatistics(): Map<String, Long>
+    public fun getOverallStatistics(): Map<String, Long>
 
     /**
      * Returns detailed statistics from composable report
      */
-    fun getDetailedStatistics(): DetailedStatistics
+    public fun getDetailedStatistics(): DetailedStatistics
 
     /**
      * Returns metrics for the composable functions.
      */
-    fun getComposablesReport(): ComposablesReport
+    public fun getComposablesReport(): ComposablesReport
 
     /**
      * Returns metrics for the classes.
      */
-    fun getClassesReport(): ClassesReport
+    public fun getClassesReport(): ClassesReport
 }
 
 /**
  * Default implementation for [ComposeCompilerMetricsProvider] which parses content provided by
  * [ComposeCompilerRawReportProvider].
  */
-@OptIn(ExperimentalStdlibApi::class)
 private class DefaultComposeCompilerMetricsProvider(
     private val contentProvider: ComposeMetricsContentProvider,
 ) : ComposeCompilerMetricsProvider {
@@ -111,7 +110,7 @@ private class DefaultComposeCompilerMetricsProvider(
 /**
  * Factory function for creating [ComposeCompilerMetricsProvider].
  */
-fun ComposeCompilerMetricsProvider(files: ComposeCompilerRawReportProvider): ComposeCompilerMetricsProvider {
+public fun ComposeCompilerMetricsProvider(files: ComposeCompilerRawReportProvider): ComposeCompilerMetricsProvider {
     val contentProvider = ComposeMetricsContentProvider(files)
     return DefaultComposeCompilerMetricsProvider(contentProvider)
 }

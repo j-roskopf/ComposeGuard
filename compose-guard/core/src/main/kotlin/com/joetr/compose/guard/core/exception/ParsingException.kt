@@ -23,8 +23,8 @@
  */
 package com.joetr.compose.guard.core.exception
 
-class ParsingException(
-    val content: String,
+public class ParsingException(
+    public val content: String,
     cause: Throwable,
     message: String = "Error occurred while parsing the content",
 ) : RuntimeException(message, cause)

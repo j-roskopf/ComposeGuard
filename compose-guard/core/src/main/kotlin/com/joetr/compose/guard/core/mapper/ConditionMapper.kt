@@ -25,8 +25,8 @@ package com.joetr.compose.guard.core.mapper
 
 import com.joetr.compose.guard.core.model.Condition
 
-object ConditionMapper {
-    fun from(value: String): Condition =
+public object ConditionMapper {
+    public fun from(value: String): Condition =
         when (value.lowercase()) {
             "stable" -> Condition.STABLE
             "unstable" -> Condition.UNSTABLE

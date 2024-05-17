@@ -23,7 +23,7 @@
  */
 package com.joetr.compose.guard.core.model
 
-enum class Condition {
+public enum class Condition {
     STABLE,
     UNSTABLE,
     MISSING,
