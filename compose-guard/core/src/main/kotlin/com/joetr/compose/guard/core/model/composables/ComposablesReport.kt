@@ -25,7 +25,7 @@ package com.joetr.compose.guard.core.model.composables
 
 import com.joetr.compose.guard.core.exception.ParsingException
 
-data class ComposablesReport(
+public data class ComposablesReport(
     val composables: List<ComposableDetail>,
     val errors: List<ParsingException>,
 ) {

@@ -26,7 +26,7 @@ package com.joetr.compose.guard.core.model
 /**
  * default params are either dynamic or static
  */
-enum class StabilityStatus {
+public enum class StabilityStatus {
     DYNAMIC,
     STATIC,
     MISSING,

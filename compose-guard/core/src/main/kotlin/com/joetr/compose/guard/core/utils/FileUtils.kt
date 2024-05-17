@@ -30,7 +30,7 @@ import java.io.FileNotFoundException
  * Checks whether directory with [path] exists or not.
  * Else throws [FileNotFoundException].
  */
-inline fun ensureDirectory(
+public inline fun ensureDirectory(
     directory: File,
     lazyMessage: () -> Any,
 ) {
@@ -43,7 +43,7 @@ inline fun ensureDirectory(
 /**
  * Checks whether [file] with exists or not. Else throws [FileNotFoundException].
  */
-inline fun ensureFileExists(
+public inline fun ensureFileExists(
     file: File,
     lazyMessage: () -> Any,
 ): File {
@@ -54,7 +54,7 @@ inline fun ensureFileExists(
     return file
 }
 
-fun cleanupDirectory(outputDirectory: File) {
+public fun cleanupDirectory(outputDirectory: File) {
     if (outputDirectory.exists()) {
         if (!outputDirectory.isDirectory) {
             throw FileNotFoundException("'$outputDirectory' is not a directory")

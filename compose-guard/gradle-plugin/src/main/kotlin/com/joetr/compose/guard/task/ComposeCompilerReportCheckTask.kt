@@ -23,35 +23,31 @@
  */
 package com.joetr.compose.guard.task
 
-import com.android.build.api.variant.Variant
 import com.joetr.compose.guard.ComposeChecks
 import com.joetr.compose.guard.ComposeCompilerCheckExtension
 import com.joetr.compose.guard.ComposeCompilerReportExtension
+import com.joetr.compose.guard.KEY_CHECK_GEN
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
 import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
 import com.joetr.compose.guard.core.utils.ensureFileExists
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.tooling.GradleConnector
 
-const val KEY_CHECK_GEN = "composeCompiler.check.enable"
-
-abstract class ComposeCompilerReportCheckTask : DefaultTask() {
+public abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
-    abstract val compileKotlinTasks: Property<String>
+    public abstract val compileKotlinTasks: Property<String>
 
     @get:OutputDirectory
-    abstract val outputDirectory: DirectoryProperty
+    public abstract val outputDirectory: DirectoryProperty
 
     @TaskAction
-    fun check() {
+    public fun check() {
         generateRawMetricsAndReport()
 
         val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
@@ -97,18 +93,4 @@ abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                     .run()
             }
     }
-}
-
-fun Project.registerComposeCompilerReportCheckTaskForVariant(variant: Variant): TaskProvider<ComposeCompilerReportCheckTask> {
-    val taskName = variant.name + "ComposeCompilerCheck"
-    val compileKotlinTaskName = compileKotlinTaskNameFromVariant(variant)
-
-    val task = tasks.register(taskName, ComposeCompilerReportCheckTask::class.java)
-
-    val reportExtension = ComposeCompilerReportExtension.get(project)
-
-    task.get().compileKotlinTasks.set(compileKotlinTaskName)
-    task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
-
-    return task
 }

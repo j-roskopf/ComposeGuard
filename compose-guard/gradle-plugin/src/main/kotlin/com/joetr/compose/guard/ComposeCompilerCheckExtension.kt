@@ -29,19 +29,19 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import java.io.File
 
-interface ComposeCompilerCheckExtension {
-    val outputDirectory: Property<File>
+public interface ComposeCompilerCheckExtension {
+    public val outputDirectory: Property<File>
 
-    val composeRawMetricsOutputDirectory: File
+    public val composeRawMetricsOutputDirectory: File
         get() = outputDirectory.get().resolve("raw")
 
-    companion object {
+    public companion object {
         private const val NAME = "composeCompilerCheck"
 
         /**
          * Creates an extension of type [ComposeCompilerCheckExtension] and returns
          */
-        fun create(target: Project) =
+        public fun create(target: Project): ComposeCompilerCheckExtension =
             target.extensions.create<ComposeCompilerCheckExtension>(NAME).apply {
                 outputDirectory.convention(target.layout.buildDirectory.asFile.get().resolve("compose_reports"))
             }
@@ -49,6 +49,6 @@ interface ComposeCompilerCheckExtension {
         /**
          * Get extensions applied to the [target] project.
          */
-        fun get(target: Project) = target.extensions.getByType<ComposeCompilerCheckExtension>()
+        public fun get(target: Project): ComposeCompilerCheckExtension = target.extensions.getByType<ComposeCompilerCheckExtension>()
     }
 }

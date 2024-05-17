@@ -25,6 +25,10 @@ repositories {
     maven(url = "https://plugins.gradle.org/m2/")
 }
 
+kotlin {
+    explicitApi()
+}
+
 dependencies {
     compileOnly(gradleApi())
     compileOnly(kotlin("stdlib"))

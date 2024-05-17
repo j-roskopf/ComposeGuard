@@ -36,7 +36,7 @@ import com.joetr.compose.guard.core.model.StabilityStatus
  * @property isInline States whether composable function is inline or not
  * @property params List of parameters of a composable function
  */
-data class ComposableDetail(
+public data class ComposableDetail(
     val functionName: String,
     val isRestartable: Boolean,
     val isSkippable: Boolean,
@@ -50,7 +50,7 @@ data class ComposableDetail(
      * @property condition Stability condition of a parameter
      * @property details Name and type details of a parameter
      */
-    data class Parameter(val condition: Condition, val stabilityStatus: StabilityStatus, val details: String) {
+    public data class Parameter(val condition: Condition, val stabilityStatus: StabilityStatus, val details: String) {
         private val nameAndType by lazy {
             details.split(":").map { it.trim() }.let { (name, type) -> name to type }
         }
@@ -66,7 +66,7 @@ data class ComposableDetail(
         val type: String get() = nameAndType.second
     }
 
-    data class FunctionAndParameter(
+    public data class FunctionAndParameter(
         val functionName: String,
         val parameterName: String,
         val parameterType: String,

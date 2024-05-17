@@ -25,8 +25,8 @@ package com.joetr.compose.guard.core.mapper
 
 import com.joetr.compose.guard.core.model.StabilityStatus
 
-object StabilityStatusMapper {
-    fun from(parameter: String): StabilityStatus {
+public object StabilityStatusMapper {
+    public fun from(parameter: String): StabilityStatus {
         return when {
             parameter.contains("@dynamic") -> StabilityStatus.DYNAMIC
             parameter.contains("@static") -> StabilityStatus.STATIC

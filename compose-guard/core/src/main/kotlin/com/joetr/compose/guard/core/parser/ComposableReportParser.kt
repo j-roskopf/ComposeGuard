@@ -33,7 +33,7 @@ import com.joetr.compose.guard.core.model.composables.ComposablesReport
 /**
  * Parses [ComposablesReport] from the [String] content.
  */
-object ComposableReportParser : Parser<String, ComposablesReport> {
+public object ComposableReportParser : Parser<String, ComposablesReport> {
     private val REGEX_COMPOSABLE_FUNCTION = "(?:(.*))fun (\\w*)".toRegex()
     private val REGEX_COMPOSABLE_PARAMETERS = "(?:(stable|unstable|) (\\w*:\\s.*))".toRegex()
 

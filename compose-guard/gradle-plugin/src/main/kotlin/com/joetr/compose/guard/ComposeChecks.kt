@@ -28,8 +28,8 @@ import com.joetr.compose.guard.core.model.StabilityStatus
 import com.joetr.compose.guard.core.model.composables.ComposableDetail
 import org.gradle.api.GradleException
 
-object ComposeChecks {
-    fun check(
+public object ComposeChecks {
+    public fun check(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
     ) {

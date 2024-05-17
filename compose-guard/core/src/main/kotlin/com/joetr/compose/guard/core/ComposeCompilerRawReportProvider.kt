@@ -31,16 +31,16 @@ import java.io.File
 /**
  * Provide files of compose compiler metrics and reports
  */
-sealed interface ComposeCompilerRawReportProvider {
-    val briefStatisticsJsonFiles: List<File>
-    val detailedStatisticsCsvFiles: List<File>
-    val composableReportFiles: List<File>
-    val classesReportFiles: List<File>
+public sealed interface ComposeCompilerRawReportProvider {
+    public val briefStatisticsJsonFiles: List<File>
+    public val detailedStatisticsCsvFiles: List<File>
+    public val composableReportFiles: List<File>
+    public val classesReportFiles: List<File>
 
     /**
      * Provides report from individual files
      */
-    class FromIndividualFiles(
+    public class FromIndividualFiles(
         override val briefStatisticsJsonFiles: List<File>,
         override val detailedStatisticsCsvFiles: List<File>,
         override val composableReportFiles: List<File>,
@@ -54,7 +54,7 @@ sealed interface ComposeCompilerRawReportProvider {
     /**
      * Searches for files in the given [directory] and provides report and metric files found in that directory.
      */
-    class FromDirectory(directory: File) : ComposeCompilerRawReportProvider {
+    public class FromDirectory(directory: File) : ComposeCompilerRawReportProvider {
         private val finder = ReportAndMetricsFileFinder(directory)
 
         override val briefStatisticsJsonFiles: List<File> = finder.findBriefStatisticsJsonFile()
@@ -72,7 +72,7 @@ sealed interface ComposeCompilerRawReportProvider {
 /**
  * Validates report and metric files
  */
-fun ComposeCompilerRawReportProvider.validateComposeCompilerRawReportProvider() {
+public fun ComposeCompilerRawReportProvider.validateComposeCompilerRawReportProvider() {
     val files =
         briefStatisticsJsonFiles +
             detailedStatisticsCsvFiles +

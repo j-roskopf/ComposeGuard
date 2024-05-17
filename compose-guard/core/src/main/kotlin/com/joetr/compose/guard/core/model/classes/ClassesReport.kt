@@ -32,7 +32,7 @@ import com.joetr.compose.guard.core.model.Condition
  * @property classes All class details
  * @property errors List of Errors occurred while parsing the classes
  */
-data class ClassesReport(val classes: List<ClassDetail>, val errors: List<ParsingException>) {
+public data class ClassesReport(val classes: List<ClassDetail>, val errors: List<ParsingException>) {
     private val stableAndUnstableClasses by lazy {
         classes.partition { it.stability === Condition.STABLE }
     }
@@ -40,10 +40,10 @@ data class ClassesReport(val classes: List<ClassDetail>, val errors: List<Parsin
     /**
      * List of stable classes
      */
-    val stableClasses = stableAndUnstableClasses.first
+    public val stableClasses: List<ClassDetail> = stableAndUnstableClasses.first
 
     /**
      * List of unstable classes
      */
-    val unstableClasses = stableAndUnstableClasses.second
+    public val unstableClasses: List<ClassDetail> = stableAndUnstableClasses.second
 }

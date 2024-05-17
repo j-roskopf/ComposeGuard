@@ -30,30 +30,30 @@ import java.io.File
  *
  * @param directory The directory in which files will be searched
  */
-class ReportAndMetricsFileFinder(directory: File) {
+public class ReportAndMetricsFileFinder(directory: File) {
     private val allFiles =
         directory
             .listFiles()
             ?.filterNotNull()
             ?: emptyList()
 
-    fun findBriefStatisticsJsonFile(): List<File> {
+    public fun findBriefStatisticsJsonFile(): List<File> {
         return allFiles.filter { it.name.endsWith(FileSuffixes.MODULE_REPORT_JSON) }
     }
 
-    fun findDetailsStatisticsCsvFile(): List<File> {
+    public fun findDetailsStatisticsCsvFile(): List<File> {
         return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_STATS_METRICS_CSV) }
     }
 
-    fun findComposablesReportTxtFile(): List<File> {
+    public fun findComposablesReportTxtFile(): List<File> {
         return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_REPORT_TXT) }
     }
 
-    fun findClassesReportTxtFile(): List<File> {
+    public fun findClassesReportTxtFile(): List<File> {
         return allFiles.filter { it.name.endsWith(FileSuffixes.CLASSES_REPORT_TXT) }
     }
 
-    object FileSuffixes {
+    private object FileSuffixes {
         const val CLASSES_REPORT_TXT = "-classes.txt"
         const val COMPOSABLES_REPORT_TXT = "-composables.txt"
         const val COMPOSABLES_STATS_METRICS_CSV = "-composables.csv"

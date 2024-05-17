@@ -21,22 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.joetr.compose.guard.task
+package com.joetr.compose.guard
 
-import com.joetr.compose.guard.ComposeCompilerCheckExtension
-import com.joetr.compose.guard.ComposeCompilerReportExtension
-import com.joetr.compose.guard.core.utils.cleanupDirectory
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.getByType
-
-public abstract class ComposeCompilerReportCleanTask : DefaultTask() {
-    @TaskAction
-    public fun generate() {
-        val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
-        val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
-
-        cleanupDirectory(genExtension.outputDirectory.get())
-        cleanupDirectory(checkExtension.outputDirectory.get())
-    }
-}
+public const val KEY_GOLDEN_GEN: String = "composeCompiler.reportGen.enable"
+public const val KEY_CHECK_GEN: String = "composeCompiler.check.enable"

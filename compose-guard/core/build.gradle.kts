@@ -16,6 +16,10 @@ plugins {
     alias(libs.plugins.mavenPublish)
 }
 
+kotlin {
+    explicitApi()
+}
+
 repositories {
     mavenCentral()
 }

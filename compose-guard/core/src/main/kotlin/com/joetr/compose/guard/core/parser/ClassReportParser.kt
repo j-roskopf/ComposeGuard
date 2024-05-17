@@ -31,7 +31,7 @@ import com.joetr.compose.guard.core.model.classes.ClassesReport
 /**
  * Parses [ClassesReport] from the [String] content.
  */
-object ClassReportParser : Parser<String, ClassesReport> {
+public object ClassReportParser : Parser<String, ClassesReport> {
     private val REGEX_RUNTIME_STABILITY = "<runtime stability> = (\\w+)".toRegex()
     private val REGEX_CLASS_NAME = "(stable|unstable|runtime) class (\\w*)".toRegex()
     private val REGEX_CLASS_FIELDS = "((\\w*) ((?:val|var) .*))".toRegex()

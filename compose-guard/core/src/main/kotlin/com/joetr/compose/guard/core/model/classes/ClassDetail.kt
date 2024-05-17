@@ -34,7 +34,7 @@ import com.joetr.compose.guard.core.model.RawContent
  * @property runtimeStability Runtime stability of a class
  * @property fields List of member fields of a class
  */
-data class ClassDetail(
+public data class ClassDetail(
     val className: String,
     val stability: Condition,
     val runtimeStability: Condition?,
@@ -47,7 +47,7 @@ data class ClassDetail(
      * @property status Status of a field. E.g. STABLE, UNSTABLE, etc
      * @property details Name and type details of a field.
      */
-    data class Field(val status: String, val details: String) {
+    public data class Field(val status: String, val details: String) {
         private val nameAndType by lazy {
             details.split(":")
                 .map { it.trim() }

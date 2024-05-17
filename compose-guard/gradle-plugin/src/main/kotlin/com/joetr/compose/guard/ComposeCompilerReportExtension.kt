@@ -29,22 +29,22 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import java.io.File
 
-interface ComposeCompilerReportExtension {
+public interface ComposeCompilerReportExtension {
     /**
      * The directory where report will be stored.
      */
-    val outputDirectory: Property<File>
+    public val outputDirectory: Property<File>
 
-    val composeRawMetricsOutputDirectory: File
+    public val composeRawMetricsOutputDirectory: File
         get() = outputDirectory.get().resolve("raw")
 
-    companion object {
+    public companion object {
         private const val NAME = "composeGuard"
 
         /**
          * Creates an extension of type [ComposeCompilerReportExtension] and returns
          */
-        fun create(target: Project) =
+        public fun create(target: Project): ComposeCompilerReportExtension =
             target.extensions.create<ComposeCompilerReportExtension>(NAME).apply {
                 outputDirectory.convention(target.projectDir.resolve("compose_reports"))
             }
@@ -52,6 +52,6 @@ interface ComposeCompilerReportExtension {
         /**
          * Get extensions applied to the [target] project.
          */
-        fun get(target: Project) = target.extensions.getByType<ComposeCompilerReportExtension>()
+        public fun get(target: Project): ComposeCompilerReportExtension = target.extensions.getByType<ComposeCompilerReportExtension>()
     }
 }
