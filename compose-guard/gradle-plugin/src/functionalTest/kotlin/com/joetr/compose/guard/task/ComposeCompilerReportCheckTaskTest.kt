@@ -164,7 +164,7 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(
             checkResult.output,
         ).contains(
-            "FunctionAndParameter(functionName=TestComposable, parameterName=test, parameterType=Test? = @dynamic Test(\"default\"))",
+            "FunctionAndParameter(functionName=TestComposable, parameterName=test, parameterType=Test?)",
         )
         assertThat(checkResult).task(checkTask).failed()
     }

@@ -35,7 +35,32 @@ import com.joetr.compose.guard.core.model.composables.ComposablesReport
  */
 public object ComposableReportParser : Parser<String, ComposablesReport> {
     private val REGEX_COMPOSABLE_FUNCTION = "(?:(.*))fun (\\w*)".toRegex()
-    private val REGEX_COMPOSABLE_PARAMETERS = "(?:(stable|unstable|) (\\w*:\\s.*))".toRegex()
+
+    /**
+     * Example matches:
+     *
+     * unstable testClass: TestDataClass? = @dynamic TestDataClass("default")
+     * unused stable nonDefaultParameter: Int
+     *
+     * Link with further explanation with this regex selected:
+     *
+     * https://regex101.com/r/gI9mqs/2
+     */
+    private val REGEX_COMPOSABLE_PARAMETERS =
+        (
+            // 1st capture group, matches the optional unused at the beginning
+            "(unused )?" +
+                // 2nd capture group, matches the required stable or unstable
+                "(stable|unstable)" +
+                // 3rd capture group, matches name + type (including optional question mark on type)
+                "(.*:\\s\\w*\\??)" +
+                // 4th optional capture group, matches the equal sign in case of default parameter
+                "(\\s=\\s|)?" +
+                // 5th capture group, matches the optional @static or @dynamic on default properties
+                "(@static|@dynamic|)?" +
+                // captures remaining value
+                ".*"
+        ).toRegex()
 
     /**
      * Parses all composable functions
@@ -90,7 +115,13 @@ public object ComposableReportParser : Parser<String, ComposablesReport> {
         val params =
             REGEX_COMPOSABLE_PARAMETERS.findAll(function).map { it.groupValues }.filter { it.isNotEmpty() }
                 .map {
-                    ComposableDetail.Parameter(ConditionMapper.from(it[1]), StabilityStatusMapper.from(it[0]), it[2])
+                    ComposableDetail.Parameter(
+                        raw = it[0],
+                        unused = it[1].isNotEmpty(),
+                        condition = ConditionMapper.from(it[2]),
+                        details = it[3],
+                        stabilityStatus = StabilityStatusMapper.from(it[5]),
+                    )
                 }.toList()
 
         return ComposableDetail(
