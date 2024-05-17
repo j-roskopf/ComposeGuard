@@ -26,7 +26,9 @@ package com.joetr.compose.guard
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.Variant
-import com.joetr.compose.guard.task.*
+import com.joetr.compose.guard.task.ComposeCompilerReportCheckTask
+import com.joetr.compose.guard.task.ComposeCompilerReportCleanTask
+import com.joetr.compose.guard.task.ComposeCompilerReportGenerateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
