@@ -16,6 +16,26 @@ Adds 3 tasks:
 * `composeCompilerClean`
   - Deletes all compiler metrics
 
+## Adding To Your Project
+
+Available via Maven Central
+
+In your root build file:
+
+```kotlin
+plugins {
+    id("com.joetr.compose.guard") version "<latest version>" apply false
+}
+```
+
+In any module you want to apply checks:
+
+```kotlin
+plugins {
+    id("com.joetr.compose.guard")
+}
+```
+
 ## Signing locally
 
 This is required to test.
