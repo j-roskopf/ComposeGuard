@@ -24,6 +24,7 @@
 package com.joetr.compose.guard
 
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
+import com.joetr.compose.guard.core.model.Condition.UNSTABLE
 import com.joetr.compose.guard.core.model.StabilityStatus
 import com.joetr.compose.guard.core.model.composables.ComposableDetail
 import org.gradle.api.GradleException
@@ -36,6 +37,7 @@ public object ComposeChecks {
         checkDynamicDefaultExpressions(checkedMetrics, goldenMetrics)
         checkUnstableClasses(checkedMetrics, goldenMetrics)
         checkSkippableButNotRestartableComposables(checkedMetrics, goldenMetrics)
+        checkUnstableParams(checkedMetrics, goldenMetrics)
     }
 
     private fun checkDynamicDefaultExpressions(
@@ -136,6 +138,53 @@ public object ComposeChecks {
                     }.joinToString(",") + "\n" +
                     "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
                     "#classes-that-are-unstable",
+            )
+        }
+    }
+
+    private fun checkUnstableParams(
+        checkedMetrics: ComposeCompilerMetricsProvider,
+        goldenMetrics: ComposeCompilerMetricsProvider,
+    ) {
+        val checkedUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
+        checkedMetrics.getComposablesReport().composables.forEach { composable ->
+            composable.params.filter {
+                it.condition == UNSTABLE
+            }.forEach { param ->
+                checkedUnstableParamsMap[
+                    ComposableDetail.FunctionAndParameter(
+                        functionName = composable.functionName,
+                        parameterName = param.name,
+                        parameterType = param.type,
+                    ),
+                ] = param.stabilityStatus.toString()
+            }
+        }
+
+        val goldenUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
+        goldenMetrics.getComposablesReport().composables.forEach { composable ->
+            composable.params.filter {
+                it.condition == UNSTABLE
+            }.forEach { param ->
+                goldenUnstableParamsMap[
+                    ComposableDetail.FunctionAndParameter(
+                        functionName = composable.functionName,
+                        parameterName = param.name,
+                        parameterType = param.type,
+                    ),
+                ] = param.stabilityStatus.toString()
+            }
+        }
+
+        // find new unstable parameters by removing all golden parameters from checked parameters
+        checkedUnstableParamsMap.keys.removeAll(goldenUnstableParamsMap.keys)
+
+        if (checkedUnstableParamsMap.isNotEmpty()) {
+            throw GradleException(
+                "New unstable parameters were added! \n" +
+                    checkedUnstableParamsMap.keys.joinToString(separator = ",") + "\n" +
+                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "#parameters-that-are-unstable",
             )
         }
     }
