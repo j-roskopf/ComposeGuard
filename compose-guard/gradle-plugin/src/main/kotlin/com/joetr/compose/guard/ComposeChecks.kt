@@ -120,11 +120,19 @@ public object ComposeChecks {
         // remove all golden values from checked
         checkedUnstableClassesMap.keys.removeAll(goldenUnstableClassesMap.keys)
 
-        if (checkedUnstableClassesMap.keys.isNotEmpty()) {
+        // we only want to alert on unstable classes used as composable parameters
+        val unstableClassesUsedInComposables =
+            checkedMetrics.getComposablesReport().composables.flatMap {
+                it.params
+            }.filter {
+                checkedUnstableClassesMap.containsKey(it.type)
+            }
+
+        if (unstableClassesUsedInComposables.isNotEmpty()) {
             throw GradleException(
                 "New unstable classes were added! \n" +
-                    checkedUnstableClassesMap.map {
-                        it.value
+                    unstableClassesUsedInComposables.map {
+                        checkedUnstableClassesMap[it.type]
                     }.joinToString(",") + "\n" +
                     "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
                     "#classes-that-are-unstable",

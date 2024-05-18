@@ -1,10 +1,10 @@
 {
- "skippableComposables": 0,
+ "skippableComposables": 1,
  "restartableComposables": 1,
  "readonlyComposables": 0,
  "totalComposables": 1,
  "restartGroups": 1,
- "totalGroups": 1,
+ "totalGroups": 2,
  "staticArguments": 0,
  "certainArguments": 1,
  "knownStableArguments": 17,
