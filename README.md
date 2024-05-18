@@ -4,7 +4,7 @@
 
 A gradle plugin for detecting regressions in Jetpack Compose:
 * New restartable but not skippable @Composables are added
-* New unstable classes are added
+* New unstable classes are added (only triggers if they are used as a @Composable parameter)
 * New @dynamic properties are added
 * TODO - New unstable parameters are added to a @Composable
 
@@ -33,6 +33,24 @@ signing.password=PASSWORD_USED_TO_GENERATE_KEY
 signing.secretKeyRingFile=/Users/YOURUSERNAME/.gnupg/composeguard.gpg (or wherever you stored the keyring you generated earlier)
 ```
 
+## Adding To Your Project
+
+In your root build file
+
+```kotlin
+plugins {
+    id("com.joetr.compose.guard") version "<latest version>" apply false
+}
+```
+
+In any module you want to apply checks:
+
+```kotlin
+plugins {
+    id("com.joetr.compose.guard")
+}
+```
+
 ## Binary Compatibility Validator
 
 This project uses [this](https://github.com/Kotlin/binary-compatibility-validator) tool to ensure the public binary API wasn't changed in a way that makes it binary incompatible.
@@ -40,6 +58,3 @@ This project uses [this](https://github.com/Kotlin/binary-compatibility-validato
 The tool allows dumping binary API of a JVM part of a Kotlin library that is public in the sense of Kotlin visibilities.
 
 To generate a new binary dump, run `./gradlew apiDump` in the root of the project.
-
-TODO
-* detekt

@@ -113,6 +113,11 @@ class ComposeCompilerReportCheckTaskTest {
             fun TestComposable(test: Test) {
                 Text(text = test.name)
             }
+            
+            @Composable
+            fun AnotherTestComposable(test: AnotherUnstableClass) {
+                Text(text = test.unstable)
+            }
             """.trimIndent(),
         )
 
@@ -221,5 +226,56 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(checkResult.output).contains("stable var unstable: String")
         assertThat(checkResult.output).contains("<runtime stability> = Unstable")
         assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
+    fun `if new unstable class is added that is not used in composable, check succeeds, then when it is used, check task fails`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // generate golden
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // add new unstable class
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/AnotherUnstableClass.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+            
+            // this is the new class
+            data class AnotherUnstableClass(var unstable: String)
+            """.trimIndent(),
+        )
+
+        // assert check succeeds because we don't want to trigger a failure if the new class is not used in composable
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        // now use the unstable class
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+            
+            @Composable
+            fun TestComposable(test: AnotherUnstableClass) {
+                Text(text = test.unstable)
+            }
+            """.trimIndent(),
+        )
+
+        val secondaryCheckResult = project.executeAndFail(":android:releaseComposeCompilerCheck", "--rerun-tasks")
+        assertThat(secondaryCheckResult.output).contains("New unstable classes were added!")
+        assertThat(secondaryCheckResult.output).contains(
+            "ClassDetail(className=AnotherUnstableClass, stability=UNSTABLE, runtimeStability=UNSTABLE, " +
+                "fields=[Field(status=stable, details=var unstable: String)], " +
+                "rawContent=RawContent(content=unstable class AnotherUnstableClass {",
+        )
+        assertThat(secondaryCheckResult.output).contains("stable var unstable: String")
+        assertThat(secondaryCheckResult.output).contains("<runtime stability> = Unstable")
+        assertThat(secondaryCheckResult).task(checkTask).failed()
     }
 }
