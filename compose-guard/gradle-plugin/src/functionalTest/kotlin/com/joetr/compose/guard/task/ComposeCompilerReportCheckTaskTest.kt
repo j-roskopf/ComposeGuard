@@ -175,6 +175,73 @@ class ComposeCompilerReportCheckTaskTest {
     }
 
     @Test
+    fun `can detect when new dynamic properties were added and old ones were deleted`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // start with 3 dynamic properties
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class Test1(var name: String)
+            data class Test2(var name: String)
+            data class Test3(var name: String)
+
+            @Composable
+            fun TestComposable(
+                test1: Test1 = Test1("default"),
+                test2: Test2 = Test2("default"),
+                test3: Test3 = Test3("default"),
+            ) {
+                Text(text = test1.name)
+                Text(text = test2.name)
+                Text(text = test3.name)
+            }
+            """.trimIndent(),
+        )
+
+        // delete 2 and add another
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class Test1(var name: String)
+            data class Test4(var name: String)
+
+            @Composable
+            fun TestComposable(
+                test1: Test1 = Test1("default"),
+                test4: Test4 = Test4("default"),
+            ) {
+                Text(text = test1.name)
+                Text(text = test4.name)
+            }
+            """.trimIndent(),
+        )
+
+        // assert check fails with new unstable class
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New @dynamic parameters were added!")
+        assertThat(
+            checkResult.output,
+        ).contains(
+            "FunctionAndParameter(functionName=TestComposable, parameterName=test4, parameterType=Test4?)",
+        )
+        assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
     fun `if no change in metrics, no failures`() {
         val project = BasicAndroidProject.getComposeProject()
         val generateTask = ":android:releaseComposeCompilerGenerate"
