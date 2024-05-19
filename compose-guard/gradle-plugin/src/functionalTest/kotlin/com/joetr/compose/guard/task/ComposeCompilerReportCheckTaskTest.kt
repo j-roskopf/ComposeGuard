@@ -384,8 +384,8 @@ class ComposeCompilerReportCheckTaskTest {
             data class OtherUnstableClass(var value: String)
 
             @Composable
-            fun TestComposable(firstUnstable: UnstableClass, newUnstable: OtherUnstableClass) {
-                Text(text = firstUnstable.value + newUnstable.value )
+            fun TestComposable(newUnstable: OtherUnstableClass) {
+                Text(text = newUnstable.value )
                 }
             """.trimIndent(),
         )
@@ -395,7 +395,7 @@ class ComposeCompilerReportCheckTaskTest {
         val checkResult = project.executeAndFail(checkTask)
         assertThat(checkResult.output).contains("New unstable parameters were added!")
         assertThat(checkResult.output).contains(
-            "FunctionAndParameter(functionName=TestComposable, parameterName=newUnstable, parameterType=OtherUnstableClass)",
+            "Function: TestComposable, Parameter: newUnstable, Type: OtherUnstableClass",
         )
         assertThat(checkResult).task(checkTask).failed()
     }

@@ -36,7 +36,7 @@ public object ComposeChecks {
     ) {
         checkDynamicDefaultExpressions(checkedMetrics, goldenMetrics)
         checkUnstableClasses(checkedMetrics, goldenMetrics)
-        checkSkippableButNotRestartableComposables(checkedMetrics, goldenMetrics)
+        checkRestartableButNotSkippable(checkedMetrics, goldenMetrics)
         checkUnstableParams(checkedMetrics, goldenMetrics)
     }
 
@@ -86,7 +86,7 @@ public object ComposeChecks {
         }
     }
 
-    private fun checkSkippableButNotRestartableComposables(
+    private fun checkRestartableButNotSkippable(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
     ) {
@@ -176,15 +176,14 @@ public object ComposeChecks {
             }
         }
 
-        // find new unstable parameters by removing all golden parameters from checked parameters
-        checkedUnstableParamsMap.keys.removeAll(goldenUnstableParamsMap.keys)
+        val newUnstableParamsMap = checkedUnstableParamsMap.filterKeys { it !in goldenUnstableParamsMap.keys }
 
-        if (checkedUnstableParamsMap.isNotEmpty()) {
+        if (newUnstableParamsMap.isNotEmpty()) {
             throw GradleException(
                 "New unstable parameters were added! \n" +
-                    checkedUnstableParamsMap.keys.joinToString(separator = ",") + "\n" +
-                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
-                    "#parameters-that-are-unstable",
+                    newUnstableParamsMap.keys.joinToString(separator = ",") {
+                        "Function: ${it.functionName}, Parameter: ${it.parameterName}, Type: ${it.parameterType}"
+                    },
             )
         }
     }

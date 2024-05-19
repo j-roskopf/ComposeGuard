@@ -6,7 +6,7 @@ A gradle plugin for detecting regressions in Jetpack Compose:
 * New restartable but not skippable @Composables are added
 * New unstable classes are added (only triggers if they are used as a @Composable parameter)
 * New @dynamic properties are added
-* TODO - New unstable parameters are added to a @Composable
+* New unstable parameters are added to a @Composable
 
 Adds 3 tasks:
 * `<variant>ComposeCompilerGenerate` (example `releaseComposeCompilerGenerate`)
