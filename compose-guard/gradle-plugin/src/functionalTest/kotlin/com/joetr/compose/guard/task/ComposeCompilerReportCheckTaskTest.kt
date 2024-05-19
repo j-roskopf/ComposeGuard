@@ -347,6 +347,60 @@ class ComposeCompilerReportCheckTaskTest {
     }
 
     @Test
+    fun `can detect when new unstable parameters are added`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // add unstable class and dynamic property so that check doesn't fail and generate golden metrics
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(firstUnstable: UnstableClass) {
+                Text(text = firstUnstable.value)
+            }
+            """.trimIndent(),
+        )
+        // Generate golden metrics with the new class included
+        var generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(newUnstable: OtherUnstableClass) {
+                Text(text = newUnstable.value )
+                }
+            """.trimIndent(),
+        )
+
+        // Assert check fails with new unstable parameter
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New unstable parameters were added in the following composables!")
+        assertThat(checkResult.output).contains(
+            "FunctionAndParameter(functionName=TestComposable, parameterName=newUnstable, parameterType=OtherUnstableClass)",
+        )
+        assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
     fun `is compatible with configuration cache`() {
         val project = BasicAndroidProject.getComposeProject()
         val generateTask = ":android:releaseComposeCompilerGenerate"
