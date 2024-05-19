@@ -36,14 +36,6 @@ public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider
 	public static final fun validateComposeCompilerRawReportProvider (Lcom/joetr/compose/guard/core/ComposeCompilerRawReportProvider;)V
 }
 
-public final class com/joetr/compose/guard/core/ComposeMetricsContentProvider {
-	public fun <init> (Lcom/joetr/compose/guard/core/ComposeCompilerRawReportProvider;)V
-	public final fun getBriefStatisticsContents ()Ljava/util/List;
-	public final fun getClassesReportContents ()Ljava/lang/String;
-	public final fun getComposablesReportContents ()Ljava/lang/String;
-	public final fun getDetailedStatisticsCsvRows ()Ljava/util/List;
-}
-
 public final class com/joetr/compose/guard/core/exception/ParsingException : java/lang/RuntimeException {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -254,29 +246,8 @@ public final class com/joetr/compose/guard/core/model/composables/ComposablesRep
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/joetr/compose/guard/core/parser/ClassReportParser : com/joetr/compose/guard/core/parser/Parser {
-	public static final field INSTANCE Lcom/joetr/compose/guard/core/parser/ClassReportParser;
-	public synthetic fun parse (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun parse (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/classes/ClassesReport;
-}
-
-public final class com/joetr/compose/guard/core/parser/ComposableReportParser : com/joetr/compose/guard/core/parser/Parser {
-	public static final field INSTANCE Lcom/joetr/compose/guard/core/parser/ComposableReportParser;
-	public synthetic fun parse (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun parse (Ljava/lang/String;)Lcom/joetr/compose/guard/core/model/composables/ComposablesReport;
-}
-
-public abstract interface class com/joetr/compose/guard/core/parser/Parser {
-	public abstract fun parse (Ljava/lang/Object;)Ljava/lang/Object;
-}
-
-public final class com/joetr/compose/guard/core/utils/CamelCaseToWordKt {
-	public static final fun camelCaseToWord (Ljava/lang/String;)Ljava/lang/String;
-}
-
 public final class com/joetr/compose/guard/core/utils/FileUtilsKt {
 	public static final fun cleanupDirectory (Ljava/io/File;)V
-	public static final fun ensureDirectory (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
 	public static final fun ensureFileExists (Ljava/io/File;Lkotlin/jvm/functions/Function0;)Ljava/io/File;
 }
 

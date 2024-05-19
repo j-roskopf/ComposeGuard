@@ -30,7 +30,7 @@ import java.io.FileNotFoundException
  * Checks whether directory with [path] exists or not.
  * Else throws [FileNotFoundException].
  */
-public inline fun ensureDirectory(
+internal inline fun ensureDirectory(
     directory: File,
     lazyMessage: () -> Any,
 ) {

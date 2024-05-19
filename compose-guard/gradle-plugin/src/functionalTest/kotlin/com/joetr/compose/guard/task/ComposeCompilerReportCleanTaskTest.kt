@@ -61,4 +61,12 @@ class ComposeCompilerReportCleanTaskTest {
         assertThat(project).findArtifactInBuild("android", "compose_reports/raw/android_release-classes.txt").isNull()
         assertThat(project).findArtifactInSrc("android", "android_release-classes.txt", "compose_reports/raw").isNull()
     }
+
+    @Test
+    fun `is compatible with configuration cache`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val cleanTask = ":android:composeCompilerClean"
+        val cleanResult = project.execute("--configuration-cache", cleanTask)
+        assertThat(cleanResult).task(cleanTask).succeeded()
+    }
 }
