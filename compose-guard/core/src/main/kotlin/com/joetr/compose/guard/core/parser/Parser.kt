@@ -26,9 +26,9 @@ package com.joetr.compose.guard.core.parser
 /**
  * Core parser for parsing value from [I] type to [O] type.
  */
-public interface Parser<I, O> {
+internal interface Parser<I, O> {
     /**
      * Parses the [content] and returns [O]
      */
-    public fun parse(content: I): O
+    fun parse(content: I): O
 }

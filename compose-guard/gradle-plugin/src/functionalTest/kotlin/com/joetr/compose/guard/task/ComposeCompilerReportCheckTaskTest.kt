@@ -345,4 +345,17 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(secondaryCheckResult.output).contains("<runtime stability> = Unstable")
         assertThat(secondaryCheckResult).task(checkTask).failed()
     }
+
+    @Test
+    fun `is compatible with configuration cache`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+        val checkTask = ":android:releaseComposeCompilerCheck"
+
+        val generateResult = project.execute("--configuration-cache", generateTask)
+        val checkResult = project.execute("--configuration-cache", checkTask)
+
+        assertThat(generateResult).task(generateTask).succeeded()
+        assertThat(checkResult).task(checkTask).succeeded()
+    }
 }

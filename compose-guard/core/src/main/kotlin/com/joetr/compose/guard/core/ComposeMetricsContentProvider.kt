@@ -26,9 +26,9 @@ package com.joetr.compose.guard.core
 /**
  * Provides content of a composable report and metrics
  */
-public class ComposeMetricsContentProvider(private val fileProvider: ComposeCompilerRawReportProvider) {
-    public val briefStatisticsContents: List<String> get() = fileProvider.briefStatisticsJsonFiles.map { it.readText() }
-    public val detailedStatisticsCsvRows: List<String> get() = fileProvider.detailedStatisticsCsvFiles.flatMap { it.readLines() }
-    public val composablesReportContents: String get() = fileProvider.composableReportFiles.joinToString(separator = "\n") { it.readText() }
-    public val classesReportContents: String get() = fileProvider.classesReportFiles.joinToString(separator = "\n") { it.readText() }
+internal class ComposeMetricsContentProvider(private val fileProvider: ComposeCompilerRawReportProvider) {
+    val briefStatisticsContents: List<String> get() = fileProvider.briefStatisticsJsonFiles.map { it.readText() }
+    val detailedStatisticsCsvRows: List<String> get() = fileProvider.detailedStatisticsCsvFiles.flatMap { it.readLines() }
+    val composablesReportContents: String get() = fileProvider.composableReportFiles.joinToString(separator = "\n") { it.readText() }
+    val classesReportContents: String get() = fileProvider.classesReportFiles.joinToString(separator = "\n") { it.readText() }
 }
