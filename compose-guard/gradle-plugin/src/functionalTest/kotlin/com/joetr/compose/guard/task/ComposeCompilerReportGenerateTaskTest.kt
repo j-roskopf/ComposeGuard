@@ -69,4 +69,17 @@ class ComposeCompilerReportGenerateTaskTest {
         assertThat(project).artifactInBuild("android", "custom_dir/raw/android_release-composables.txt").isType("txt")
         assertThat(project).artifactInBuild("android", "custom_dir/raw/android_release-module.json").isType("json")
     }
+
+    @Test
+    fun `is compatible with configuration cache`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val task = ":android:releaseComposeCompilerGenerate"
+        val result = project.execute("--configuration-cache", task)
+
+        assertThat(result).task(task).succeeded()
+        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports/raw").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports/raw").isType("csv")
+        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports/raw").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports/raw").isType("json")
+    }
 }

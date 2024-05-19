@@ -26,25 +26,36 @@ package com.joetr.compose.guard.task
 import com.joetr.compose.guard.KEY_GOLDEN_GEN
 import com.joetr.compose.guard.core.utils.cleanupDirectory
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.tooling.GradleConnector
 
-public abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
+internal abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
     @get:Input
-    public abstract val compileKotlinTasks: Property<String>
+    abstract val compileKotlinTasks: Property<String>
 
     @get:OutputDirectory
-    public abstract val composeRawMetricsOutputDirectory: DirectoryProperty
+    abstract val composeRawMetricsOutputDirectory: DirectoryProperty
+
+    /** This input only exists to signal task dependencies */
+    @get:InputFiles
+    @get:IgnoreEmptyDirectories
+    abstract val kotlinSources: ConfigurableFileCollection
 
     @get:OutputDirectory
-    public abstract val outputDirectory: DirectoryProperty
+    abstract val outputDirectory: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val projectDirectory: DirectoryProperty
 
     @TaskAction
-    public fun generate() {
+    fun generate() {
         val outputDirectory = outputDirectory.get().asFile
         cleanupDirectory(outputDirectory)
 
@@ -52,7 +63,7 @@ public abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
     }
 
     private fun generateRawMetricsAndReport() {
-        GradleConnector.newConnector().forProjectDirectory(project.layout.projectDirectory.asFile)
+        GradleConnector.newConnector().forProjectDirectory(projectDirectory.asFile.get())
             .connect()
             .use {
                 it.newBuild()

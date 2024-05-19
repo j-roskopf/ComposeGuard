@@ -31,12 +31,14 @@ import com.joetr.compose.guard.task.ComposeCompilerReportCleanTask
 import com.joetr.compose.guard.task.ComposeCompilerReportGenerateTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.Directory
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-public class ReportGenPlugin : Plugin<Project> {
+internal class ReportGenPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         ComposeCompilerReportExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
@@ -133,8 +135,15 @@ private fun Project.registerComposeCompilerReportGenTaskForVariant(variant: Vari
     task.get().compileKotlinTasks.set(compileKotlinTaskName)
     task.get().composeRawMetricsOutputDirectory.set(reportExtension.composeRawMetricsOutputDirectory)
     task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
-
+    task.get().projectDirectory.set(project.layout.projectDirectory)
+    task.get().kotlinSources.setFrom(variant.getKotlinSources(project))
     return task
+}
+
+public fun Variant.getKotlinSources(project: Project): ConfigurableFileCollection {
+    @Suppress("UnstableApiUsage")
+    val kotlinCollection = project.files(this.sources.kotlin?.all ?: emptyList<Directory>())
+    return kotlinCollection
 }
 
 /**
@@ -156,10 +165,17 @@ private fun Project.registerComposeCompilerReportCheckTaskForVariant(variant: Va
 
     val task = tasks.register(taskName, ComposeCompilerReportCheckTask::class.java)
 
+    val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
+    val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
+
     val reportExtension = ComposeCompilerReportExtension.get(project)
 
     task.get().compileKotlinTasks.set(compileKotlinTaskName)
     task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
+    task.get().genOutputDirectoryPath.set(genExtension.composeRawMetricsOutputDirectory.path)
+    task.get().checkOutputDirectoryPath.set(checkExtension.composeRawMetricsOutputDirectory.path)
+    task.get().projectDirectory.set(project.layout.projectDirectory.asFile)
+    task.get().kotlinSources.setFrom(variant.getKotlinSources(project))
 
     return task
 }
@@ -175,7 +191,13 @@ private fun compileKotlinTaskNameFromVariant(variant: Variant): String {
 private fun Project.registerComposeCompilerReportCleanTaskForVariant(): TaskProvider<ComposeCompilerReportCleanTask> {
     val taskName = "composeCompilerClean"
 
+    val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
+    val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
+
     val task = tasks.register(taskName, ComposeCompilerReportCleanTask::class.java)
+
+    task.get().genOutputDirectoryPath.set(genExtension.composeRawMetricsOutputDirectory.path)
+    task.get().checkOutputDirectoryPath.set(checkExtension.composeRawMetricsOutputDirectory.path)
 
     return task
 }

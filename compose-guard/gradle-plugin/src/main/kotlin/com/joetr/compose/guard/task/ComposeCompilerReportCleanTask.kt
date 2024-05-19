@@ -23,20 +23,23 @@
  */
 package com.joetr.compose.guard.task
 
-import com.joetr.compose.guard.ComposeCompilerCheckExtension
-import com.joetr.compose.guard.ComposeCompilerReportExtension
 import com.joetr.compose.guard.core.utils.cleanupDirectory
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.getByType
+import java.io.File
 
-public abstract class ComposeCompilerReportCleanTask : DefaultTask() {
+internal abstract class ComposeCompilerReportCleanTask : DefaultTask() {
+    @get:Input
+    abstract val genOutputDirectoryPath: Property<String>
+
+    @get:Input
+    abstract val checkOutputDirectoryPath: Property<String>
+
     @TaskAction
-    public fun generate() {
-        val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
-        val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
-
-        cleanupDirectory(genExtension.outputDirectory.get())
-        cleanupDirectory(checkExtension.outputDirectory.get())
+    fun generate() {
+        cleanupDirectory(File(genOutputDirectoryPath.get()))
+        cleanupDirectory(File(checkOutputDirectoryPath.get()))
     }
 }
