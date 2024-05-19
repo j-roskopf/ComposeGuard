@@ -180,10 +180,8 @@ public object ComposeChecks {
 
         if (newUnstableParamsMap.isNotEmpty()) {
             throw GradleException(
-                "New unstable parameters were added! \n" +
-                    newUnstableParamsMap.keys.joinToString(separator = ",") {
-                        "Function: ${it.functionName}, Parameter: ${it.parameterName}, Type: ${it.parameterType}"
-                    },
+                "New unstable parameters were added in the following composables! \n" +
+                    newUnstableParamsMap.keys.joinToString(separator = "\n") { it.toString() },
             )
         }
     }
