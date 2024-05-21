@@ -23,62 +23,11 @@
  */
 package com.joetr.compose.guard.task
 
-import com.joetr.compose.guard.KEY_GOLDEN_GEN
-import com.joetr.compose.guard.core.utils.cleanupDirectory
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.provider.Property
-import org.gradle.api.tasks.IgnoreEmptyDirectories
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.TaskAction
-import org.gradle.tooling.GradleConnector
+import org.gradle.api.tasks.OutputFiles
 
 internal abstract class ComposeCompilerReportGenerateTask : DefaultTask() {
-    @get:Input
-    abstract val compileKotlinTasks: Property<String>
-
-    @get:OutputDirectory
-    abstract val composeRawMetricsOutputDirectory: DirectoryProperty
-
-    /** This input only exists to signal task dependencies */
-    @get:InputFiles
-    @get:IgnoreEmptyDirectories
-    abstract val kotlinSources: ConfigurableFileCollection
-
-    @get:OutputDirectory
+    @get:OutputFiles
     abstract val outputDirectory: DirectoryProperty
-
-    @get:OutputDirectory
-    abstract val projectDirectory: DirectoryProperty
-
-    @TaskAction
-    fun generate() {
-        val outputDirectory = outputDirectory.get().asFile
-        cleanupDirectory(outputDirectory)
-
-        generateRawMetricsAndReport()
-    }
-
-    private fun generateRawMetricsAndReport() {
-        GradleConnector.newConnector().forProjectDirectory(projectDirectory.asFile.get())
-            .connect()
-            .use {
-                it.newBuild()
-                    .setStandardOutput(System.out)
-                    .setStandardError(System.err)
-                    .setStandardInput(System.`in`)
-                    .forTasks(compileKotlinTasks.get())
-                    .withArguments(
-                        // Re-running is necessary. In case devs deleted raw files and if task uses cache
-                        // then this task will explode 💣
-                        "--rerun-tasks",
-                        // Signal for enabling report generation in `kotlinOptions{}` block.
-                        "-P$KEY_GOLDEN_GEN=true",
-                    )
-                    .run()
-            }
-    }
 }

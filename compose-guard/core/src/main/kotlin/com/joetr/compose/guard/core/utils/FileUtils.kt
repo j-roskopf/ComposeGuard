@@ -30,7 +30,7 @@ import java.io.FileNotFoundException
  * Checks whether directory with [path] exists or not.
  * Else throws [FileNotFoundException].
  */
-internal inline fun ensureDirectory(
+public inline fun ensureDirectory(
     directory: File,
     lazyMessage: () -> Any,
 ) {
@@ -40,10 +40,25 @@ internal inline fun ensureDirectory(
     }
 }
 
+public inline fun ensureDirectoryIsNotEmpty(
+    directory: File,
+    lazyMessage: () -> Any,
+) {
+    if (!directory.isDirectory) {
+        val message = lazyMessage()
+        throw FileNotFoundException(message.toString())
+    }
+
+    if (directory.listFiles()?.isEmpty() == true) {
+        val message = lazyMessage()
+        throw FileNotFoundException(message.toString())
+    }
+}
+
 /**
  * Checks whether [file] with exists or not. Else throws [FileNotFoundException].
  */
-public inline fun ensureFileExists(
+internal inline fun ensureFileExists(
     file: File,
     lazyMessage: () -> Any,
 ): File {

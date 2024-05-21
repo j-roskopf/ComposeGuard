@@ -32,9 +32,6 @@ import java.io.File
 internal interface ComposeCompilerCheckExtension {
     val outputDirectory: Property<File>
 
-    val composeRawMetricsOutputDirectory: File
-        get() = outputDirectory.get().resolve("raw")
-
     companion object {
         private const val NAME = "composeCompilerCheck"
 

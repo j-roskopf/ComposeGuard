@@ -53,24 +53,6 @@ signing.password=PASSWORD_USED_TO_GENERATE_KEY
 signing.secretKeyRingFile=/Users/YOURUSERNAME/.gnupg/composeguard.gpg (or wherever you stored the keyring you generated earlier)
 ```
 
-## Adding To Your Project
-
-In your root build file
-
-```kotlin
-plugins {
-    id("com.joetr.compose.guard") version "<latest version>" apply false
-}
-```
-
-In any module you want to apply checks:
-
-```kotlin
-plugins {
-    id("com.joetr.compose.guard")
-}
-```
-
 ## Binary Compatibility Validator
 
 This project uses [this](https://github.com/Kotlin/binary-compatibility-validator) tool to ensure the public binary API wasn't changed in a way that makes it binary incompatible.

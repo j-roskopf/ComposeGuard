@@ -23,181 +23,179 @@
  */
 package com.joetr.compose.guard
 
-import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.variant.AndroidComponentsExtension
-import com.android.build.api.variant.Variant
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.joetr.compose.guard.task.ComposeCompilerReportCheckTask
 import com.joetr.compose.guard.task.ComposeCompilerReportCleanTask
 import com.joetr.compose.guard.task.ComposeCompilerReportGenerateTask
+import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.Directory
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
+import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByType
-import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.gradle.kotlin.dsl.register
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
-internal class ReportGenPlugin : Plugin<Project> {
+private const val REPORT_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination="
+private const val METRIC_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination="
+private const val GENERATE_TASK_NAME = "ComposeCompilerGenerate"
+private const val CHECK_TASK_NAME = "ComposeCompilerCheck"
+private const val CLEAN_TASK_NAME = "composeCompilerClean"
+
+public class ReportGenPlugin : Plugin<Project> {
     override fun apply(target: Project) {
+        // create extensions
         ComposeCompilerReportExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
 
-        val android =
-            runCatching {
-                target.extensions.getByType(AndroidComponentsExtension::class.java)
-            }.getOrElse { error("This plugin is only applicable for Android modules") }
+        // register directories for storing metrics for generate + check tasks
+        target.registerComposeParameters()
 
-        val commonExtension = runCatching { target.extensions.getByType(CommonExtension::class.java) }.getOrNull()
-
-        android.onVariants { variant ->
-            target.registerComposeCompilerReportGenTaskForVariant(variant)
-            target.registerComposeCompilerReportCheckTaskForVariant(variant)
+        // register generate + check tasks for library modules
+        target.extensions.findByType<LibraryAndroidComponentsExtension>()?.beforeVariants {
+            registerGenerateTask(
+                name = it.name,
+                target = target,
+            )
+            registerCheckTask(
+                name = it.name,
+                target = target,
+            )
         }
 
-        target.registerComposeCompilerReportCleanTaskForVariant()
+        // register generate + check tasks for app module
+        target.extensions.findByType<ApplicationAndroidComponentsExtension>()?.beforeVariants {
+            registerGenerateTask(
+                name = it.name,
+                target = target,
+            )
+            registerCheckTask(
+                name = it.name,
+                target = target,
+            )
+        }
 
-        target.afterEvaluate {
-            val isComposeEnabled = commonExtension?.buildFeatures?.compose
+        // register clean task
+        target.registerComposeCompilerReportCleanTask()
+    }
 
-            if (isComposeEnabled != true) {
-                error("Jetpack Compose is not found enabled in this module '${target.name}'")
+    private fun registerGenerateTask(
+        name: String,
+        target: Project,
+    ) {
+        val reportExtension = ComposeCompilerReportExtension.get(target)
+
+        val variantTask =
+            target.tasks.register<ComposeCompilerReportGenerateTask>(
+                name = "${name}$GENERATE_TASK_NAME",
+            ) {
+                this.outputDirectory.set(target.layout.dir(reportExtension.outputDirectory))
             }
 
-            // When this method returns true it means gradle task for generating report is executing otherwise
-            // normal compilation task is executing.
-            val isFromReportGenGradleTask = target.executingComposeCompilerReportGenerationGradleTask()
-            if (isFromReportGenGradleTask) {
-                val kotlinAndroidExt = target.extensions.getByType<KotlinAndroidProjectExtension>()
-                kotlinAndroidExt.target {
-                    // Exclude for test variants, no use!
-                    compilations.filter { !it.name.endsWith("Test") }.forEach {
-                        it.kotlinOptions {
-                            configureKotlinOptionsForComposeCompilerReport(target)
+        // make task depend on compile kotlin task
+        variantTask.configure(
+            object : Action<ComposeCompilerReportGenerateTask> {
+                override fun execute(t: ComposeCompilerReportGenerateTask) {
+                    t.dependsOn(target.tasks.named("compile${name.capitalized()}Kotlin"))
+                }
+            },
+        )
+    }
+
+    private fun registerCheckTask(
+        name: String,
+        target: Project,
+    ) {
+        val checkExtension = target.extensions.getByType<ComposeCompilerCheckExtension>()
+        val genExtension = target.extensions.getByType<ComposeCompilerReportExtension>()
+
+        val variantTask =
+            target.tasks.register<ComposeCompilerReportCheckTask>(
+                name = "${name}$CHECK_TASK_NAME",
+            ) {
+                outputDirectory.set(target.layout.dir(genExtension.outputDirectory))
+                genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
+                checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
+                inputDirectory.set(checkExtension.outputDirectory.get())
+            }
+
+        // make task depend on compile kotlin task
+        variantTask.configure(
+            object : Action<ComposeCompilerReportCheckTask> {
+                override fun execute(t: ComposeCompilerReportCheckTask) {
+                    t.dependsOn(target.tasks.named("compile${name.capitalized()}Kotlin"))
+                }
+            },
+        )
+    }
+
+    private fun Project.registerComposeCompilerReportCleanTask(): TaskProvider<ComposeCompilerReportCleanTask> {
+        val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
+        val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
+
+        val task = tasks.register(CLEAN_TASK_NAME, ComposeCompilerReportCleanTask::class.java)
+
+        task.get().genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
+        task.get().checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
+        return task
+    }
+
+    private fun Project.registerComposeParameters() {
+        val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
+        val genExtension = extensions.getByType<ComposeCompilerReportExtension>()
+
+        val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
+
+        // if output directory doesn't exist, re-run kotlin compile task
+        tasks.withType(KotlinJvmCompile::class.java).configureEach(
+            object : Action<KotlinJvmCompile> {
+                override fun execute(t: KotlinJvmCompile) {
+                    t.outputs.upToDateWhen {
+                        isGenDirectoryNotEmpty
+                    }
+                }
+            },
+        )
+
+        // Depending on this task. We need to do this to generate the metrics report
+        tasks.withType(KotlinJvmCompile::class.java).whenTaskAdded(
+            object : Action<KotlinJvmCompile> {
+                override fun execute(t: KotlinJvmCompile) {
+                    t.kotlinOptions {
+                        if (gradle.startParameter.taskNames.any {
+                                it.contains(CHECK_TASK_NAME)
+                            }
+                        ) {
+                            freeCompilerArgs = freeCompilerArgs +
+                                listOf(
+                                    "-P",
+                                    REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath,
+                                )
+                            freeCompilerArgs = freeCompilerArgs +
+                                listOf(
+                                    "-P",
+                                    METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath,
+                                )
+                        } else if (gradle.startParameter.taskNames.any {
+                                it.contains(GENERATE_TASK_NAME)
+                            }
+                        ) {
+                            freeCompilerArgs = freeCompilerArgs +
+                                listOf(
+                                    "-P",
+                                    REPORT_PARAM + genExtension.outputDirectory.get().absolutePath,
+                                )
+                            freeCompilerArgs = freeCompilerArgs +
+                                listOf(
+                                    "-P",
+                                    METRIC_PARAM + genExtension.outputDirectory.get().absolutePath,
+                                )
                         }
                     }
                 }
-            }
-
-            val isFromCheckGradleTask = target.executingComposeCompilerCheckGradleTask()
-            if (isFromCheckGradleTask) {
-                val kotlinAndroidExt = target.extensions.getByType<KotlinAndroidProjectExtension>()
-                kotlinAndroidExt.target {
-                    // Exclude for test variants, no use!
-                    compilations.filter { !it.name.endsWith("Test") }.forEach {
-                        it.kotlinOptions {
-                            configureKotlinOptionsForComposeCompilerCheck(target)
-                        }
-                    }
-                }
-            }
-        }
+            },
+        )
     }
-
-    private fun KotlinJvmOptions.configureKotlinOptionsForComposeCompilerReport(project: Project) {
-        val reportExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
-        val outputPath = reportExtension.composeRawMetricsOutputDirectory.absolutePath
-        freeCompilerArgs +=
-            listOf(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$outputPath",
-            )
-        freeCompilerArgs +=
-            listOf(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$outputPath",
-            )
-    }
-
-    private fun KotlinJvmOptions.configureKotlinOptionsForComposeCompilerCheck(project: Project) {
-        val reportExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
-        val outputPath = reportExtension.composeRawMetricsOutputDirectory.absolutePath
-        freeCompilerArgs +=
-            listOf(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$outputPath",
-            )
-        freeCompilerArgs +=
-            listOf(
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$outputPath",
-            )
-    }
-}
-
-private fun Project.registerComposeCompilerReportGenTaskForVariant(variant: Variant): TaskProvider<ComposeCompilerReportGenerateTask> {
-    val taskName = variant.name + "ComposeCompilerGenerate"
-    val compileKotlinTaskName = compileKotlinTaskNameFromVariant(variant)
-    val reportExtension = ComposeCompilerReportExtension.get(project)
-
-    val task = tasks.register(taskName, ComposeCompilerReportGenerateTask::class.java)
-
-    task.get().compileKotlinTasks.set(compileKotlinTaskName)
-    task.get().composeRawMetricsOutputDirectory.set(reportExtension.composeRawMetricsOutputDirectory)
-    task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
-    task.get().projectDirectory.set(project.layout.projectDirectory)
-    task.get().kotlinSources.setFrom(variant.getKotlinSources(project))
-    return task
-}
-
-public fun Variant.getKotlinSources(project: Project): ConfigurableFileCollection {
-    @Suppress("UnstableApiUsage")
-    val kotlinCollection = project.files(this.sources.kotlin?.all ?: emptyList<Directory>())
-    return kotlinCollection
-}
-
-/**
- * Returns true if currently executing task is about generating compose compiler report
- */
-private fun Project.executingComposeCompilerReportGenerationGradleTask() =
-    runCatching {
-        property(KEY_GOLDEN_GEN)
-    }.getOrNull() == "true"
-
-private fun Project.executingComposeCompilerCheckGradleTask() =
-    runCatching {
-        property(KEY_CHECK_GEN)
-    }.getOrNull() == "true"
-
-private fun Project.registerComposeCompilerReportCheckTaskForVariant(variant: Variant): TaskProvider<ComposeCompilerReportCheckTask> {
-    val taskName = variant.name + "ComposeCompilerCheck"
-    val compileKotlinTaskName = compileKotlinTaskNameFromVariant(variant)
-
-    val task = tasks.register(taskName, ComposeCompilerReportCheckTask::class.java)
-
-    val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
-    val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
-
-    val reportExtension = ComposeCompilerReportExtension.get(project)
-
-    task.get().compileKotlinTasks.set(compileKotlinTaskName)
-    task.get().outputDirectory.set(layout.dir(reportExtension.outputDirectory))
-    task.get().genOutputDirectoryPath.set(genExtension.composeRawMetricsOutputDirectory.path)
-    task.get().checkOutputDirectoryPath.set(checkExtension.composeRawMetricsOutputDirectory.path)
-    task.get().projectDirectory.set(project.layout.projectDirectory.asFile)
-    task.get().kotlinSources.setFrom(variant.getKotlinSources(project))
-
-    return task
-}
-
-/**
- * Returns a task name for compile<VARIANT>Kotlin with [variant]
- */
-private fun compileKotlinTaskNameFromVariant(variant: Variant): String {
-    val variantName = variant.name.let { it[0].uppercaseChar() + it.substring(1) }
-    return "compile${variantName}Kotlin"
-}
-
-private fun Project.registerComposeCompilerReportCleanTaskForVariant(): TaskProvider<ComposeCompilerReportCleanTask> {
-    val taskName = "composeCompilerClean"
-
-    val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
-    val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
-
-    val task = tasks.register(taskName, ComposeCompilerReportCleanTask::class.java)
-
-    task.get().genOutputDirectoryPath.set(genExtension.composeRawMetricsOutputDirectory.path)
-    task.get().checkOutputDirectoryPath.set(checkExtension.composeRawMetricsOutputDirectory.path)
-
-    return task
 }
