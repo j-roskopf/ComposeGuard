@@ -24,7 +24,6 @@
 package com.joetr.compose.guard.task
 
 import assertk.assertThat
-import com.joetr.compose.guard.task.infra.asserts.artifactInBuild
 import com.joetr.compose.guard.task.infra.asserts.artifactInSrc
 import com.joetr.compose.guard.task.infra.asserts.isType
 import com.joetr.compose.guard.task.infra.asserts.succeeded
@@ -41,10 +40,10 @@ class ComposeCompilerReportGenerateTaskTest {
         val result = project.execute(task)
 
         assertThat(result).task(task).succeeded()
-        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports/raw").isType("txt")
-        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports/raw").isType("csv")
-        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports/raw").isType("txt")
-        assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports/raw").isType("json")
+        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports").isType("csv")
+        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports").isType("json")
     }
 
     @Test
@@ -54,7 +53,7 @@ class ComposeCompilerReportGenerateTaskTest {
                 additionalBuildScriptForAndroidSubProject =
                     """
                     composeGuard {
-                        outputDirectory = layout.buildDirectory.dir("custom_dir").get().asFile
+                        outputDirectory = layout.projectDirectory.dir("custom_dir").asFile
                     }
                     """.trimIndent(),
             )
@@ -64,10 +63,10 @@ class ComposeCompilerReportGenerateTaskTest {
         val result = project.execute(task)
 
         assertThat(result).task(task).succeeded()
-        assertThat(project).artifactInBuild("android", "custom_dir/raw/android_release-classes.txt").isType("txt")
-        assertThat(project).artifactInBuild("android", "custom_dir/raw/android_release-composables.csv").isType("csv")
-        assertThat(project).artifactInBuild("android", "custom_dir/raw/android_release-composables.txt").isType("txt")
-        assertThat(project).artifactInBuild("android", "custom_dir/raw/android_release-module.json").isType("json")
+        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "custom_dir").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "custom_dir").isType("csv")
+        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "custom_dir").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-module.json", "custom_dir").isType("json")
     }
 
     @Test
@@ -77,9 +76,9 @@ class ComposeCompilerReportGenerateTaskTest {
         val result = project.execute("--configuration-cache", task)
 
         assertThat(result).task(task).succeeded()
-        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports/raw").isType("txt")
-        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports/raw").isType("csv")
-        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports/raw").isType("txt")
-        assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports/raw").isType("json")
+        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports").isType("csv")
+        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports").isType("json")
     }
 }

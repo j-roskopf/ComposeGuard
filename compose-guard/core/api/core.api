@@ -248,6 +248,7 @@ public final class com/joetr/compose/guard/core/model/composables/ComposablesRep
 
 public final class com/joetr/compose/guard/core/utils/FileUtilsKt {
 	public static final fun cleanupDirectory (Ljava/io/File;)V
-	public static final fun ensureFileExists (Ljava/io/File;Lkotlin/jvm/functions/Function0;)Ljava/io/File;
+	public static final fun ensureDirectory (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
+	public static final fun ensureDirectoryIsNotEmpty (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
 }
 

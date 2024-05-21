@@ -33,7 +33,9 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 
 inline fun Assert<BuildResult>.task(path: String): Assert<BuildTask> {
-    return prop(name = "task($path)") { it.task(path) }.isNotNull()
+    return prop(name = "task($path)") {
+        it.task(path)
+    }.isNotNull()
 }
 
 inline fun Assert<BuildResult>.doesNotHaveTask(path: String) {

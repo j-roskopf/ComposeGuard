@@ -24,28 +24,26 @@
 package com.joetr.compose.guard.task
 
 import com.joetr.compose.guard.ComposeChecks
-import com.joetr.compose.guard.KEY_CHECK_GEN
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
 import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
-import com.joetr.compose.guard.core.utils.ensureFileExists
+import com.joetr.compose.guard.core.utils.ensureDirectoryIsNotEmpty
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.tooling.GradleConnector
 import java.io.File
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
-    @get:Input
-    abstract val compileKotlinTasks: Property<String>
-
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
+
+    @get:InputDirectory
+    @get:Optional // not present on first run
+    abstract val inputDirectory: DirectoryProperty
 
     @get:Input
     abstract val genOutputDirectoryPath: Property<String>
@@ -53,22 +51,12 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
 
-    @get:OutputDirectory
-    abstract val projectDirectory: DirectoryProperty
-
-    /** This input only exists to signal task dependencies */
-    @get:InputFiles
-    @get:IgnoreEmptyDirectories
-    abstract val kotlinSources: ConfigurableFileCollection
-
     @TaskAction
     fun check() {
-        generateRawMetricsAndReport()
-
         val genOutputDirectory = File(genOutputDirectoryPath.get())
         val checkOutputDirectory = File(checkOutputDirectoryPath.get())
 
-        ensureFileExists(genOutputDirectory) {
+        ensureDirectoryIsNotEmpty(genOutputDirectory) {
             "Golden metrics do not exist! Please generate them using the <variant>ComposeCompilerGenerate task"
         }
 
@@ -87,25 +75,5 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
             )
 
         ComposeChecks.check(checkedMetrics, goldenMetrics)
-    }
-
-    private fun generateRawMetricsAndReport() {
-        GradleConnector.newConnector().forProjectDirectory(projectDirectory.asFile.get())
-            .connect()
-            .use {
-                it.newBuild()
-                    .setStandardOutput(System.out)
-                    .setStandardError(System.err)
-                    .setStandardInput(System.`in`)
-                    .forTasks(compileKotlinTasks.get())
-                    .withArguments(
-                        // Re-running is necessary. In case devs deleted raw files and if task uses cache
-                        // then this task will explode 💣
-                        "--rerun-tasks",
-                        // Signal for enabling report generation in `kotlinOptions{}` block.
-                        "-P$KEY_CHECK_GEN=true",
-                    )
-                    .run()
-            }
     }
 }

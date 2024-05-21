@@ -44,13 +44,13 @@ class ComposeCompilerReportCleanTaskTest {
         // generate golden
         val generateResult = project.execute(generateTask)
         assertThat(generateResult).task(generateTask).succeeded()
-        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports/raw").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports").isType("txt")
 
         // generate check
         val checkTask = ":android:releaseComposeCompilerCheck"
         val checkResult = project.execute(checkTask)
         assertThat(checkResult).task(checkTask).succeeded()
-        assertThat(project).artifactInBuild("android", "compose_reports/raw/android_release-classes.txt").isType("txt")
+        assertThat(project).artifactInBuild("android", "compose_reports/android_release-classes.txt").isType("txt")
 
         // clean
         val cleanTask = ":android:composeCompilerClean"
@@ -58,8 +58,8 @@ class ComposeCompilerReportCleanTaskTest {
         assertThat(cleanResult).task(cleanTask).succeeded()
 
         // verify check and generated reports no longer exist
-        assertThat(project).findArtifactInBuild("android", "compose_reports/raw/android_release-classes.txt").isNull()
-        assertThat(project).findArtifactInSrc("android", "android_release-classes.txt", "compose_reports/raw").isNull()
+        assertThat(project).findArtifactInBuild("android", "compose_reports/android_release-classes.txt").isNull()
+        assertThat(project).findArtifactInSrc("android", "android_release-classes.txt", "compose_reports").isNull()
     }
 
     @Test

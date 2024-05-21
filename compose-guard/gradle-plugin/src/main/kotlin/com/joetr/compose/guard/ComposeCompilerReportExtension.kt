@@ -35,9 +35,6 @@ public interface ComposeCompilerReportExtension {
      */
     public val outputDirectory: Property<File>
 
-    public val composeRawMetricsOutputDirectory: File
-        get() = outputDirectory.get().resolve("raw")
-
     public companion object {
         private const val NAME = "composeGuard"
 
