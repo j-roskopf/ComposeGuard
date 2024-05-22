@@ -36,6 +36,27 @@ plugins {
 }
 ```
 
+## Configuring Compose Guard
+
+Each check that is performed has the ability to be turned off in case it is not useful to you.
+
+```kts
+composeGuardCheck {
+    errorOnNewDynamicProperties = false // defaults to true
+    errorOnNewRestartableButNotSkippableComposables = false // defaults to true
+    errorOnNewUnstableClasses = false // defaults to true
+    errorOnNewUnstableParams = false // defaults to true
+}
+```
+
+Additionally, the output directory of the golden metrics has the ability to be configured as well.
+
+```kotlin
+composeGuardGenerate {
+    outputDirectory = layout.projectDirectory.dir("custom_dir").asFile
+}
+```
+
 ## Signing locally
 
 This is required to test.

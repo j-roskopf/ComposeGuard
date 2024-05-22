@@ -1,3 +1,17 @@
+public abstract interface class com/joetr/compose/guard/ComposeCompilerCheckExtension {
+	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerCheckExtension$Companion;
+	public abstract fun getErrorOnNewDynamicProperties ()Lorg/gradle/api/provider/Property;
+	public abstract fun getErrorOnNewRestartableButNotSkippableComposables ()Lorg/gradle/api/provider/Property;
+	public abstract fun getErrorOnNewUnstableClasses ()Lorg/gradle/api/provider/Property;
+	public abstract fun getErrorOnNewUnstableParams ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOutputDirectory ()Lorg/gradle/api/provider/Property;
+}
+
+public final class com/joetr/compose/guard/ComposeCompilerCheckExtension$Companion {
+	public final fun create (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerCheckExtension;
+	public final fun get (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerCheckExtension;
+}
+
 public abstract interface class com/joetr/compose/guard/ComposeCompilerReportExtension {
 	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerReportExtension$Companion;
 	public abstract fun getOutputDirectory ()Lorg/gradle/api/provider/Property;

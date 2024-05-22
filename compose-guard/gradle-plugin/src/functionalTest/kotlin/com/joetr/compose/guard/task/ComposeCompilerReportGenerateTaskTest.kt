@@ -52,7 +52,7 @@ class ComposeCompilerReportGenerateTaskTest {
             BasicAndroidProject.getComposeProject(
                 additionalBuildScriptForAndroidSubProject =
                     """
-                    composeGuard {
+                    composeGuardGenerate {
                         outputDirectory = layout.projectDirectory.dir("custom_dir").asFile
                     }
                     """.trimIndent(),
