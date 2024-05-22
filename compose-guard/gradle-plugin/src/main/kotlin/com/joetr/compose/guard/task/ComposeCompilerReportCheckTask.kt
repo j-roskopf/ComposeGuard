@@ -24,6 +24,7 @@
 package com.joetr.compose.guard.task
 
 import com.joetr.compose.guard.ComposeChecks
+import com.joetr.compose.guard.ComposeCompilerCheckExtension
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
 import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
 import com.joetr.compose.guard.core.utils.ensureDirectoryIsNotEmpty
@@ -51,6 +52,9 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
 
+    @get:Input
+    abstract val composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>
+
     @TaskAction
     fun check() {
         val genOutputDirectory = File(genOutputDirectoryPath.get())
@@ -74,6 +78,10 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                 ),
             )
 
-        ComposeChecks.check(checkedMetrics, goldenMetrics)
+        ComposeChecks.check(
+            checkedMetrics = checkedMetrics,
+            goldenMetrics = goldenMetrics,
+            composeCompilerCheckExtension = composeCompilerCheckExtension,
+        )
     }
 }

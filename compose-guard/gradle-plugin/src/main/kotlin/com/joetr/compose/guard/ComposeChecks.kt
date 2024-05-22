@@ -28,16 +28,26 @@ import com.joetr.compose.guard.core.model.Condition.UNSTABLE
 import com.joetr.compose.guard.core.model.StabilityStatus
 import com.joetr.compose.guard.core.model.composables.ComposableDetail
 import org.gradle.api.GradleException
+import org.gradle.api.provider.Property
 
 internal object ComposeChecks {
     fun check(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
+        composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>,
     ) {
-        checkDynamicDefaultExpressions(checkedMetrics, goldenMetrics)
-        checkUnstableClasses(checkedMetrics, goldenMetrics)
-        checkRestartableButNotSkippable(checkedMetrics, goldenMetrics)
-        checkUnstableParams(checkedMetrics, goldenMetrics)
+        if (composeCompilerCheckExtension.get().errorOnNewDynamicProperties.get()) {
+            checkDynamicDefaultExpressions(checkedMetrics, goldenMetrics)
+        }
+        if (composeCompilerCheckExtension.get().errorOnNewUnstableClasses.get()) {
+            checkUnstableClasses(checkedMetrics, goldenMetrics)
+        }
+        if (composeCompilerCheckExtension.get().errorOnNewRestartableButNotSkippableComposables.get()) {
+            checkRestartableButNotSkippable(checkedMetrics, goldenMetrics)
+        }
+        if (composeCompilerCheckExtension.get().errorOnNewUnstableParams.get()) {
+            checkUnstableParams(checkedMetrics, goldenMetrics)
+        }
     }
 
     private fun checkDynamicDefaultExpressions(

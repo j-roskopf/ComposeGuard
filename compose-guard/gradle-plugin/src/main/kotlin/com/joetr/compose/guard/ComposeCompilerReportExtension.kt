@@ -36,7 +36,7 @@ public interface ComposeCompilerReportExtension {
     public val outputDirectory: Property<File>
 
     public companion object {
-        private const val NAME = "composeGuard"
+        private const val NAME = "composeGuardGenerate"
 
         /**
          * Creates an extension of type [ComposeCompilerReportExtension] and returns

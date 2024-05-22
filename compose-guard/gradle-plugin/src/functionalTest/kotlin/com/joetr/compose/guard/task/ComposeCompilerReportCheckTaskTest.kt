@@ -369,7 +369,7 @@ class ComposeCompilerReportCheckTaskTest {
             """.trimIndent(),
         )
         // Generate golden metrics with the new class included
-        var generateResult = project.execute(generateTask)
+        val generateResult = project.execute(generateTask)
         assertThat(generateResult).task(generateTask).succeeded()
 
         // modify the composable to introduce a new unstable parameter

@@ -119,6 +119,7 @@ public class ReportGenPlugin : Plugin<Project> {
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
                 checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
                 inputDirectory.set(checkExtension.outputDirectory.get())
+                composeCompilerCheckExtension.set(checkExtension)
             }
 
         // make task depend on compile kotlin task

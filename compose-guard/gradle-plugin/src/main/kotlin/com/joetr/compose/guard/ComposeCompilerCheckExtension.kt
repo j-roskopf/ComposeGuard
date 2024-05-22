@@ -29,23 +29,32 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import java.io.File
 
-internal interface ComposeCompilerCheckExtension {
-    val outputDirectory: Property<File>
+public interface ComposeCompilerCheckExtension {
+    public val outputDirectory: Property<File>
 
-    companion object {
-        private const val NAME = "composeCompilerCheck"
+    public val errorOnNewUnstableClasses: Property<Boolean>
+    public val errorOnNewUnstableParams: Property<Boolean>
+    public val errorOnNewDynamicProperties: Property<Boolean>
+    public val errorOnNewRestartableButNotSkippableComposables: Property<Boolean>
+
+    public companion object {
+        private const val NAME = "composeGuardCheck"
 
         /**
          * Creates an extension of type [ComposeCompilerCheckExtension] and returns
          */
-        fun create(target: Project): ComposeCompilerCheckExtension =
+        public fun create(target: Project): ComposeCompilerCheckExtension =
             target.extensions.create<ComposeCompilerCheckExtension>(NAME).apply {
                 outputDirectory.convention(target.layout.buildDirectory.asFile.get().resolve("compose_reports"))
+                errorOnNewUnstableClasses.convention(true)
+                errorOnNewUnstableParams.convention(true)
+                errorOnNewDynamicProperties.convention(true)
+                errorOnNewRestartableButNotSkippableComposables.convention(true)
             }
 
         /**
          * Get extensions applied to the [target] project.
          */
-        fun get(target: Project): ComposeCompilerCheckExtension = target.extensions.getByType<ComposeCompilerCheckExtension>()
+        public fun get(target: Project): ComposeCompilerCheckExtension = target.extensions.getByType<ComposeCompilerCheckExtension>()
     }
 }
