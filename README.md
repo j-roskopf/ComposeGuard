@@ -1,10 +1,12 @@
 # Compose Guard
 
 <p align="center">
+  <a href="https://opensource.org/license/mit/"><img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg"/></a>
   <a href="https://mailchi.mp/kotlinweekly/kotlin-weekly-408"><img alt="Kotlin Weekly" src="https://skydoves.github.io/badges/kotlin-weekly.svg"/></a>
+  <a href="https://central.sonatype.com/namespace/com.joetr.compose.guard"><img alt="Maveb Central" src="https://img.shields.io/maven-central/v/com.joetr.compose.guard/com.joetr.compose.guard.gradle.plugin"/></a>
+  <a href="https://github.com/j-roskopf/ComposeGuard/blob/main/.github/workflows/release.yml"><img alt="Release Workflow" src="https://github.com/j-roskopf/ComposeGuard/blob/main/.github/workflows/release.yml/badge.svg"/></a>
 </p><br>
 
-![Maven Central Version](https://img.shields.io/maven-central/v/com.joetr.compose.guard/com.joetr.compose.guard.gradle.plugin)
 
 A gradle plugin for detecting regressions in Jetpack Compose:
 * New restartable but not skippable @Composables are added
@@ -22,7 +24,7 @@ Adds 3 tasks:
 
 ## Adding To Your Project
 
-Available via Maven Central
+Available via Maven Central - ![Maven Central Version](https://img.shields.io/maven-central/v/com.joetr.compose.guard/com.joetr.compose.guard.gradle.plugin)
 
 In your root build file:
 
