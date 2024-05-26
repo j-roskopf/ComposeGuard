@@ -1,5 +1,9 @@
 # Compose Guard
 
+<p align="center">
+  <a href="https://mailchi.mp/kotlinweekly/kotlin-weekly-408"><img alt="Kotlin Weekly" src="https://skydoves.github.io/badges/kotlin-weekly.svg"/></a>
+</p><br>
+
 ![Maven Central Version](https://img.shields.io/maven-central/v/com.joetr.compose.guard/com.joetr.compose.guard.gradle.plugin)
 
 A gradle plugin for detecting regressions in Jetpack Compose:
