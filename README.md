@@ -1,4 +1,7 @@
-# Compose Guard
+<div align="center">
+  <img src="./assets/compose_guard_icon.png" width="256">
+  <h1>Compose Guard</h1>
+</div>
 
 <p align="center">
   <a href="https://opensource.org/license/mit/"><img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg"/></a>
