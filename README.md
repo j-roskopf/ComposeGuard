@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/icon.png" width="512">
+  <img src="assets/compose_guard_icon.png" width="512">
   <h1>Compose Guard</h1>
 </div>
 
