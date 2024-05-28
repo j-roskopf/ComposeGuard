@@ -8,6 +8,8 @@
   <a href="https://androidweekly.net/issues/issue-624"><img alt="Android Weekly" src="https://skydoves.github.io/badges/android-weekly.svg"/></a>
   <a href="https://mailchi.mp/kotlinweekly/kotlin-weekly-408"><img alt="Kotlin Weekly" src="https://skydoves.github.io/badges/kotlin-weekly.svg"/></a>
   <a href="https://blog.canopas.com/android-stack-weekly-issue-126-e892cc8bf543"><img alt="Android Stack Weekly" src="https://img.shields.io/badge/News-Android_Stack_Weekly-orange?logo=android"/></a>
+  <a href="https://jetc.dev/issues/215#github-j-roskopf--composeguard"><img alt="Jetpack Compose Newsletter" src="https://img.shields.io/badge/News-Jetpack_Compose_Newsletter_215-orange?logo=android"/></a>
+  <a href="https://jetc.dev/issues/216#compose-guard-detecting-regressions-in-jetpack-compose"><img alt="Jetpack Compose Newsletter" src="https://img.shields.io/badge/News-Jetpack_Compose_Newsletter_216-orange?logo=android"/></a>
   <a href="https://central.sonatype.com/namespace/com.joetr.compose.guard"><img alt="Maveb Central" src="https://img.shields.io/maven-central/v/com.joetr.compose.guard/com.joetr.compose.guard.gradle.plugin"/></a>
   <a href="https://github.com/j-roskopf/ComposeGuard/actions/workflows/release.yml"><img alt="Release Workflow" src="https://github.com/j-roskopf/ComposeGuard/actions/workflows/release.yml/badge.svg"/></a>
 </p><br>
