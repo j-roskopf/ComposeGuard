@@ -178,43 +178,36 @@ public class ReportGenPlugin : Plugin<Project> {
         tasks.withType(KotlinJvmCompile::class.java).whenTaskAdded(
             object : Action<KotlinJvmCompile> {
                 override fun execute(t: KotlinJvmCompile) {
-                    if (gradle.startParameter.taskNames.any {
-                            it.contains(CHECK_TASK_NAME)
-                        }
-                    ) {
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
+                    t.kotlinOptions {
+                        if (gradle.startParameter.taskNames.any {
+                                it.contains(CHECK_TASK_NAME)
+                            }
+                        ) {
+                            freeCompilerArgs = freeCompilerArgs +
                                 listOf(
                                     "-P",
                                     REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
+                                )
+                            freeCompilerArgs = freeCompilerArgs +
                                 listOf(
                                     "-P",
                                     METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
-                    } else if (gradle.startParameter.taskNames.any {
-                            it.contains(GENERATE_TASK_NAME)
-                        }
-                    ) {
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
+                                )
+                        } else if (gradle.startParameter.taskNames.any {
+                                it.contains(GENERATE_TASK_NAME)
+                            }
+                        ) {
+                            freeCompilerArgs = freeCompilerArgs +
                                 listOf(
                                     "-P",
                                     REPORT_PARAM + genExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
-
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
+                                )
+                            freeCompilerArgs = freeCompilerArgs +
                                 listOf(
                                     "-P",
                                     METRIC_PARAM + genExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
+                                )
+                        }
                     }
                 }
             },
