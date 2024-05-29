@@ -15,19 +15,28 @@
 </p><br>
 
 
-A gradle plugin for detecting regressions in Jetpack Compose:
+A gradle plugin for detecting regressions in Jetpack Compose / Compose Multiplatform:
 * New restartable but not skippable @Composables are added
 * New unstable classes are added (only triggers if they are used as a @Composable parameter)
 * New @dynamic properties are added
 * New unstable parameters are added to a @Composable
 
-Adds 3 tasks:
+In an Android project, Compose Guard adds 3 tasks:
 * `<variant>ComposeCompilerGenerate` (example `releaseComposeCompilerGenerate`)
   - Generate golden compose metrics to compare against
 * `<variant>ComposeCompilerCheck` (example `releaseComposeCompilerCheck`)
   - Generates new metrics and compares against golden values
 * `composeCompilerClean`
   - Deletes all compiler metrics
+
+In a Multiplatform project, Compose Guard adds the same 3 `Check`, `Clean`, and `Generate` task for each JVM / Android Target following the pattern `<target><variant if applicable>ComposeCompilerGenerate`
+* `<variant><target>ComposeCompilerGenerate` (example `androidReleaseComposeCompilerGenerate` or `jvmComposeCompilerGenerate`)
+  - Generate golden compose metrics to compare against
+* `<variant><target>ComposeCompilerCheck` (example `androidReleaseComposeCompilerCheck` or `jvmComposeCompilerCheck`)
+  - Generates new metrics and compares against golden values
+* `composeCompilerClean`
+  - Deletes all compiler metrics
+
 
 ## Adding To Your Project
 
