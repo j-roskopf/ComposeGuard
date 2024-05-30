@@ -45,3 +45,67 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNINGINMEMORYKEYID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNINGINMEMORYKEYPASSWORD }}
         run: ./gradlew build --stacktrace
+
+      - name: Grant Permission to Execute Sandbox Android
+        working-directory: ./sandbox-android-app
+        run: chmod +x gradlew
+
+      - name: Sandbox Android Clean Compiler Metrics
+        working-directory: ./sandbox-android-app
+        run: ./gradlew composeCompilerClean --rerun-tasks
+
+      - name: Sandbox Android Generate Compiler Metrics
+        working-directory: ./sandbox-android-app
+        run: ./gradlew releaseComposeCompilerGenerate --rerun-tasks
+
+      - name: Sandbox Android Check Compiler Metrics
+        working-directory: ./sandbox-android-app
+        run: ./gradlew releaseComposeCompilerCheck --rerun-tasks
+
+      - name: Grant Permission to Execute Sandbox Multiplatform
+        working-directory: ./sandbox-multiplatform-app
+        run: chmod +x gradlew
+
+      - name: Sandbox Multiplatform Clean Compiler Metrics
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew composeCompilerClean --rerun-tasks
+
+      - name: Sandbox Multiplatform Generate Compiler Metrics Android
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew androidReleaseComposeCompilerGenerate --rerun-tasks
+
+      - name: Sandbox Multiplatform Check Compiler Metrics Android
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew androidReleaseComposeCompilerCheck --rerun-tasks
+
+      - name: Sandbox Multiplatform Generate Compiler Metrics Jvm
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew jvmComposeCompilerGenerate --rerun-tasks
+
+      - name: Sandbox Multiplatform Check Compiler Metrics Jvm
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew jvmComposeCompilerCheck --rerun-tasks
+
+      - name: Sandbox Multiplatform Generate Compiler Metrics iOS
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew iosArm64ComposeCompilerGenerate --rerun-tasks
+
+      - name: Sandbox Multiplatform Check Compiler Metrics iOS
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew iosArm64ComposeCompilerCheck --rerun-tasks
+
+      - name: Sandbox Multiplatform Generate Compiler Metrics JS
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew jsComposeCompilerGenerate --rerun-tasks
+
+      - name: Sandbox Multiplatform Check Compiler Metrics JS
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew jsComposeCompilerCheck --rerun-tasks
+
+      - name: Sandbox Multiplatform Generate Compiler Metrics WASM
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew wasmJsComposeCompilerGenerate --rerun-tasks
+
+      - name: Sandbox Multiplatform Check Compiler Metrics WASM
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew wasmJsComposeCompilerCheck --rerun-tasks
