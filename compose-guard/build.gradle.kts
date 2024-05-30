@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val GROUP: String by project
@@ -18,8 +17,8 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
-    compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
 }
 
 subprojects {

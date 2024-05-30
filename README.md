@@ -15,19 +15,35 @@
 </p><br>
 
 
-A gradle plugin for detecting regressions in Jetpack Compose:
+A gradle plugin for detecting regressions in Jetpack Compose / Compose Multiplatform:
 * New restartable but not skippable @Composables are added
 * New unstable classes are added (only triggers if they are used as a @Composable parameter)
 * New @dynamic properties are added
 * New unstable parameters are added to a @Composable
 
-Adds 3 tasks:
-* `<variant>ComposeCompilerGenerate` (example `releaseComposeCompilerGenerate`)
+In an Android project, Compose Guard adds 3 tasks:
+* `<variant>ComposeCompilerGenerate` (example `./gradlew releaseComposeCompilerGenerate`)
   - Generate golden compose metrics to compare against
-* `<variant>ComposeCompilerCheck` (example `releaseComposeCompilerCheck`)
+* `<variant>ComposeCompilerCheck` (example `./gradlew releaseComposeCompilerCheck`)
   - Generates new metrics and compares against golden values
-* `composeCompilerClean`
+* `./gradlew composeCompilerClean`
   - Deletes all compiler metrics
+
+In a Multiplatform project, Compose Guard adds the same 2 `Check` and `Generate` tasks (as well as a root `composeCompilerClean` task) for each supported target following the pattern `<target><variant if applicable>ComposeCompilerGenerate`
+* `<variant><target>ComposeCompilerGenerate` 
+  - Examples: `./gradlew androidReleaseComposeCompilerGenerate`, `./gradlew jvmComposeCompilerGenerate`, ` ./gradlew iosArm64ComposeCompilerGenerate`, `./gradlew jsComposeCompilerGenerate`, `./gradlew wasmJsComposeCompilerGenerate`
+  - Generate golden compose metrics to compare against
+* `<variant><target>ComposeCompilerCheck` 
+  - Examples: `./gradlew androidReleaseComposeCompilerCheck`, `./gradlew jvmComposeCompilerCheck`, `./gradlew iosArm64ComposeCompilerCheck`, `./gradlew jsComposeCompilerCheck`, `./gradlew wasmJsComposeCompilerCheck`
+  - Generates new metrics and compares against golden values
+* `./gradlew composeCompilerClean`
+  - Deletes all compiler metrics
+
+## Platforms
+![](https://img.shields.io/badge/Android-black.svg?style=for-the-badge&logo=android) | ![](https://img.shields.io/badge/iOS-black.svg?style=for-the-badge&logo=apple) | ![](https://img.shields.io/badge/Desktop-black.svg?style=for-the-badge&logo=apple) | ![](https://img.shields.io/badge/Web-black.svg?style=for-the-badge&logo=google-chrome)
+:----: | :----: |:----------------------------------------------------------------------------------:| :----:
+✅ | ✅ |                                         ✅                                          | ✅
+
 
 ## Adding To Your Project
 
@@ -94,3 +110,5 @@ This project uses [this](https://github.com/Kotlin/binary-compatibility-validato
 The tool allows dumping binary API of a JVM part of a Kotlin library that is public in the sense of Kotlin visibilities.
 
 To generate a new binary dump, run `./gradlew apiDump` in the root of the project.
+
+

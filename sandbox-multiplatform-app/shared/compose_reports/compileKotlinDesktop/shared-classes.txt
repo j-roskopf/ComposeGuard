@@ -1,0 +1,143 @@
+stable class drawable {
+  <runtime stability> = Stable
+}
+stable class string {
+  <runtime stability> = Stable
+}
+stable class font {
+  <runtime stability> = Stable
+}
+stable class Res {
+  <runtime stability> = Stable
+}
+runtime class PopupNotification {
+  runtime val localization: Localization
+  <runtime stability> = Uncertain(Localization)
+}
+stable class Page {
+  <runtime stability> = Stable
+}
+runtime class MemoryPage {
+  runtime val pictureData: PictureData
+  stable val scrollState: ScrollState
+  <runtime stability> = Uncertain(PictureData)
+}
+stable class CameraPage {
+  <runtime stability> = Stable
+}
+runtime class FullScreenPage {
+  runtime val pictureData: PictureData
+  <runtime stability> = Uncertain(PictureData)
+}
+unstable class GalleryPage {
+  unstable val photoGallery: PhotoGallery
+  unstable val externalEvents: Flow<ExternalImageViewerEvent>
+  stable var galleryStyle$delegate: MutableState<GalleryStyle>
+  stable var currentPictureIndex$delegate: MutableState<Int>
+  <runtime stability> = Unstable
+}
+unstable class GalleryEntryWithMetadata {
+  stable val id: GalleryId
+  stable val picture: Picture
+  unstable val thumbnail: ImageBitmap
+  <runtime stability> = Unstable
+}
+unstable class PhotoGallery {
+  runtime val deps: Dependencies
+  unstable val _galleryStateFlow: MutableStateFlow<List<GalleryEntryWithMetadata>>
+  unstable val galleryStateFlow: StateFlow<List<GalleryEntryWithMetadata>>
+  stable val mockedResponse: String
+  <runtime stability> = Unstable
+}
+stable class Picture {
+  stable val big: String
+  stable val small: String
+  <runtime stability> = Stable
+}
+stable class GpsPosition {
+  stable val latitude: Double
+  stable val longitude: Double
+  <runtime stability> = Stable
+}
+stable class Resource {
+  stable val resource: String
+  stable val thumbnailResource: String
+  stable val name: String
+  stable val description: String
+  stable val gps: GpsPosition
+  stable val dateString: String
+  <runtime stability> = Stable
+}
+stable class ScalableState {
+  stable val imageSize: IntSize
+  stable var boxSize$delegate: MutableState<IntSize>
+  stable var offset$delegate: MutableState<IntOffset>
+  stable var scale$delegate: MutableState<Float>
+  <runtime stability> = Stable
+}
+stable class ImageviewerColors {
+  stable val Gray: Color
+  stable val LightGray: Color
+  stable val DarkGray: Color
+  stable val PreviewImageAreaHoverColor: Color
+  stable val ToastBackground: Color
+  stable val MiniatureColor: Color
+  stable val MiniatureHoverColor: Color
+  stable val Foreground: Color
+  stable val TranslucentBlack: Color
+  stable val TranslucentWhite: Color
+  stable val Transparent: Color
+  stable val background: Color
+  stable val onBackground: Color
+  stable val fullScreenImageBackground: Color
+  stable val uiLightBlack: Color
+  stable val textOnImage: Color
+  stable val noteBlockBackground: Color
+  stable val KotlinGradient0: Color
+  stable val KotlinGradient50: Color
+  stable val KotlinGradient100: Color
+  stable val kotlinHorizontalGradientBrush: Brush
+  <runtime stability> = Stable
+}
+stable class NavigationStack {
+  stable val stack: SnapshotStateList<T>
+  <runtime stability> = Stable
+}
+stable class Hidden {
+  <runtime stability> = Stable
+}
+stable class Shown {
+  stable val message: String
+  <runtime stability> = Stable
+}
+stable class ResString {
+  stable val appName: String
+  stable val loading: String
+  stable val repoEmpty: String
+  stable val noInternet: String
+  stable val repoInvalid: String
+  stable val refreshUnavailable: String
+  stable val loadImageUnavailable: String
+  stable val lastImage: String
+  stable val firstImage: String
+  stable val picture: String
+  stable val size: String
+  stable val pixels: String
+  stable val back: String
+  stable val refresh: String
+  <runtime stability> = Stable
+}
+stable class BlurFilter {
+  <runtime stability> = Stable
+}
+stable class GrayScaleFilter {
+  <runtime stability> = Stable
+}
+stable class PixelFilter {
+  <runtime stability> = Stable
+}
+unstable class ExternalNavigationEventBus {
+  unstable val _events: MutableSharedFlow<ExternalImageViewerEvent>
+  unstable val events: SharedFlow<ExternalImageViewerEvent>
+  <runtime stability> = Unstable
+}

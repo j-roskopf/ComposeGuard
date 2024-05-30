@@ -14,7 +14,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Compose Guard Android Application"
+rootProject.name = "ComposeGuardAndroidApplication"
 include(":app")
 include(":feature")
+
 

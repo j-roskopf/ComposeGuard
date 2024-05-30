@@ -50,6 +50,9 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     abstract val genOutputDirectoryPath: Property<String>
 
     @get:Input
+    abstract val multiplatformCompilationTarget: Property<String>
+
+    @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
 
     @get:Input
@@ -57,8 +60,19 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @TaskAction
     fun check() {
-        val genOutputDirectory = File(genOutputDirectoryPath.get())
-        val checkOutputDirectory = File(checkOutputDirectoryPath.get())
+        val genOutputDirectory =
+            if (multiplatformCompilationTarget.get().isNotEmpty()) {
+                File(genOutputDirectoryPath.get().plus(File.separator).plus(multiplatformCompilationTarget.get()))
+            } else {
+                File(genOutputDirectoryPath.get())
+            }
+
+        val checkOutputDirectory =
+            if (multiplatformCompilationTarget.get().isNotEmpty()) {
+                File(checkOutputDirectoryPath.get().plus(File.separator).plus(multiplatformCompilationTarget.get()))
+            } else {
+                File(checkOutputDirectoryPath.get())
+            }
 
         ensureDirectoryIsNotEmpty(genOutputDirectory) {
             "Golden metrics do not exist! Please generate them using the <variant>ComposeCompilerGenerate task"

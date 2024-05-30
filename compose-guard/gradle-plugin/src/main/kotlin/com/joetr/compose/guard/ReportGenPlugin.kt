@@ -37,6 +37,14 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.KotlinJsTarget
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 private const val REPORT_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination="
@@ -49,33 +57,17 @@ public class ReportGenPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         // create extensions
         ComposeCompilerReportExtension.create(target)
+        InternalComposeCompilerCheckExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
 
         // register directories for storing metrics for generate + check tasks
         target.registerComposeParameters()
 
-        // register generate + check tasks for library modules
-        target.extensions.findByType<LibraryAndroidComponentsExtension>()?.beforeVariants {
-            registerGenerateTask(
-                name = it.name,
-                target = target,
-            )
-            registerCheckTask(
-                name = it.name,
-                target = target,
-            )
-        }
-
-        // register generate + check tasks for app module
-        target.extensions.findByType<ApplicationAndroidComponentsExtension>()?.beforeVariants {
-            registerGenerateTask(
-                name = it.name,
-                target = target,
-            )
-            registerCheckTask(
-                name = it.name,
-                target = target,
-            )
+        if (target.isMultiplatformProject()) {
+            target.registerTasksForMultiplatformTargets()
+        } else {
+            // assume android project
+            target.registerTasksForAndroidProject()
         }
 
         // register clean task
@@ -83,43 +75,71 @@ public class ReportGenPlugin : Plugin<Project> {
     }
 
     private fun registerGenerateTask(
-        name: String,
-        target: Project,
+        target: String,
+        project: Project,
+        variant: String,
     ) {
-        val reportExtension = ComposeCompilerReportExtension.get(target)
+        val reportExtension = ComposeCompilerReportExtension.get(project)
+
+        val taskName =
+            if (project.isMultiplatformProject()) {
+                "${target}${variant.capitalized()}$GENERATE_TASK_NAME"
+            } else {
+                "${variant}$GENERATE_TASK_NAME"
+            }
 
         val variantTask =
-            target.tasks.register<ComposeCompilerReportGenerateTask>(
-                name = "${name}$GENERATE_TASK_NAME",
+            project.tasks.register<ComposeCompilerReportGenerateTask>(
+                name = taskName,
             ) {
-                this.outputDirectory.set(target.layout.dir(reportExtension.outputDirectory))
+                this.outputDirectory.set(project.layout.dir(reportExtension.outputDirectory))
             }
 
         // make task depend on compile kotlin task
         variantTask.configure(
             object : Action<ComposeCompilerReportGenerateTask> {
                 override fun execute(t: ComposeCompilerReportGenerateTask) {
-                    t.dependsOn(target.tasks.named("compile${name.capitalized()}Kotlin"))
+                    if (project.isMultiplatformProject()) {
+                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin${target.capitalized()}"))
+                    } else {
+                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin"))
+                    }
                 }
             },
         )
     }
 
     private fun registerCheckTask(
-        name: String,
-        target: Project,
+        target: String,
+        project: Project,
+        variant: String,
     ) {
-        val checkExtension = target.extensions.getByType<ComposeCompilerCheckExtension>()
-        val genExtension = target.extensions.getByType<ComposeCompilerReportExtension>()
+        val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
+        val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
+        val internalExtension = project.extensions.getByType<InternalComposeCompilerCheckExtension>()
+
+        val taskName =
+            if (project.isMultiplatformProject()) {
+                "${target}${variant.capitalized()}$CHECK_TASK_NAME"
+            } else {
+                "${variant}$CHECK_TASK_NAME"
+            }
 
         val variantTask =
-            target.tasks.register<ComposeCompilerReportCheckTask>(
-                name = "${name}$CHECK_TASK_NAME",
+            project.tasks.register<ComposeCompilerReportCheckTask>(
+                name = taskName,
             ) {
-                outputDirectory.set(target.layout.dir(genExtension.outputDirectory))
+                outputDirectory.set(project.layout.dir(genExtension.outputDirectory))
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
                 checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
                 inputDirectory.set(checkExtension.outputDirectory.get())
+                multiplatformCompilationTarget.set(
+                    if (project.isMultiplatformProject()) {
+                        internalExtension.composeMultiplatformCompilationTarget.get()
+                    } else {
+                        ""
+                    },
+                )
                 composeCompilerCheckExtension.set(checkExtension)
             }
 
@@ -127,7 +147,11 @@ public class ReportGenPlugin : Plugin<Project> {
         variantTask.configure(
             object : Action<ComposeCompilerReportCheckTask> {
                 override fun execute(t: ComposeCompilerReportCheckTask) {
-                    t.dependsOn(target.tasks.named("compile${name.capitalized()}Kotlin"))
+                    if (project.isMultiplatformProject()) {
+                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin${target.capitalized()}"))
+                    } else {
+                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin"))
+                    }
                 }
             },
         )
@@ -146,6 +170,7 @@ public class ReportGenPlugin : Plugin<Project> {
 
     private fun Project.registerComposeParameters() {
         val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
+        val internalExtension = extensions.getByType<InternalComposeCompilerCheckExtension>()
         val genExtension = extensions.getByType<ComposeCompilerReportExtension>()
 
         val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
@@ -161,50 +186,194 @@ public class ReportGenPlugin : Plugin<Project> {
             },
         )
 
-        // Depending on this task. We need to do this to generate the metrics report
-        tasks.withType(KotlinJvmCompile::class.java).whenTaskAdded(
-            object : Action<KotlinJvmCompile> {
-                override fun execute(t: KotlinJvmCompile) {
+        project.tasks.withType(KotlinCompile::class.java).configureEach(
+            object : Action<KotlinCompile<*>> {
+                override fun execute(t: KotlinCompile<*>) {
+                    internalExtension.composeMultiplatformCompilationTarget.set(t.name)
+
                     if (gradle.startParameter.taskNames.any {
                             it.contains(CHECK_TASK_NAME)
                         }
                     ) {
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
-                                listOf(
-                                    "-P",
-                                    REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
-                                listOf(
-                                    "-P",
-                                    METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
+                            )
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
+                            )
                     } else if (gradle.startParameter.taskNames.any {
                             it.contains(GENERATE_TASK_NAME)
                         }
                     ) {
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
-                                listOf(
-                                    "-P",
-                                    REPORT_PARAM + genExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
-
-                        t.compilerOptions.freeCompilerArgs.set(
-                            t.compilerOptions.freeCompilerArgs.get() +
-                                listOf(
-                                    "-P",
-                                    METRIC_PARAM + genExtension.outputDirectory.get().absolutePath,
-                                ),
-                        )
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                REPORT_PARAM + genExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
+                            )
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                METRIC_PARAM + genExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
+                            )
                     }
                 }
             },
         )
+    }
+
+    /**
+     * Registers check / generate tasks for Android / JVM / Native targets.
+     */
+    private fun Project.registerTasksForMultiplatformTargets() {
+        val multiplatformExtension = extensions.findByType<KotlinMultiplatformExtension>()
+        val androidTargets =
+            multiplatformExtension?.targets?.withType(KotlinAndroidTarget::class.java)
+        androidTargets?.all(
+            object : Action<KotlinAndroidTarget> {
+                override fun execute(kotlinAndroidTarget: KotlinAndroidTarget) {
+                    kotlinAndroidTarget.compilations.all(
+                        object : Action<KotlinJvmAndroidCompilation> {
+                            override fun execute(kotlinJvmAndroidCompilation: KotlinJvmAndroidCompilation) {
+                                registerCheckTask(
+                                    variant = kotlinJvmAndroidCompilation.androidVariant.name,
+                                    project = this@registerTasksForMultiplatformTargets,
+                                    target = kotlinAndroidTarget.name,
+                                )
+                                registerGenerateTask(
+                                    variant = kotlinJvmAndroidCompilation.androidVariant.name,
+                                    project = this@registerTasksForMultiplatformTargets,
+                                    target = kotlinAndroidTarget.name,
+                                )
+                            }
+                        },
+                    )
+                }
+            },
+        )
+
+        val jvmTargets =
+            multiplatformExtension?.targets?.withType(KotlinJvmTarget::class.java)
+        jvmTargets?.all(
+            object : Action<KotlinJvmTarget> {
+                override fun execute(kotlinJvmTarget: KotlinJvmTarget) {
+                    registerCheckTask(
+                        variant = "",
+                        target = kotlinJvmTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                    )
+
+                    registerGenerateTask(
+                        target = kotlinJvmTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                        variant = "",
+                    )
+                }
+            },
+        )
+
+        val nativeTargets =
+            multiplatformExtension?.targets?.withType(KotlinNativeTarget::class.java)
+        nativeTargets?.all(
+            object : Action<KotlinNativeTarget> {
+                override fun execute(kotlinNativeTarget: KotlinNativeTarget) {
+                    registerCheckTask(
+                        variant = "",
+                        target = kotlinNativeTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                    )
+
+                    registerGenerateTask(
+                        target = kotlinNativeTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                        variant = "",
+                    )
+                }
+            },
+        )
+
+        val jsTargets =
+            multiplatformExtension?.targets?.withType(KotlinJsTarget::class.java)
+        jsTargets?.all(
+            object : Action<KotlinJsTarget> {
+                override fun execute(kotlinJsTarget: KotlinJsTarget) {
+                    registerCheckTask(
+                        variant = "",
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                    )
+
+                    registerGenerateTask(
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                        variant = "",
+                    )
+                }
+            },
+        )
+
+        val irTargets =
+            multiplatformExtension?.targets?.withType(KotlinJsIrTarget::class.java)
+        irTargets?.all(
+            object : Action<KotlinJsIrTarget> {
+                override fun execute(kotlinJsTarget: KotlinJsIrTarget) {
+                    registerCheckTask(
+                        variant = "",
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                    )
+
+                    registerGenerateTask(
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                        variant = "",
+                    )
+                }
+            },
+        )
+    }
+
+    /**
+     * Registers check / gen task for Android Project
+     */
+    private fun Project.registerTasksForAndroidProject() {
+        // register generate + check tasks for library modules
+        extensions.findByType<LibraryAndroidComponentsExtension>()?.beforeVariants {
+            registerGenerateTask(
+                variant = it.name,
+                project = this,
+                target = "",
+            )
+            registerCheckTask(
+                variant = it.name,
+                project = this,
+                target = "",
+            )
+        }
+
+        // register generate + check tasks for app module
+        extensions.findByType<ApplicationAndroidComponentsExtension>()?.beforeVariants {
+            registerGenerateTask(
+                target = "",
+                project = this,
+                variant = it.name,
+            )
+            registerCheckTask(
+                target = "",
+                project = this,
+                variant = it.name,
+            )
+        }
+    }
+
+    private fun Project.isMultiplatformProject(): Boolean {
+        return pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")
     }
 }
