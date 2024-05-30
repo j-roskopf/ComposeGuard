@@ -1,0 +1,3 @@
+stable class MainActivity {
+  <runtime stability> = Stable
+}

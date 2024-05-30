@@ -1,4 +1,4 @@
-rootProject.name = "Compose Guard Multiplatform Application"
+rootProject.name = "ComposeGuardMultiplatformApplication"
 
 include(":androidApp")
 include(":shared")

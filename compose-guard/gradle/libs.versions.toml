@@ -1,4 +1,6 @@
 [versions]
+# kotlin 2.0 changes metrics location - https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compiler.html#compose-compiler-options-dsl
+# can't upgrade until - https://youtrack.jetbrains.com/issue/KT-68646
 kotlin = "1.9.20"
 serialization = "1.6.3"
 coroutines = "1.8.0"

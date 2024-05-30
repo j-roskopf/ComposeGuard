@@ -1,0 +1,6 @@
+package,name,composable,skippable,restartable,readonly,inline,isLambda,hasDefaults,defaultsGroup,groups,calls,
+App,App,1,1,1,0,0,0,0,0,1,1,
+TestCommon,TestCommon,1,0,1,0,0,0,0,0,1,1,
+MainView,MainView,1,1,1,0,0,0,0,0,1,1,
+AppPreview,AppPreview,1,1,1,0,0,0,0,0,1,1,
+DesktopOnly,DesktopOnly,1,1,1,0,0,0,0,0,1,1,

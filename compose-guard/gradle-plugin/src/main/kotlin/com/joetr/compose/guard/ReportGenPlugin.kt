@@ -29,7 +29,6 @@ import com.joetr.compose.guard.task.ComposeCompilerReportCheckTask
 import com.joetr.compose.guard.task.ComposeCompilerReportCleanTask
 import com.joetr.compose.guard.task.ComposeCompilerReportGenerateTask
 import org.gradle.api.Action
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
@@ -38,6 +37,7 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
@@ -174,40 +174,37 @@ public class ReportGenPlugin : Plugin<Project> {
             },
         )
 
-        // Depending on this task. We need to do this to generate the metrics report
-        tasks.withType(KotlinJvmCompile::class.java).whenTaskAdded(
-            object : Action<KotlinJvmCompile> {
-                override fun execute(t: KotlinJvmCompile) {
-                    t.kotlinOptions {
-                        if (gradle.startParameter.taskNames.any {
-                                it.contains(CHECK_TASK_NAME)
-                            }
-                        ) {
-                            freeCompilerArgs = freeCompilerArgs +
-                                listOf(
-                                    "-P",
-                                    REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath,
-                                )
-                            freeCompilerArgs = freeCompilerArgs +
-                                listOf(
-                                    "-P",
-                                    METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath,
-                                )
-                        } else if (gradle.startParameter.taskNames.any {
-                                it.contains(GENERATE_TASK_NAME)
-                            }
-                        ) {
-                            freeCompilerArgs = freeCompilerArgs +
-                                listOf(
-                                    "-P",
-                                    REPORT_PARAM + genExtension.outputDirectory.get().absolutePath,
-                                )
-                            freeCompilerArgs = freeCompilerArgs +
-                                listOf(
-                                    "-P",
-                                    METRIC_PARAM + genExtension.outputDirectory.get().absolutePath,
-                                )
+        project.tasks.withType(KotlinCompile::class.java).configureEach(
+            object : Action<KotlinCompile<*>> {
+                override fun execute(t: KotlinCompile<*>) {
+                    if (gradle.startParameter.taskNames.any {
+                            it.contains(CHECK_TASK_NAME)
                         }
+                    ) {
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath,
+                            )
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath,
+                            )
+                    } else if (gradle.startParameter.taskNames.any {
+                            it.contains(GENERATE_TASK_NAME)
+                        }
+                    ) {
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                REPORT_PARAM + genExtension.outputDirectory.get().absolutePath,
+                            )
+                        t.kotlinOptions.freeCompilerArgs +=
+                            listOf(
+                                "-P",
+                                METRIC_PARAM + genExtension.outputDirectory.get().absolutePath,
+                            )
                     }
                 }
             },

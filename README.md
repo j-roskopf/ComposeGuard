@@ -29,13 +29,18 @@ In an Android project, Compose Guard adds 3 tasks:
 * `composeCompilerClean`
   - Deletes all compiler metrics
 
-In a Multiplatform project, Compose Guard adds the same 3 `Check`, `Clean`, and `Generate` task for each JVM / Android Target following the pattern `<target><variant if applicable>ComposeCompilerGenerate`
-* `<variant><target>ComposeCompilerGenerate` (example `androidReleaseComposeCompilerGenerate` or `jvmComposeCompilerGenerate`)
+In a Multiplatform project, Compose Guard adds the same 2 `Check` and `Generate` tasks (as well as a root `composeCompilerClean` task) for each supported target following the pattern `<target><variant if applicable>ComposeCompilerGenerate`
+* `<variant><target>ComposeCompilerGenerate` (example `androidReleaseComposeCompilerGenerate` or `jvmComposeCompilerGenerate` or ` iosArm64ComposeCompilerGenerate`)
   - Generate golden compose metrics to compare against
-* `<variant><target>ComposeCompilerCheck` (example `androidReleaseComposeCompilerCheck` or `jvmComposeCompilerCheck`)
+* `<variant><target>ComposeCompilerCheck` (example `androidReleaseComposeCompilerCheck` or `jvmComposeCompilerCheck` or ` iosArm64ComposeCompilerCheck`)
   - Generates new metrics and compares against golden values
 * `composeCompilerClean`
   - Deletes all compiler metrics
+
+## Platforms
+![](https://img.shields.io/badge/Android-black.svg?style=for-the-badge&logo=android) | ![](https://img.shields.io/badge/iOS-black.svg?style=for-the-badge&logo=apple) | ![](https://img.shields.io/badge/Desktop-black.svg?style=for-the-badge&logo=apple) | ![](https://img.shields.io/badge/Web-black.svg?style=for-the-badge&logo=google-chrome)
+:----: | :----: |:----------------------------------------------------------------------------------:| :----:
+✅ | ✅ |                                         ✅                                          | Planned
 
 
 ## Adding To Your Project

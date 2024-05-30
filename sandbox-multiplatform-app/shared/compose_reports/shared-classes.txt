@@ -1,0 +1,4 @@
+unstable class Test {
+  stable var name: String
+  <runtime stability> = Unstable
+}
