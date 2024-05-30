@@ -1,0 +1,526 @@
+
+> Configure project :compose-guard:gradle-plugin
+WARNING: Unsupported Kotlin plugin version.
+The `embedded-kotlin` and `kotlin-dsl` plugins rely on features of Kotlin `1.9.10` that might work differently than in the requested version `1.9.20`.
+
+> Task :compose-guard:core:checkKotlinGradlePluginConfigurationErrors
+> Task :compose-guard:core:compileKotlin UP-TO-DATE
+> Task :compose-guard:core:compileJava NO-SOURCE
+> Task :compose-guard:core:processResources NO-SOURCE
+> Task :compose-guard:core:classes UP-TO-DATE
+> Task :compose-guard:core:jar UP-TO-DATE
+> Task :compose-guard:gradle-plugin:checkKotlinGradlePluginConfigurationErrors
+> Task :compose-guard:gradle-plugin:compileKotlin UP-TO-DATE
+> Task :compose-guard:gradle-plugin:compileJava NO-SOURCE
+> Task :compose-guard:gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :compose-guard:gradle-plugin:processResources UP-TO-DATE
+> Task :compose-guard:gradle-plugin:classes UP-TO-DATE
+> Task :compose-guard:gradle-plugin:jar UP-TO-DATE
+
+> Configure project :shared
+New 'wasm' target is Work-in-Progress and is subject to change without notice.
+w: The Default Kotlin Hierarchy Template was not applied to 'project ':shared'':
+Deprecated 'ios()' shortcut was used:
+
+  kotlin {
+      ios()
+  }
+
+Please declare the required targets explicitly:
+
+  kotlin {
+      iosX64()
+      iosArm64()
+      iosSimulatorArm64() /* <- Note: Was not previously applied */
+      /* ... */
+  }
+
+After that, replace `by getting` with static accessors:
+
+  sourceSets {
+      commonMain { ... }
+      
+      iosMain {
+          dependencies { ... }
+      }
+  }
+
+To suppress the 'Default Hierarchy Template' add
+    'kotlin.mpp.applyDefaultHierarchyTemplate=false'
+to your gradle.properties
+
+Learn more about hierarchy templates: https://kotl.in/hierarchy-template
+
+
+> Configure project :webApp
+New 'wasm' target is Work-in-Progress and is subject to change without notice.
+w: The Default Kotlin Hierarchy Template was not applied to 'project ':webApp'':
+Explicit .dependsOn() edges were configured for the following source sets:
+[jsMain, wasmJsMain]
+
+Consider removing dependsOn-calls or disabling the default template by adding
+    'kotlin.mpp.applyDefaultHierarchyTemplate=false'
+to your gradle.properties
+
+Learn more about hierarchy templates: https://kotl.in/hierarchy-template
+
+
+> Task :shared:tasks
+
+------------------------------------------------------------
+Tasks runnable from project ':shared' - Commonized CInterop dependencies for source set iosTest with targets: '(ios_arm64, ios_x64)'.
+------------------------------------------------------------
+
+Android tasks
+-------------
+androidDependencies - Displays the Android dependencies of the project.
+signingReport - Displays the signing info for the base and test modules
+sourceSets - Prints out all the source sets defined in this project.
+
+Build tasks
+-----------
+allMetadataJar - Assembles a jar archive containing the metadata for all Kotlin source sets.
+androidDebugSourcesJar - Assembles a jar archive containing the sources of target 'androidDebug'.
+androidReleaseSourcesJar - Assembles a jar archive containing the sources of target 'androidRelease'.
+assemble - Assemble main outputs for all the variants.
+assembleAndroidTest - Assembles all the Test applications.
+build - Assembles and tests this project.
+buildDependents - Assembles and tests this project and all projects that depend on it.
+buildKotlinToolingMetadata - Build metadata json file containing information about the used Kotlin tooling
+buildNeeded - Assembles and tests this project and all projects it depends on.
+clean - Deletes the build directory.
+cleanAllTests - Deletes all the test results.
+compileDebugAndroidTestSources
+compileDebugSources
+compileDebugUnitTestSources
+compileIosMainKotlinMetadata - Compiles a klibrary from the 'iosMain' compilation in target 'metadata'.
+compileKotlinIosArm64 - Compiles a klibrary from the 'main' compilation in target 'iosArm64'.
+compileKotlinIosSimulatorArm64 - Compiles a klibrary from the 'main' compilation in target 'iosSimulatorArm64'.
+compileKotlinIosX64 - Compiles a klibrary from the 'main' compilation in target 'iosX64'.
+compileReleaseSources
+compileReleaseUnitTestSources
+compileTestKotlinIosArm64 - Compiles a klibrary from the 'test' compilation in target 'iosArm64'.
+compileTestKotlinIosSimulatorArm64 - Compiles a klibrary from the 'test' compilation in target 'iosSimulatorArm64'.
+compileTestKotlinIosX64 - Compiles a klibrary from the 'test' compilation in target 'iosX64'.
+desktopJar - Assembles an archive containing the main classes.
+desktopMainClasses - Assembles outputs for compilation 'main' of target 'desktop'
+desktopSourcesJar - Assembles a jar archive containing the sources of target 'desktop'.
+desktopTestClasses - Assembles outputs for compilation 'test' of target 'desktop'
+embedAndSignPodAppleFrameworkForXcode - Embed and sign pod framework as requested by Xcode's environment variables
+extractDebugAnnotations - Extracts Android annotations for the debug variant into the archive file
+extractReleaseAnnotations - Extracts Android annotations for the release variant into the archive file
+iosArm64Binaries - Assembles outputs for target 'iosArm64'.
+iosArm64MainBinaries - Links all binaries for compilation 'main' of target 'iosArm64'.
+iosArm64MainKlibrary - Assembles outputs for compilation 'main' of target 'iosArm64'
+iosArm64MetadataJar - Assembles Kotlin metadata of target 'iosArm64'.
+iosArm64SourcesJar - Assembles a jar archive containing the sources of target 'iosArm64'.
+iosArm64TestBinaries - Links all binaries for compilation 'test' of target 'iosArm64'.
+iosArm64TestKlibrary - Assembles outputs for compilation 'test' of target 'iosArm64'
+iosSimulatorArm64Binaries - Assembles outputs for target 'iosSimulatorArm64'.
+iosSimulatorArm64MainBinaries - Links all binaries for compilation 'main' of target 'iosSimulatorArm64'.
+iosSimulatorArm64MainKlibrary - Assembles outputs for compilation 'main' of target 'iosSimulatorArm64'
+iosSimulatorArm64MetadataJar - Assembles Kotlin metadata of target 'iosSimulatorArm64'.
+iosSimulatorArm64SourcesJar - Assembles a jar archive containing the sources of target 'iosSimulatorArm64'.
+iosSimulatorArm64TestBinaries - Links all binaries for compilation 'test' of target 'iosSimulatorArm64'.
+iosSimulatorArm64TestKlibrary - Assembles outputs for compilation 'test' of target 'iosSimulatorArm64'
+iosX64Binaries - Assembles outputs for target 'iosX64'.
+iosX64MainBinaries - Links all binaries for compilation 'main' of target 'iosX64'.
+iosX64MainKlibrary - Assembles outputs for compilation 'main' of target 'iosX64'
+iosX64MetadataJar - Assembles Kotlin metadata of target 'iosX64'.
+iosX64SourcesJar - Assembles a jar archive containing the sources of target 'iosX64'.
+iosX64TestBinaries - Links all binaries for compilation 'test' of target 'iosX64'.
+iosX64TestKlibrary - Assembles outputs for compilation 'test' of target 'iosX64'
+jsJar - Assembles an archive containing the main classes.
+jsMainClasses - Assembles outputs for compilation 'main' of target 'js'
+jsSourcesJar - Assembles a jar archive containing the sources of target 'js'.
+jsTestClasses - Assembles outputs for compilation 'test' of target 'js'
+linkDebugTestIosArm64 - Links a test executable 'debugTest' for a target 'iosArm64'.
+linkDebugTestIosSimulatorArm64 - Links a test executable 'debugTest' for a target 'iosSimulatorArm64'.
+linkDebugTestIosX64 - Links a test executable 'debugTest' for a target 'iosX64'.
+linkIosArm64 - Links all binaries for target 'iosArm64'.
+linkIosSimulatorArm64 - Links all binaries for target 'iosSimulatorArm64'.
+linkIosX64 - Links all binaries for target 'iosX64'.
+linkPodDebugFrameworkIosArm64 - Links a framework 'podDebugFramework' for a target 'iosArm64'.
+linkPodDebugFrameworkIosSimulatorArm64 - Links a framework 'podDebugFramework' for a target 'iosSimulatorArm64'.
+linkPodDebugFrameworkIosX64 - Links a framework 'podDebugFramework' for a target 'iosX64'.
+linkPodIosArm64 - Links all binaries for target 'iosArm64'.
+linkPodIosSimulatorArm64 - Links all binaries for target 'iosSimulatorArm64'.
+linkPodIosX64 - Links all binaries for target 'iosX64'.
+linkPodReleaseFrameworkIosArm64 - Links a framework 'podReleaseFramework' for a target 'iosArm64'.
+linkPodReleaseFrameworkIosSimulatorArm64 - Links a framework 'podReleaseFramework' for a target 'iosSimulatorArm64'.
+linkPodReleaseFrameworkIosX64 - Links a framework 'podReleaseFramework' for a target 'iosX64'.
+metadataCommonMainClasses - Assembles outputs for compilation 'commonMain' of target 'metadata'
+metadataIosMainClasses - Assembles outputs for compilation 'iosMain' of target 'metadata'
+metadataJsWasmMainClasses - Assembles outputs for compilation 'jsWasmMain' of target 'metadata'
+metadataMainClasses - Assembles outputs for compilation 'main' of target 'metadata'
+metadataSourcesJar - Assembles a jar archive containing the sources of target 'metadata'.
+wasmJsJar - Assembles an archive containing the main classes.
+wasmJsMainClasses - Assembles outputs for compilation 'main' of target 'wasmJs'
+wasmJsSourcesJar - Assembles a jar archive containing the sources of target 'wasmJs'.
+wasmJsTestClasses - Assembles outputs for compilation 'test' of target 'wasmJs'
+
+CocoaPods tasks
+---------------
+podImport - Called on Gradle sync, depends on Cinterop tasks for every used pod
+podInstall - Invokes `pod install` call within Podfile location directory
+podPublishDebugXCFramework - Produces Debug XCFramework for all requested targets
+podPublishReleaseXCFramework - Produces Release XCFramework for all requested targets
+podPublishXCFramework - Produces Release and Debug XCFrameworks with respective podspecs
+podspec - Generates a podspec file for CocoaPods import
+
+Help tasks
+----------
+buildEnvironment - Displays all buildscript dependencies declared in project ':shared'.
+dependencies - Displays all dependencies declared in project ':shared'.
+dependencyInsight - Displays the insight into a specific dependency in project ':shared'.
+help - Displays a help message.
+javaToolchains - Displays the detected java toolchains.
+kotlinDslAccessorsReport - Prints the Kotlin code for accessing the currently available project extensions and conventions.
+outgoingVariants - Displays the outgoing variants of project ':shared'.
+projects - Displays the sub-projects of project ':shared'.
+properties - Displays the properties of project ':shared'.
+resolvableConfigurations - Displays the configurations that can be resolved in project ':shared'.
+tasks - Displays the tasks runnable from project ':shared'.
+
+Ide tasks
+---------
+resolveIdeDependencies - Debugging/Diagnosing task that will resolve dependencies for the IDE
+
+Install tasks
+-------------
+installDebugAndroidTest - Installs the android (on device) tests for the Debug build.
+uninstallAll - Uninstall all applications.
+uninstallDebugAndroidTest - Uninstalls the android (on device) tests for the Debug build.
+
+Interop tasks
+-------------
+commonize - Aggregator task for all c-interop & Native distribution commonizer tasks
+commonizeCInterop - Invokes the commonizer on c-interop bindings of the project
+runCommonizer - [Deprecated: Use 'commonize' instead]
+
+NodeJs tasks
+------------
+jsPackageJson - Create package.json file for compilation 'main' (target js (js))
+jsTestPackageJson - Create package.json file for compilation 'test' (target js (js))
+wasmJsPackageJson - Create package.json file for compilation 'main' (target wasmJs (wasm))
+wasmJsTestPackageJson - Create package.json file for compilation 'test' (target wasmJs (wasm))
+
+Run tasks
+---------
+desktopRun - Jvm Run task for target 'desktop' and compilation 'main'. This task can act as carrier for the IDE to execute jvm based code
+
+Verification tasks
+------------------
+allTests - Runs the tests for all targets and create aggregated report
+check - Runs all checks.
+checkJetifier - Checks whether Jetifier is needed for the current project
+checkKotlinGradlePluginConfigurationErrors - Checks that Kotlin Gradle Plugin hasn't reported project configuration errors, failing otherwise. This task always runs before compileKotlin* or similar tasks.
+connectedAndroidTest - Installs and runs instrumentation tests for all flavors on connected devices.
+connectedCheck - Runs all device checks on currently connected devices.
+connectedDebugAndroidTest - Installs and runs the tests for debug on connected devices.
+desktopTest - Runs the tests of the test test run.
+deviceAndroidTest - Installs and runs instrumentation tests using all Device Providers.
+deviceCheck - Runs all device checks using Device Providers and Test Servers.
+iosSimulatorArm64Test - Executes Kotlin/Native unit tests for target iosSimulatorArm64.
+iosX64Test - Executes Kotlin/Native unit tests for target iosX64.
+jsBrowserTest - Run all js tests inside browser using karma and webpack
+jsTest - Run JS tests for all platforms
+lint - Runs lint on the default variant.
+lintAnalyzeDebug - Run lint analysis on the debug variant
+lintAnalyzeRelease - Run lint analysis on the release variant
+lintDebug - Print text output from the corresponding lint report task
+lintFix - Runs lint on the default variant and applies any safe suggestions to the source code.
+lintFixDebug - Fix lint on the debug variant
+lintFixRelease - Fix lint on the release variant
+lintRelease - Print text output from the corresponding lint report task
+lintReportDebug - Run lint on the debug variant
+lintReportRelease - Run lint on the release variant
+test - Run unit tests for all variants.
+testDebugUnitTest - Run unit tests for the debug build.
+testReleaseUnitTest - Run unit tests for the release build.
+updateLintBaseline - Updates the lint baseline using the default variant.
+updateLintBaselineDebug - Update the lint baseline using the debug variant
+updateLintBaselineRelease - Update the lint baseline using the release variant
+wasmJsBrowserTest - Run all wasmJs tests inside browser using karma and webpack
+wasmJsTest - Run JS tests for all platforms
+
+Other tasks
+-----------
+analyzeDebugAndroidTestDependencies
+analyzeDebugDependencies
+analyzeDebugUnitTestDependencies
+analyzeReleaseDependencies
+analyzeReleaseUnitTestDependencies
+androidDebugAndroidTestComposeCompilerCheck
+androidDebugAndroidTestComposeCompilerGenerate
+androidDebugComposeCompilerCheck
+androidDebugComposeCompilerGenerate
+androidDebugUnitTestComposeCompilerCheck
+androidDebugUnitTestComposeCompilerGenerate
+androidReleaseComposeCompilerCheck
+androidReleaseComposeCompilerGenerate
+androidReleaseUnitTestComposeCompilerCheck
+androidReleaseUnitTestComposeCompilerGenerate
+assembleDebug - Assembles main output for variant debug
+assembleDebugAndroidTest - Assembles main output for variant debugAndroidTest
+assembleDebugUnitTest - Assembles main output for variant debugUnitTest
+assembleRelease - Assembles main output for variant release
+assembleReleaseUnitTest - Assembles main output for variant releaseUnitTest
+bundleDebugAar - Assembles a bundle containing the library in debug.
+bundleDebugLocalLintAar - Assembles a bundle containing the library in debug.
+bundleLibCompileToJarDebug
+bundleLibCompileToJarDebugAndroidTest
+bundleLibCompileToJarDebugUnitTest
+bundleLibCompileToJarRelease
+bundleLibCompileToJarReleaseUnitTest
+bundleLibResDebug
+bundleLibResRelease
+bundleLibRuntimeToDirDebug
+bundleLibRuntimeToDirRelease
+bundleLibRuntimeToJarDebug
+bundleLibRuntimeToJarRelease
+bundleReleaseAar - Assembles a bundle containing the library in release.
+bundleReleaseLocalLintAar - Assembles a bundle containing the library in release.
+checkCanSyncPodComposeResourcesForIos
+checkDebugAndroidTestAarMetadata
+checkDebugAndroidTestDuplicateClasses
+checkDebugManifest
+checkReleaseManifest
+compileCommonMainKotlinMetadata - Compiles the kotlin sources in compilation 'commonMain' in target 'metadata' to Metadata.
+compileDebugAndroidTestJavaWithJavac
+compileDebugAndroidTestKotlinAndroid - Compiles the debugAndroidTest kotlin.
+compileDebugAndroidTestShaders
+compileDebugJavaWithJavac
+compileDebugKotlinAndroid - Compiles the debug kotlin.
+compileDebugLibraryResources
+compileDebugShaders
+compileDebugUnitTestJavaWithJavac
+compileDebugUnitTestKotlinAndroid - Compiles the debugUnitTest kotlin.
+compileJsWasmMainKotlinMetadata - Compiles the kotlin sources in compilation 'jsWasmMain' in target 'metadata' to Metadata.
+compileKotlinDesktop - Compiles the compilation 'main' in target 'desktop'.
+compileKotlinJs - Compiles the Kotlin sources in compilation 'main' in target 'js' to JavaScript.
+compileKotlinMetadata - Compiles the kotlin sources in compilation 'main' in target 'metadata' to Metadata.
+compileKotlinWasmJs - Compiles the Kotlin sources in compilation 'main' in target 'wasmJs' to JavaScript.
+compileLint
+compileLintChecks
+compileReleaseJavaWithJavac
+compileReleaseKotlinAndroid - Compiles the release kotlin.
+compileReleaseLibraryResources
+compileReleaseShaders
+compileReleaseUnitTestJavaWithJavac
+compileReleaseUnitTestKotlinAndroid - Compiles the releaseUnitTest kotlin.
+compileTestDevelopmentExecutableKotlinJs - Compiles the Kotlin sources in compilation 'test' in target 'js' to JavaScript.
+compileTestDevelopmentExecutableKotlinWasmJs - Compiles the Kotlin sources in compilation 'test' in target 'wasmJs' to JavaScript.
+compileTestKotlinDesktop - Compiles the compilation 'test' in target 'desktop'.
+compileTestKotlinJs - Compiles the Kotlin sources in compilation 'test' in target 'js' to JavaScript.
+compileTestKotlinWasmJs - Compiles the Kotlin sources in compilation 'test' in target 'wasmJs' to JavaScript.
+compileTestProductionExecutableKotlinJs - Compiles the Kotlin sources in compilation 'test' in target 'js' to JavaScript.
+compileTestProductionExecutableKotlinWasmJs - Compiles the Kotlin sources in compilation 'test' in target 'wasmJs' to JavaScript.
+components - Displays the components produced by project ':shared'. [deprecated]
+composeCompilerClean
+compressDebugAndroidTestAssets
+configureDesktopPreviewDesktop
+consumeConfigAttr
+copyCommonAndroidComposeResources
+copyDebugFontsToAndroidAssets
+copyDebugJniLibsProjectAndLocalJars
+copyDebugJniLibsProjectOnly
+copyReleaseFontsToAndroidAssets
+copyReleaseJniLibsProjectAndLocalJars
+copyReleaseJniLibsProjectOnly
+copyTestComposeResourcesForIosArm64
+copyTestComposeResourcesForIosSimulatorArm64
+copyTestComposeResourcesForIosX64
+createDebugAndroidTestApkListingFileRedirect
+createDebugVariantModel
+createFullJarDebug
+createFullJarRelease
+createMockableJar
+createReleaseVariantModel
+dependentComponents - Displays the dependent components of components in project ':shared'. [deprecated]
+desktopComposeCompilerCheck
+desktopComposeCompilerGenerate
+desktopProcessResources - Processes file collection.
+desktopTestProcessResources - Processes file collection.
+desugarDebugAndroidTestFileDependencies
+dexBuilderDebugAndroidTest
+exportDebugConsumerProguardFiles
+exportReleaseConsumerProguardFiles
+extractDeepLinksDebug
+extractDeepLinksForAarDebug
+extractDeepLinksForAarRelease
+extractDeepLinksRelease
+extractProguardFiles
+generateComposeResClass
+generateDebugAndroidTestAssets
+generateDebugAndroidTestResources
+generateDebugAndroidTestResValues
+generateDebugAndroidTestSources
+generateDebugAssets
+generateDebugExternalPublicTxt
+generateDebugLintModel
+generateDebugResources
+generateDebugResValues
+generateDebugRFile
+generateDebugSources
+generateDebugUnitTestAssets
+generateDebugUnitTestResources
+generateDebugUnitTestSources
+generateDebugUnitTestStubRFile
+generateDummyFramework
+generateProjectStructureMetadata - Generates serialized project structure metadata of the current project (for tooling)
+generateReleaseAssets
+generateReleaseExternalPublicTxt
+generateReleaseLintModel
+generateReleaseResources
+generateReleaseResValues
+generateReleaseRFile
+generateReleaseSources
+generateReleaseUnitTestAssets
+generateReleaseUnitTestResources
+generateReleaseUnitTestSources
+generateReleaseUnitTestStubRFile
+iosArm64ComposeCompilerCheck
+iosArm64ComposeCompilerGenerate
+iosArm64ProcessResources - Processes file collection.
+iosArm64TestProcessResources - Processes file collection.
+iosSimulatorArm64ComposeCompilerCheck
+iosSimulatorArm64ComposeCompilerGenerate
+iosSimulatorArm64ProcessResources - Processes file collection.
+iosSimulatorArm64TestProcessResources - Processes file collection.
+iosX64ComposeCompilerCheck
+iosX64ComposeCompilerGenerate
+iosX64ProcessResources - Processes file collection.
+iosX64TestProcessResources - Processes file collection.
+javaPreCompileDebug
+javaPreCompileDebugAndroidTest
+javaPreCompileDebugUnitTest
+javaPreCompileRelease
+javaPreCompileReleaseUnitTest
+jsProcessResources - Processes file collection.
+jsPublicPackageJson
+jsTestProcessResources - Processes file collection.
+jsTestPublicPackageJson
+jsTestTestDevelopmentExecutableCompileSync
+jsTestTestDevelopmentExecutableValidateGeneratedByCompilerTypeScript
+jsTestTestProductionExecutableCompileSync
+jsTestTestProductionExecutableValidateGeneratedByCompilerTypeScript
+linkPodDebugFrameworkIosFat
+linkPodReleaseFrameworkIosFat
+mapDebugAndroidTestSourceSetPaths
+mapDebugSourceSetPaths
+mapReleaseSourceSetPaths
+mergeDebugAndroidTestAssets
+mergeDebugAndroidTestGeneratedProguardFiles
+mergeDebugAndroidTestGlobalSynthetics
+mergeDebugAndroidTestJavaResource
+mergeDebugAndroidTestJniLibFolders
+mergeDebugAndroidTestNativeLibs
+mergeDebugAndroidTestResources
+mergeDebugAndroidTestShaders
+mergeDebugAssets
+mergeDebugConsumerProguardFiles
+mergeDebugGeneratedProguardFiles
+mergeDebugJavaResource
+mergeDebugJniLibFolders
+mergeDebugNativeLibs
+mergeDebugResources
+mergeDebugShaders
+mergeExtDexDebugAndroidTest
+mergeLibDexDebugAndroidTest
+mergeProjectDexDebugAndroidTest
+mergeReleaseAssets
+mergeReleaseConsumerProguardFiles
+mergeReleaseGeneratedProguardFiles
+mergeReleaseJavaResource
+mergeReleaseJniLibFolders
+mergeReleaseNativeLibs
+mergeReleaseResources
+mergeReleaseShaders
+metadataCommonMainProcessResources - Processes file collection.
+metadataIosMainProcessResources - Processes file collection.
+metadataJsWasmMainProcessResources - Processes file collection.
+metadataProcessResources - Processes file collection.
+model - Displays the configuration model of project ':shared'. [deprecated]
+packageDebugAndroidTest
+packageDebugAssets
+packageDebugRenderscript
+packageDebugResources
+packageReleaseAssets
+packageReleaseRenderscript
+packageReleaseResources
+parseDebugLocalResources
+parseReleaseLocalResources
+podDebugIosFatFramework
+podDebugIosSimulatorFatFramework
+podGenIos - Сreates a synthetic Xcode project to retrieve CocoaPods dependencies
+podInstallSyntheticIos - Invokes `pod install` for synthetic project
+podReleaseIosFatFramework
+podReleaseIosSimulatorFatFramework
+podSpecDebug - Generates podspec for Debug XCFramework publishing
+podSpecRelease - Generates podspec for Release XCFramework publishing
+preBuild
+preDebugAndroidTestBuild
+preDebugBuild
+preDebugUnitTestBuild
+prepareDebugAndroidTestArtProfile
+prepareDebugArtProfile
+prepareDebugUnitTestArtProfile
+prepareKotlinIdeaImport - Umbrella for all tasks required to run before IDEA/Gradle import
+prepareLintJarForPublish
+prepareReleaseArtProfile
+prepareReleaseUnitTestArtProfile
+preReleaseBuild
+preReleaseUnitTestBuild
+processDebugAndroidTestJavaRes
+processDebugAndroidTestManifest
+processDebugAndroidTestResources
+processDebugJavaRes
+processDebugManifest
+processDebugUnitTestJavaRes
+processReleaseJavaRes
+processReleaseManifest
+processReleaseUnitTestJavaRes
+resolveConfigAttr
+signingConfigWriterDebugAndroidTest
+stripDebugDebugSymbols
+stripReleaseDebugSymbols
+syncDebugLibJars
+syncPodComposeResourcesForIos
+syncReleaseLibJars
+transformCommonMainDependenciesMetadata - Generates serialized dependencies metadata for compilation 'commonMain' (for tooling)
+transformDependenciesMetadata
+transformIosMainCInteropDependenciesMetadata
+transformIosMainCInteropDependenciesMetadataForIde
+transformIosMainDependenciesMetadata - Generates serialized dependencies metadata for compilation 'iosMain' (for tooling)
+transformIosTestCInteropDependenciesMetadataForIde
+transformJsWasmMainDependenciesMetadata - Generates serialized dependencies metadata for compilation 'jsWasmMain' (for tooling)
+validateSigningDebugAndroidTest
+verifyReleaseResources
+wasmJsProcessResources - Processes file collection.
+wasmJsPublicPackageJson
+wasmJsTestProcessResources - Processes file collection.
+wasmJsTestPublicPackageJson
+wasmJsTestTestDevelopmentExecutableCompileSync
+wasmJsTestTestDevelopmentExecutableValidateGeneratedByCompilerTypeScript
+wasmJsTestTestProductionExecutableCompileSync
+wasmJsTestTestProductionExecutableValidateGeneratedByCompilerTypeScript
+writeDebugAarMetadata
+writeDebugAndroidTestSigningConfigVersions
+writeDebugLintModelMetadata
+writeReleaseAarMetadata
+writeReleaseLintModelMetadata
+
+Rules
+-----
+Pattern: clean<TaskName>: Cleans the output files of a task.
+Pattern: build<ConfigurationName>: Assembles the artifacts of a configuration.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.4/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 808ms
+9 actionable tasks: 3 executed, 6 up-to-date

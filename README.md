@@ -40,7 +40,7 @@ In a Multiplatform project, Compose Guard adds the same 2 `Check` and `Generate`
 ## Platforms
 ![](https://img.shields.io/badge/Android-black.svg?style=for-the-badge&logo=android) | ![](https://img.shields.io/badge/iOS-black.svg?style=for-the-badge&logo=apple) | ![](https://img.shields.io/badge/Desktop-black.svg?style=for-the-badge&logo=apple) | ![](https://img.shields.io/badge/Web-black.svg?style=for-the-badge&logo=google-chrome)
 :----: | :----: |:----------------------------------------------------------------------------------:| :----:
-✅ | ✅ |                                         ✅                                          | Planned
+✅ | ✅ |                                         ✅                                          | ✅
 
 
 ## Adding To Your Project
@@ -108,3 +108,5 @@ This project uses [this](https://github.com/Kotlin/binary-compatibility-validato
 The tool allows dumping binary API of a JVM part of a Kotlin library that is public in the sense of Kotlin visibilities.
 
 To generate a new binary dump, run `./gradlew apiDump` in the root of the project.
+
+

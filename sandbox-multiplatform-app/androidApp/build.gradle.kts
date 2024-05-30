@@ -17,15 +17,12 @@ kotlin {
 }
 
 android {
-    compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.myapplication"
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-
+    namespace = "example.imageviewer"
+    compileSdk = 34
     defaultConfig {
-        applicationId = "com.myapplication.MyApplication"
-        minSdk = (findProperty("android.minSdk") as String).toInt()
-        targetSdk = (findProperty("android.targetSdk") as String).toInt()
+        applicationId = "org.jetbrains.Imageviewer"
+        minSdk = 26
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
     }

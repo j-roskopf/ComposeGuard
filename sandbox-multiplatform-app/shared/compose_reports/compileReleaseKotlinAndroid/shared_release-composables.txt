@@ -1,0 +1,167 @@
+restartable skippable fun AndroidOnlyShared()
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ImageViewerAndroid()
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun LocationVisualizer(
+  stable modifier: Modifier
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable, [androidx.compose.ui.UiComposable]]") fun ScrollableColumn(
+  stable modifier: Modifier
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[0, [0]]") fun Tooltip(
+  unused stable text: String
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ImageViewerCommon(
+  dependencies: Dependencies
+  unstable externalEvents: Flow<ExternalImageViewerEvent>? = @dynamic emptyFlow()
+)
+restartable skippable scheme("[0, [0]]") fun ImageViewerTheme(
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun CameraScreen(
+  stable onBack: Function0<Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun CircularButton(
+  unstable image: Painter
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun FullscreenImage(
+  picture: PictureData
+  stable getFilter: Function1<FilterType, BitmapFilter>
+  localization: Localization
+  stable back: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun FullscreenImageBar(
+  localization: Localization
+  unused stable pictureName: String?
+  stable onBack: Function0<Unit>
+  unused unstable filters: List<FilterType>
+  unused unstable selectedFilters: Set<FilterType>
+  unused stable onSelectFilter: Function1<FilterType, Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun FilterButtons(
+  unstable filters: List<FilterType>
+  unstable selectedFilters: Set<FilterType>
+  stable onSelectFilter: Function1<FilterType, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun FilterButton(
+  stable active: Boolean
+  stable type: FilterType
+  stable onClick: Function0<Unit>
+)
+fun getFilterImage(
+  stable active: Boolean
+  stable type: FilterType
+): Painter
+restartable scheme("[androidx.compose.ui.UiComposable]") fun GalleryScreen(
+  unstable galleryPage: GalleryPage
+  unused unstable photoGallery: PhotoGallery
+  dependencies: Dependencies
+  stable onClickPreviewPicture: Function1<PictureData, Unit>
+  stable onMakeNewMemory: Function0<Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun SquaresGalleryView(
+  unstable images: List<PictureData>
+  selectedImage: PictureData
+  stable onSelect: Function1<PictureData, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MakeNewMemoryMiniature(
+  stable <this>: BoxScope
+  stable onClick: Function0<Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun SquareMiniature(
+  unstable image: ImageBitmap
+  stable isHighlighted: Boolean
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun SquareThumbnail(
+  picture: PictureData
+  stable isHighlighted: Boolean
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ListGalleryView(
+  stable pictures: SnapshotStateList<PictureData>
+  unused dependencies: Dependencies
+  stable onSelect: Function1<PictureData, Unit>
+  stable onFullScreen: Function1<PictureData, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun LoadingScreen(
+  stable text: String? = @static ""
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MemoryScreen(
+  memoryPage: MemoryPage
+  dependencies: Dependencies
+  unused unstable photoGallery: PhotoGallery
+  localization: Localization
+  stable onSelectRelatedMemory: Function1<PictureData, Unit>
+  stable onBack: Function0<Unit>
+  stable onHeaderClick: Function1<PictureData, Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun MemoryHeader(
+  unstable bitmap: ImageBitmap?
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MagicButtonOverlay(
+  stable <this>: BoxScope
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MemoryTextOverlay(
+  stable <this>: BoxScope
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Collapsible(
+  stable s: String
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Headliner(
+  stable s: String
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun RelatedMemoriesVisualizer(
+  dependencies: Dependencies
+  stable onSelectRelatedMemory: Function1<PictureData, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun RelatedMemory(
+  unused stable index: Int
+  galleryEntry: PictureData
+  stable onSelectRelatedMemory: Function1<PictureData, Unit>
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun Miniature(
+  stable picture: Picture
+  unstable image: ImageBitmap?
+  stable onClickSelect: Function0<Unit>
+  stable onClickFullScreen: Function0<Unit>
+  stable onClickInfo: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun PreviewImage(
+  picture: PictureData
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable, [androidx.compose.ui.UiComposable]]") fun TouchScrollableColumn(
+  stable modifier: Modifier
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Thumbnail(
+  picture: PictureData
+  stable onClickSelect: Function0<Unit>
+  stable onClickFullScreen: Function0<Unit>
+  stable onClickInfo: Function0<Unit>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ThumbnailImage(
+  stable modifier: Modifier
+  picture: PictureData
+  stable filter: Function1<ImageBitmap, ImageBitmap>? = @static $composer.startReplaceableGroup(777581432)
+val tmp0_group = $composer.cache(false) {
+  {     it  :   ImageBitmap   ->
+    it
+  }
+
+}
+
+$composer.endReplaceableGroup()
+tmp0_group@example.imageviewer.view.ThumbnailImage
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Toast(
+  stable state: MutableState<ToastState>
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable, [androidx.compose.ui.UiComposable], [androidx.compose.ui.UiComposable]]") fun TopLayout(
+  stable alignLeftContent: Function2<Composer, Int, Unit>? = @static ComposableSingletons$TopLayoutKt.lambda-1
+  stable alignRightContent: Function2<Composer, Int, Unit>? = @static ComposableSingletons$TopLayoutKt.lambda-2
+)

@@ -1,0 +1,167 @@
+restartable skippable fun ImageViewerCommon(
+  dependencies: Dependencies
+  externalEvents: Flow<ExternalImageViewerEvent>? = @dynamic emptyFlow()
+)
+restartable skippable scheme("[0, [0]]") fun ImageViewerTheme(
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable fun CameraScreen(
+  stable onBack: Function0<Unit>
+)
+restartable skippable fun CircularButton(
+  stable image: Painter
+  stable onClick: Function0<Unit>
+)
+restartable skippable fun FullscreenImage(
+  picture: PictureData
+  stable getFilter: Function1<FilterType, BitmapFilter>
+  localization: Localization
+  stable back: Function0<Unit>
+)
+restartable skippable fun FullscreenImageBar(
+  localization: Localization
+  unused stable pictureName: String?
+  stable onBack: Function0<Unit>
+  unused filters: List<FilterType>
+  unused selectedFilters: Set<FilterType>
+  unused stable onSelectFilter: Function1<FilterType, Unit>
+)
+restartable skippable fun FilterButtons(
+  filters: List<FilterType>
+  selectedFilters: Set<FilterType>
+  stable onSelectFilter: Function1<FilterType, Unit>
+)
+restartable skippable fun FilterButton(
+  stable active: Boolean
+  stable type: FilterType
+  stable onClick: Function0<Unit>
+)
+fun getFilterImage(
+  stable active: Boolean
+  stable type: FilterType
+): Painter
+restartable skippable fun GalleryScreen(
+  galleryPage: GalleryPage
+  unused photoGallery: PhotoGallery
+  dependencies: Dependencies
+  stable onClickPreviewPicture: Function1<PictureData, Unit>
+  stable onMakeNewMemory: Function0<Unit>
+)
+restartable skippable fun SquaresGalleryView(
+  images: List<PictureData>
+  selectedImage: PictureData
+  stable onSelect: Function1<PictureData, Unit>
+)
+restartable skippable fun MakeNewMemoryMiniature(
+  stable <this>: BoxScope
+  stable onClick: Function0<Unit>
+)
+restartable skippable fun SquareMiniature(
+  image: ImageBitmap
+  stable isHighlighted: Boolean
+  stable onClick: Function0<Unit>
+)
+restartable skippable fun SquareThumbnail(
+  picture: PictureData
+  stable isHighlighted: Boolean
+  stable onClick: Function0<Unit>
+)
+restartable skippable fun ListGalleryView(
+  stable pictures: SnapshotStateList<PictureData>
+  unused dependencies: Dependencies
+  stable onSelect: Function1<PictureData, Unit>
+  stable onFullScreen: Function1<PictureData, Unit>
+)
+restartable skippable fun LoadingScreen(
+  stable text: String? = @static ""
+)
+restartable skippable fun MemoryScreen(
+  memoryPage: MemoryPage
+  dependencies: Dependencies
+  unused photoGallery: PhotoGallery
+  localization: Localization
+  stable onSelectRelatedMemory: Function1<PictureData, Unit>
+  stable onBack: Function0<Unit>
+  stable onHeaderClick: Function1<PictureData, Unit>
+)
+restartable skippable fun MemoryHeader(
+  bitmap: ImageBitmap?
+  stable onClick: Function0<Unit>
+)
+restartable skippable fun MagicButtonOverlay(
+  stable <this>: BoxScope
+  stable onClick: Function0<Unit>
+)
+restartable skippable fun MemoryTextOverlay(
+  stable <this>: BoxScope
+)
+restartable skippable fun Collapsible(
+  stable s: String
+)
+restartable skippable fun Headliner(
+  stable s: String
+)
+restartable skippable fun RelatedMemoriesVisualizer(
+  dependencies: Dependencies
+  stable onSelectRelatedMemory: Function1<PictureData, Unit>
+)
+restartable skippable fun RelatedMemory(
+  unused stable index: Int
+  galleryEntry: PictureData
+  stable onSelectRelatedMemory: Function1<PictureData, Unit>
+)
+restartable skippable fun Miniature(
+  stable picture: Picture
+  image: ImageBitmap?
+  stable onClickSelect: Function0<Unit>
+  stable onClickFullScreen: Function0<Unit>
+  stable onClickInfo: Function0<Unit>
+)
+restartable skippable fun PreviewImage(
+  picture: PictureData
+  stable onClick: Function0<Unit>
+)
+restartable skippable scheme("[0, [0]]") fun TouchScrollableColumn(
+  stable modifier: Modifier
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable fun Thumbnail(
+  picture: PictureData
+  stable onClickSelect: Function0<Unit>
+  stable onClickFullScreen: Function0<Unit>
+  stable onClickInfo: Function0<Unit>
+)
+restartable skippable fun ThumbnailImage(
+  stable modifier: Modifier
+  picture: PictureData
+  stable filter: Function1<ImageBitmap, ImageBitmap>? = @static $composer.startReplaceableGroup(777581432)
+val tmp0_group = $composer.cache(false) {
+  {     it  :   ImageBitmap   ->
+    it
+  }
+
+}
+
+$composer.endReplaceableGroup()
+tmp0_group@example.imageviewer.view.ThumbnailImage
+)
+restartable skippable fun Toast(
+  stable state: MutableState<ToastState>
+)
+restartable skippable scheme("[0, [0], [0]]") fun TopLayout(
+  stable alignLeftContent: Function2<Composer, Int, Unit>? = @static ComposableSingletons$TopLayoutKt.lambda-1
+  stable alignRightContent: Function2<Composer, Int, Unit>? = @static ComposableSingletons$TopLayoutKt.lambda-2
+)
+restartable skippable fun ImageViewerIos()
+restartable skippable fun IosOnlyShared()
+restartable skippable fun LocationVisualizer(
+  unused stable modifier: Modifier
+)
+restartable skippable scheme("[0, [0]]") fun ScrollableColumn(
+  stable modifier: Modifier
+  stable content: Function2<Composer, Int, Unit>
+)
+restartable skippable scheme("[0, [0]]") fun Tooltip(
+  unused stable text: String
+  stable content: Function2<Composer, Int, Unit>
+)

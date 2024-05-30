@@ -42,6 +42,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.KotlinJsTarget
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
@@ -184,12 +186,14 @@ public class ReportGenPlugin : Plugin<Project> {
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
-                                REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath,
+                                REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
                             )
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
-                                METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath,
+                                METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
                             )
                     } else if (gradle.startParameter.taskNames.any {
                             it.contains(GENERATE_TASK_NAME)
@@ -198,12 +202,14 @@ public class ReportGenPlugin : Plugin<Project> {
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
-                                REPORT_PARAM + genExtension.outputDirectory.get().absolutePath,
+                                REPORT_PARAM + genExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
                             )
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
-                                METRIC_PARAM + genExtension.outputDirectory.get().absolutePath,
+                                METRIC_PARAM + genExtension.outputDirectory.get().absolutePath +
+                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
                             )
                     }
                 }
@@ -274,6 +280,46 @@ public class ReportGenPlugin : Plugin<Project> {
 
                     registerGenerateTask(
                         target = kotlinNativeTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                        variant = "",
+                    )
+                }
+            },
+        )
+
+        val jsTargets =
+            multiplatformExtension?.targets?.withType(KotlinJsTarget::class.java)
+        jsTargets?.all(
+            object : Action<KotlinJsTarget> {
+                override fun execute(kotlinJsTarget: KotlinJsTarget) {
+                    registerCheckTask(
+                        variant = "",
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                    )
+
+                    registerGenerateTask(
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                        variant = "",
+                    )
+                }
+            },
+        )
+
+        val irTargets =
+            multiplatformExtension?.targets?.withType(KotlinJsIrTarget::class.java)
+        irTargets?.all(
+            object : Action<KotlinJsIrTarget> {
+                override fun execute(kotlinJsTarget: KotlinJsIrTarget) {
+                    registerCheckTask(
+                        variant = "",
+                        target = kotlinJsTarget.name,
+                        project = this@registerTasksForMultiplatformTargets,
+                    )
+
+                    registerGenerateTask(
+                        target = kotlinJsTarget.name,
                         project = this@registerTasksForMultiplatformTargets,
                         variant = "",
                     )

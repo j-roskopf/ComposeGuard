@@ -1,0 +1,3 @@
+package,name,composable,skippable,restartable,readonly,inline,isLambda,hasDefaults,defaultsGroup,groups,calls,
+JsAppOnly,JsAppOnly,1,1,1,0,0,0,0,0,1,0,
+ImageViewerWeb,ImageViewerWeb,1,1,1,0,0,0,0,0,1,2,

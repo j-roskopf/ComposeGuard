@@ -1,7 +1,0 @@
-restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun App()
-restartable scheme("[androidx.compose.ui.UiComposable]") fun TestCommon(
-  unstable test: Test
-)
-restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MainView()
-restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun AppPreview()
-restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun DesktopOnly()

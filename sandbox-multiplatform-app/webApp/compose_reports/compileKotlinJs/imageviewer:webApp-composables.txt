@@ -1,0 +1,2 @@
+restartable skippable fun JsAppOnly()
+restartable skippable fun ImageViewerWeb()
