@@ -15,7 +15,9 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+data class Test(var name: String)
+
 @Composable
-fun AndroidOnlyApp() {
+fun AndroidOnlyApp(test: Test) {
 
 }

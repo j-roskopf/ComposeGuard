@@ -22,19 +22,21 @@ A gradle plugin for detecting regressions in Jetpack Compose / Compose Multiplat
 * New unstable parameters are added to a @Composable
 
 In an Android project, Compose Guard adds 3 tasks:
-* `<variant>ComposeCompilerGenerate` (example `releaseComposeCompilerGenerate`)
+* `<variant>ComposeCompilerGenerate` (example `./gradlew releaseComposeCompilerGenerate`)
   - Generate golden compose metrics to compare against
-* `<variant>ComposeCompilerCheck` (example `releaseComposeCompilerCheck`)
+* `<variant>ComposeCompilerCheck` (example `./gradlew releaseComposeCompilerCheck`)
   - Generates new metrics and compares against golden values
-* `composeCompilerClean`
+* `./gradlew composeCompilerClean`
   - Deletes all compiler metrics
 
 In a Multiplatform project, Compose Guard adds the same 2 `Check` and `Generate` tasks (as well as a root `composeCompilerClean` task) for each supported target following the pattern `<target><variant if applicable>ComposeCompilerGenerate`
-* `<variant><target>ComposeCompilerGenerate` (example `androidReleaseComposeCompilerGenerate` or `jvmComposeCompilerGenerate` or ` iosArm64ComposeCompilerGenerate`)
+* `<variant><target>ComposeCompilerGenerate` 
+  - Examples: `./gradlew androidReleaseComposeCompilerGenerate`, `./gradlew jvmComposeCompilerGenerate`, ` ./gradlew iosArm64ComposeCompilerGenerate`, `./gradlew jsComposeCompilerGenerate`, `./gradlew wasmJsComposeCompilerGenerate`
   - Generate golden compose metrics to compare against
-* `<variant><target>ComposeCompilerCheck` (example `androidReleaseComposeCompilerCheck` or `jvmComposeCompilerCheck` or ` iosArm64ComposeCompilerCheck`)
+* `<variant><target>ComposeCompilerCheck` 
+  - Examples: `./gradlew androidReleaseComposeCompilerCheck`, `./gradlew jvmComposeCompilerCheck`, `./gradlew iosArm64ComposeCompilerCheck`, `./gradlew jsComposeCompilerCheck`, `./gradlew wasmJsComposeCompilerCheck`
   - Generates new metrics and compares against golden values
-* `composeCompilerClean`
+* `./gradlew composeCompilerClean`
   - Deletes all compiler metrics
 
 ## Platforms

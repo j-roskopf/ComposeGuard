@@ -57,6 +57,7 @@ public class ReportGenPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         // create extensions
         ComposeCompilerReportExtension.create(target)
+        InternalComposeCompilerCheckExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
 
         // register directories for storing metrics for generate + check tasks
@@ -115,6 +116,7 @@ public class ReportGenPlugin : Plugin<Project> {
     ) {
         val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
         val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
+        val internalExtension = project.extensions.getByType<InternalComposeCompilerCheckExtension>()
 
         val taskName =
             if (project.isMultiplatformProject()) {
@@ -131,6 +133,13 @@ public class ReportGenPlugin : Plugin<Project> {
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
                 checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
                 inputDirectory.set(checkExtension.outputDirectory.get())
+                multiplatformCompilationTarget.set(
+                    if (project.isMultiplatformProject()) {
+                        internalExtension.composeMultiplatformCompilationTarget.get()
+                    } else {
+                        ""
+                    },
+                )
                 composeCompilerCheckExtension.set(checkExtension)
             }
 
@@ -161,6 +170,7 @@ public class ReportGenPlugin : Plugin<Project> {
 
     private fun Project.registerComposeParameters() {
         val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
+        val internalExtension = extensions.getByType<InternalComposeCompilerCheckExtension>()
         val genExtension = extensions.getByType<ComposeCompilerReportExtension>()
 
         val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
@@ -179,6 +189,8 @@ public class ReportGenPlugin : Plugin<Project> {
         project.tasks.withType(KotlinCompile::class.java).configureEach(
             object : Action<KotlinCompile<*>> {
                 override fun execute(t: KotlinCompile<*>) {
+                    internalExtension.composeMultiplatformCompilationTarget.set(t.name)
+
                     if (gradle.startParameter.taskNames.any {
                             it.contains(CHECK_TASK_NAME)
                         }
@@ -328,10 +340,6 @@ public class ReportGenPlugin : Plugin<Project> {
         )
     }
 
-    private fun Project.isMultiplatformProject(): Boolean {
-        return pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")
-    }
-
     /**
      * Registers check / gen task for Android Project
      */
@@ -363,5 +371,9 @@ public class ReportGenPlugin : Plugin<Project> {
                 variant = it.name,
             )
         }
+    }
+
+    private fun Project.isMultiplatformProject(): Boolean {
+        return pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")
     }
 }

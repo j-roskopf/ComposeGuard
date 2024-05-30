@@ -1,1 +1,3 @@
-restartable skippable fun AndroidOnlyApp()
+restartable skippable fun AndroidOnlyApp(
+  unused unstable test: Test
+)

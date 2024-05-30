@@ -8,7 +8,9 @@ fun main() = application {
     ImageViewerDesktop()
 }
 
+data class Test(var name: String)
+
 @Composable
-fun DesktopOnlyApp() {
+fun DesktopOnlyApp(test: Test) {
 
 }
