@@ -2,7 +2,10 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.joetr.compose.guard")
+    id("org.jetbrains.kotlin.plugin.compose").version("2.0.0")
 }
+
+
 
 android {
     namespace = "com.example.myapplication"
@@ -37,14 +40,15 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.5"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+composeCompiler {
+    enableStrongSkippingMode.set(true)
 }
 
 dependencies {

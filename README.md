@@ -75,6 +75,11 @@ composeGuardCheck {
     errorOnNewRestartableButNotSkippableComposables = false // defaults to true
     errorOnNewUnstableClasses = false // defaults to true
     errorOnNewUnstableParams = false // defaults to true
+    /**
+     * In strong skipping mode (https://developer.android.com/develop/ui/compose/performance/stability/strongskipping)
+     * you may not care about new unstable params if the composable is already skippable
+     */
+    ignoreUnstableParamsOnSkippableComposables = true // defaults to false
 }
 ```
 

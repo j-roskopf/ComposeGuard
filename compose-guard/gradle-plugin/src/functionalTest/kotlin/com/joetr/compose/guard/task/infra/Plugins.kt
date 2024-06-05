@@ -24,5 +24,7 @@
 package com.joetr.compose.guard.task.infra
 
 object Plugins {
-    @JvmStatic val KOTLIN_VERSION: String = "1.9.22"
+    @JvmStatic val KOTLIN_VERSION_1_9_22: String = "1.9.22"
+
+    @JvmStatic val KOTLIN_VERSION_2_0_0: String = "2.0.0"
 }

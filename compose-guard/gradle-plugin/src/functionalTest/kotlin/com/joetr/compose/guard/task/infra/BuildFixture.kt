@@ -29,22 +29,36 @@ import com.autonomousapps.kit.gradle.GradleProperties
 import com.autonomousapps.kit.gradle.Plugin
 import org.intellij.lang.annotations.Language
 
-private const val KOTLIN_VERSION = "1.9.22"
 private const val ANDROID_GRADLE_PLUGIN_VERSION = "7.4.0"
 
 class BuildFixture : AbstractGradleProject() {
     fun build(
         script: String = "",
         builder: GradleProject.Builder.() -> Unit,
+        kotlinVersion: String = Plugins.KOTLIN_VERSION_1_9_22,
     ): GradleProject {
-        return minimumFixture(script).apply { builder() }
+        return minimumFixture(script = script, kotlinVersion = kotlinVersion).apply { builder() }
             .write()
     }
 
     private fun minimumFixture(
         @Language("kt") script: String = "",
+        kotlinVersion: String,
     ): GradleProject.Builder {
-        val ksp = "$KOTLIN_VERSION-1.0.17"
+        val plugins =
+            listOf(
+                Plugin("com.android.library", ANDROID_GRADLE_PLUGIN_VERSION, apply = false),
+                androidAppPlugin(false),
+                kotlinAndroid(apply = false, kotlinVersion = kotlinVersion),
+                reportGenPlugin(false),
+            ) +
+                if (kotlinVersion.startsWith("2")) {
+                    listOf(composePlugin(apply = false, kotlinVersion = kotlinVersion))
+                } else {
+                    emptyList()
+                }
+
+        val ksp = "$kotlinVersion-1.0.17"
         val moshix = "0.25.1"
         val hilt = "2.51.1"
         val root =
@@ -54,7 +68,7 @@ class BuildFixture : AbstractGradleProject() {
                     """
         [versions]
         jdk = "17"
-        kotlin = "$KOTLIN_VERSION"
+        kotlin = "$kotlinVersion"
         ksp = "$ksp"
         jvmTarget = "17"
         compileSdk = "34"
@@ -87,12 +101,7 @@ class BuildFixture : AbstractGradleProject() {
                         .trimIndent(),
                 )
                 withBuildScript {
-                    plugins(
-                        Plugin("com.android.library", ANDROID_GRADLE_PLUGIN_VERSION, apply = false),
-                        androidAppPlugin(false),
-                        kotlinAndroid(false),
-                        reportGenPlugin(false),
-                    )
+                    plugins(plugins)
                     withKotlin(script = script)
                 }
 
@@ -105,7 +114,6 @@ class BuildFixture : AbstractGradleProject() {
     companion object {
         val REPORT_GEN_PLUGIN = reportGenPlugin()
         val ANDROID_APP_PLUGIN = androidAppPlugin()
-        val KOTLIN_ANDROID = kotlinAndroid()
 
         private fun androidAppPlugin(apply: Boolean = true): Plugin {
             return Plugin(
@@ -115,10 +123,13 @@ class BuildFixture : AbstractGradleProject() {
             )
         }
 
-        private fun kotlinAndroid(apply: Boolean = true): Plugin {
+        internal fun kotlinAndroid(
+            apply: Boolean = true,
+            kotlinVersion: String,
+        ): Plugin {
             return Plugin(
                 id = "org.jetbrains.kotlin.android",
-                version = if (apply.not()) KOTLIN_VERSION else null,
+                version = if (apply.not()) kotlinVersion else null,
                 apply = apply,
             )
         }
@@ -127,6 +138,17 @@ class BuildFixture : AbstractGradleProject() {
             return Plugin(
                 id = "com.joetr.compose.guard",
                 version = if (apply.not()) PLUGIN_UNDER_TEST_VERSION else null,
+                apply = apply,
+            )
+        }
+
+        internal fun composePlugin(
+            apply: Boolean = true,
+            kotlinVersion: String,
+        ): Plugin {
+            return Plugin(
+                id = "org.jetbrains.kotlin.plugin.compose",
+                version = if (apply.not()) kotlinVersion else null,
                 apply = apply,
             )
         }

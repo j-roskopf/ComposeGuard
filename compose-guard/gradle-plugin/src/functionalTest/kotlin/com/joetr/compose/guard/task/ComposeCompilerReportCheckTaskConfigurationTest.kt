@@ -25,9 +25,12 @@ package com.joetr.compose.guard.task
 
 import assertk.assertThat
 import assertk.assertions.contains
+import com.joetr.compose.guard.task.infra.Plugins
+import com.joetr.compose.guard.task.infra.asserts.failed
 import com.joetr.compose.guard.task.infra.asserts.succeeded
 import com.joetr.compose.guard.task.infra.asserts.task
 import com.joetr.compose.guard.task.infra.execute
+import com.joetr.compose.guard.task.infra.executeAndFail
 import org.junit.Test
 
 class ComposeCompilerReportCheckTaskConfigurationTest {
@@ -217,6 +220,128 @@ class ComposeCompilerReportCheckTaskConfigurationTest {
             fun NewTestComposable(test: Test) {
                 Text(text = test.name)
             }
+            """.trimIndent(),
+        )
+
+        // assert check succeeds
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+    }
+
+    @Test
+    fun `new unstable params are still flagged when strong skipping is enabled`() {
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """
+                    composeCompiler.enableStrongSkippingMode.set(true)
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // add unstable class and dynamic property so that check doesn't fail and generate golden metrics
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(firstUnstable: UnstableClass) {
+                Text(text = firstUnstable.value)
+            }
+            """.trimIndent(),
+        )
+        // Generate golden metrics with the new class included
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(newUnstable: OtherUnstableClass) {
+                Text(text = newUnstable.value )
+                }
+            """.trimIndent(),
+        )
+
+        // assert check fails
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New unstable parameters were added in the following @Composables!")
+        assertThat(checkResult.output).contains(
+            "FunctionAndParameter(functionName=TestComposable, parameterName=newUnstable, parameterType=OtherUnstableClass)",
+        )
+        assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
+    fun `new unstable params are not flagged when strong skipping is enabled and ignore unstable params is checked`() {
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """
+                    composeCompiler.enableStrongSkippingMode.set(true)
+                    
+                    composeGuardCheck {
+                        ignoreUnstableParamsOnSkippableComposables.set(true)
+                    }
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        // add unstable class and dynamic property so that check doesn't fail and generate golden metrics
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(firstUnstable: UnstableClass) {
+                Text(text = firstUnstable.value)
+            }
+            """.trimIndent(),
+        )
+        // Generate golden metrics with the new class included
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(newUnstable: OtherUnstableClass) {
+                Text(text = newUnstable.value )
+                }
             """.trimIndent(),
         )
 

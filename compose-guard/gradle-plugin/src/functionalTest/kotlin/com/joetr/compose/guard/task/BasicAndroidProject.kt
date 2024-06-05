@@ -30,15 +30,20 @@ import com.autonomousapps.kit.gradle.android.AndroidBlock
 import com.autonomousapps.kit.gradle.android.CompileOptions
 import com.autonomousapps.kit.gradle.android.DefaultConfig
 import com.joetr.compose.guard.task.infra.BuildFixture
+import com.joetr.compose.guard.task.infra.BuildFixture.Companion.composePlugin
+import com.joetr.compose.guard.task.infra.BuildFixture.Companion.kotlinAndroid
 import com.joetr.compose.guard.task.infra.Plugins
 import org.gradle.api.JavaVersion
 
 object BasicAndroidProject {
-    fun getComposeProject(additionalBuildScriptForAndroidSubProject: String = ""): GradleProject {
+    fun getComposeProject(
+        additionalBuildScriptForAndroidSubProject: String = "",
+        kotlinVersion: String = Plugins.KOTLIN_VERSION_1_9_22,
+    ): GradleProject {
+        val includeKotlinCompilerExtensionVersion = kotlinVersion.startsWith("1")
         val script =
             """
             android.buildFeatures.compose = true
-            android.composeOptions.kotlinCompilerExtensionVersion = "1.5.10"
             
             $additionalBuildScriptForAndroidSubProject
 
@@ -52,8 +57,27 @@ object BasicAndroidProject {
                     implementation("androidx.compose.ui:ui-tooling-preview")
                     implementation("androidx.compose.material3:material3")
             }
-            """.trimIndent()
+            
+            """.trimIndent() +
+                if (includeKotlinCompilerExtensionVersion) {
+                    """
+                    android.composeOptions.kotlinCompilerExtensionVersion = "1.5.10"
+                    """.trimIndent()
+                } else {
+                    ""
+                }
 
+        val plugins =
+            listOf(
+                BuildFixture.ANDROID_APP_PLUGIN,
+                kotlinAndroid(kotlinVersion = kotlinVersion),
+                BuildFixture.REPORT_GEN_PLUGIN,
+            ) +
+                if (kotlinVersion.startsWith("2")) {
+                    listOf(composePlugin(kotlinVersion = kotlinVersion))
+                } else {
+                    emptyList()
+                }
         val project =
             BuildFixture().build(
                 script =
@@ -65,7 +89,7 @@ object BasicAndroidProject {
                       }
                       dependencies {
                         classpath("com.android.tools.build:gradle:8.2.0")
-                        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Plugins.KOTLIN_VERSION}")
+                        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
                       }
                     }
                     """.trimIndent(),
@@ -75,7 +99,7 @@ object BasicAndroidProject {
                         packageName = "com.example.myapplication",
                     ) {
                         withBuildScript {
-                            plugins(BuildFixture.ANDROID_APP_PLUGIN, BuildFixture.KOTLIN_ANDROID, BuildFixture.REPORT_GEN_PLUGIN)
+                            plugins(plugins)
                             android =
                                 AndroidBlock(
                                     namespace = "com.example.myapplication",
@@ -120,6 +144,7 @@ object BasicAndroidProject {
                         }
                     }
                 },
+                kotlinVersion = kotlinVersion,
             )
 
         return project
