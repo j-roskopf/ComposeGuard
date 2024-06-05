@@ -393,7 +393,7 @@ class ComposeCompilerReportCheckTaskTest {
         // Assert check fails with new unstable parameter
         val checkTask = ":android:releaseComposeCompilerCheck"
         val checkResult = project.executeAndFail(checkTask)
-        assertThat(checkResult.output).contains("New unstable parameters were added in the following composables!")
+        assertThat(checkResult.output).contains("New unstable parameters were added in the following @Composables!")
         assertThat(checkResult.output).contains(
             "FunctionAndParameter(functionName=TestComposable, parameterName=newUnstable, parameterType=OtherUnstableClass)",
         )

@@ -5,8 +5,6 @@ kotlin = "1.9.20"
 serialization = "1.6.3"
 coroutines = "1.8.0"
 spotless = "6.25.0"
-kotlinxHtml = "0.11.0"
-kotlinxCli = "0.3.6"
 mavenPublish = "0.28.0"
 androidGradlePlugin = "8.2.0"
 junit = "5.10.2"
@@ -15,8 +13,6 @@ truth = "1.4.2"
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-kotlinx-html-jvm = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
-kotlinx-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version.ref = "kotlinxCli" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 junit-four =  { module = "junit:junit", version = "4.13.2" }

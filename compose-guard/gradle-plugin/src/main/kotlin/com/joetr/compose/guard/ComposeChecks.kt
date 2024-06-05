@@ -37,16 +37,24 @@ internal object ComposeChecks {
         composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>,
     ) {
         if (composeCompilerCheckExtension.get().errorOnNewDynamicProperties.get()) {
-            checkDynamicDefaultExpressions(checkedMetrics, goldenMetrics)
+            checkDynamicDefaultExpressions(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
         }
         if (composeCompilerCheckExtension.get().errorOnNewUnstableClasses.get()) {
-            checkUnstableClasses(checkedMetrics, goldenMetrics)
+            checkUnstableClasses(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
         }
         if (composeCompilerCheckExtension.get().errorOnNewRestartableButNotSkippableComposables.get()) {
-            checkRestartableButNotSkippable(checkedMetrics, goldenMetrics)
+            checkRestartableButNotSkippable(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
         }
         if (composeCompilerCheckExtension.get().errorOnNewUnstableParams.get()) {
-            checkUnstableParams(checkedMetrics, goldenMetrics)
+            checkUnstableParams(
+                checkedMetrics = checkedMetrics,
+                goldenMetrics = goldenMetrics,
+                ignoreUnstableParamsOnSkippableComposables =
+                    composeCompilerCheckExtension
+                        .get()
+                        .ignoreUnstableParamsOnSkippableComposables
+                        .get(),
+            )
         }
     }
 
@@ -152,14 +160,24 @@ internal object ComposeChecks {
         }
     }
 
+    /**
+     * @param ignoreUnstableParamsOnSkippableComposables - In strong skipping mode (https://developer.android.com/develop/ui/compose/performance/stability/strongskipping)
+     * we don't really care about new unstable params if the composable is already skippable
+     */
     private fun checkUnstableParams(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
+        ignoreUnstableParamsOnSkippableComposables: Boolean,
     ) {
         val checkedUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
         checkedMetrics.getComposablesReport().composables.forEach { composable ->
             composable.params.filter {
-                it.condition == UNSTABLE
+                it.condition == UNSTABLE &&
+                    if (ignoreUnstableParamsOnSkippableComposables) {
+                        composable.isSkippable.not()
+                    } else {
+                        true
+                    }
             }.forEach { param ->
                 checkedUnstableParamsMap[
                     ComposableDetail.FunctionAndParameter(
@@ -174,7 +192,12 @@ internal object ComposeChecks {
         val goldenUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
         goldenMetrics.getComposablesReport().composables.forEach { composable ->
             composable.params.filter {
-                it.condition == UNSTABLE
+                it.condition == UNSTABLE &&
+                    if (ignoreUnstableParamsOnSkippableComposables) {
+                        composable.isSkippable.not()
+                    } else {
+                        true
+                    }
             }.forEach { param ->
                 goldenUnstableParamsMap[
                     ComposableDetail.FunctionAndParameter(
@@ -190,7 +213,7 @@ internal object ComposeChecks {
 
         if (newUnstableParamsMap.isNotEmpty()) {
             throw GradleException(
-                "New unstable parameters were added in the following composables! \n" +
+                "New unstable parameters were added in the following @Composables! \n" +
                     newUnstableParamsMap.keys.joinToString(separator = "\n") { it.toString() },
             )
         }
