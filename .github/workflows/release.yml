@@ -8,8 +8,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-13
-    timeout-minutes: 60
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
