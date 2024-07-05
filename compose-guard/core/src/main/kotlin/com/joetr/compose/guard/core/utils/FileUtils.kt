@@ -40,6 +40,27 @@ public inline fun ensureDirectory(
     }
 }
 
+/**
+ * Checks whether there are metrics for the given variant
+ */
+public fun ensureVariantsExistsInDirectory(
+    directory: File,
+    variant: String,
+) {
+    val files = directory.listFiles() ?: emptyArray()
+    val variantFiles =
+        files.filter {
+            it.name.contains(variant)
+        }.size
+
+    if (variantFiles <= 0) {
+        throw FileNotFoundException(
+            "Golden metrics do not exist for variant $variant! " +
+                "Please generate them using the `${variant}ComposeCompilerGenerate` task",
+        )
+    }
+}
+
 public inline fun ensureDirectoryIsNotEmpty(
     directory: File,
     lazyMessage: () -> Any,

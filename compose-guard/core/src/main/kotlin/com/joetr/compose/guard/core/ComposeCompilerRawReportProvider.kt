@@ -54,13 +54,13 @@ public sealed interface ComposeCompilerRawReportProvider {
     /**
      * Searches for files in the given [directory] and provides report and metric files found in that directory.
      */
-    public class FromDirectory(directory: File) : ComposeCompilerRawReportProvider {
+    public class FromDirectory(directory: File, variant: String) : ComposeCompilerRawReportProvider {
         private val finder = ReportAndMetricsFileFinder(directory)
 
-        override val briefStatisticsJsonFiles: List<File> = finder.findBriefStatisticsJsonFile()
-        override val detailedStatisticsCsvFiles: List<File> = finder.findDetailsStatisticsCsvFile()
-        override val composableReportFiles: List<File> = finder.findComposablesReportTxtFile()
-        override val classesReportFiles: List<File> = finder.findClassesReportTxtFile()
+        override val briefStatisticsJsonFiles: List<File> = finder.findBriefStatisticsJsonFileForVariant(variant = variant)
+        override val detailedStatisticsCsvFiles: List<File> = finder.findDetailsStatisticsCsvFileForVariant(variant = variant)
+        override val composableReportFiles: List<File> = finder.findComposablesReportTxtFileForVariant(variant = variant)
+        override val classesReportFiles: List<File> = finder.findClassesReportTxtFileForVariant(variant = variant)
 
         init {
             ensureDirectory(directory) { "Directory '$directory' not exists" }

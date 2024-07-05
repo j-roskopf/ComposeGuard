@@ -45,7 +45,7 @@ class ComposeCompilerReportCheckTaskTest {
         // fails because no metrics exist generated
         assertThat(
             result.output,
-        ).contains("Golden metrics do not exist! Please generate them using the <variant>ComposeCompilerGenerate task")
+        ).contains("Golden metrics do not exist for variant release! Please generate them using the `releaseComposeCompilerGenerate` task")
     }
 
     @Test

@@ -27,7 +27,7 @@ import com.joetr.compose.guard.ComposeChecks
 import com.joetr.compose.guard.ComposeCompilerCheckExtension
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
 import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
-import com.joetr.compose.guard.core.utils.ensureDirectoryIsNotEmpty
+import com.joetr.compose.guard.core.utils.ensureVariantsExistsInDirectory
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
@@ -53,6 +53,12 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     abstract val multiplatformCompilationTarget: Property<String>
 
     @get:Input
+    abstract val compilationVariant: Property<String>
+
+    @get:Input
+    abstract val compilationTaskName: Property<String>
+
+    @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
 
     @get:Input
@@ -62,26 +68,31 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     fun check() {
         val genOutputDirectory =
             if (multiplatformCompilationTarget.get().isNotEmpty()) {
-                File(genOutputDirectoryPath.get().plus(File.separator).plus(multiplatformCompilationTarget.get()))
+                File(
+                    genOutputDirectoryPath.get().plus(File.separator)
+                        .plus(multiplatformCompilationTarget.get()),
+                )
             } else {
                 File(genOutputDirectoryPath.get())
             }
 
         val checkOutputDirectory =
             if (multiplatformCompilationTarget.get().isNotEmpty()) {
-                File(checkOutputDirectoryPath.get().plus(File.separator).plus(multiplatformCompilationTarget.get()))
+                File(
+                    checkOutputDirectoryPath.get().plus(File.separator)
+                        .plus(multiplatformCompilationTarget.get()),
+                )
             } else {
                 File(checkOutputDirectoryPath.get())
             }
 
-        ensureDirectoryIsNotEmpty(genOutputDirectory) {
-            "Golden metrics do not exist! Please generate them using the <variant>ComposeCompilerGenerate task"
-        }
+        ensureVariantsExistsInDirectory(genOutputDirectory.resolve(compilationTaskName.get()), compilationVariant.get())
 
         val goldenMetrics =
             ComposeCompilerMetricsProvider(
                 ComposeCompilerRawReportProvider.FromDirectory(
                     directory = genOutputDirectory,
+                    variant = compilationVariant.get(),
                 ),
             )
 
@@ -89,6 +100,7 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
             ComposeCompilerMetricsProvider(
                 ComposeCompilerRawReportProvider.FromDirectory(
                     directory = checkOutputDirectory,
+                    variant = compilationVariant.get(),
                 ),
             )
 

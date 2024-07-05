@@ -17,7 +17,7 @@ public abstract interface class com/joetr/compose/guard/core/ComposeCompilerRawR
 }
 
 public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider$FromDirectory : com/joetr/compose/guard/core/ComposeCompilerRawReportProvider {
-	public fun <init> (Ljava/io/File;)V
+	public fun <init> (Ljava/io/File;Ljava/lang/String;)V
 	public fun getBriefStatisticsJsonFiles ()Ljava/util/List;
 	public fun getClassesReportFiles ()Ljava/util/List;
 	public fun getComposableReportFiles ()Ljava/util/List;
@@ -44,10 +44,10 @@ public final class com/joetr/compose/guard/core/exception/ParsingException : jav
 
 public final class com/joetr/compose/guard/core/file/ReportAndMetricsFileFinder {
 	public fun <init> (Ljava/io/File;)V
-	public final fun findBriefStatisticsJsonFile ()Ljava/util/List;
-	public final fun findClassesReportTxtFile ()Ljava/util/List;
-	public final fun findComposablesReportTxtFile ()Ljava/util/List;
-	public final fun findDetailsStatisticsCsvFile ()Ljava/util/List;
+	public final fun findBriefStatisticsJsonFileForVariant (Ljava/lang/String;)Ljava/util/List;
+	public final fun findClassesReportTxtFileForVariant (Ljava/lang/String;)Ljava/util/List;
+	public final fun findComposablesReportTxtFileForVariant (Ljava/lang/String;)Ljava/util/List;
+	public final fun findDetailsStatisticsCsvFileForVariant (Ljava/lang/String;)Ljava/util/List;
 }
 
 public final class com/joetr/compose/guard/core/mapper/ConditionMapper {
@@ -250,5 +250,6 @@ public final class com/joetr/compose/guard/core/utils/FileUtilsKt {
 	public static final fun cleanupDirectory (Ljava/io/File;)V
 	public static final fun ensureDirectory (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
 	public static final fun ensureDirectoryIsNotEmpty (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
+	public static final fun ensureVariantsExistsInDirectory (Ljava/io/File;Ljava/lang/String;)V
 }
 
