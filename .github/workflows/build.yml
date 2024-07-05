@@ -86,14 +86,6 @@ jobs:
         working-directory: ./sandbox-multiplatform-app
         run: ./gradlew jvmComposeCompilerCheck --rerun-tasks
 
-      - name: Sandbox Multiplatform Generate Compiler Metrics iOS
-        working-directory: ./sandbox-multiplatform-app
-        run: ./gradlew iosArm64ComposeCompilerGenerate --rerun-tasks
-
-      - name: Sandbox Multiplatform Check Compiler Metrics iOS
-        working-directory: ./sandbox-multiplatform-app
-        run: ./gradlew iosArm64ComposeCompilerCheck --rerun-tasks
-
       - name: Sandbox Multiplatform Generate Compiler Metrics JS
         working-directory: ./sandbox-multiplatform-app
         run: ./gradlew jsComposeCompilerGenerate --rerun-tasks
@@ -102,6 +94,10 @@ jobs:
         working-directory: ./sandbox-multiplatform-app
         run: ./gradlew jsComposeCompilerCheck --rerun-tasks
 
+      - name: Sandbox Multiplatform Generate Compiler Metrics iOS
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew iosArm64ComposeCompilerGenerate --rerun-tasks
+
       - name: Sandbox Multiplatform Generate Compiler Metrics WASM
         working-directory: ./sandbox-multiplatform-app
         run: ./gradlew wasmJsComposeCompilerGenerate --rerun-tasks
@@ -109,3 +105,7 @@ jobs:
       - name: Sandbox Multiplatform Check Compiler Metrics WASM
         working-directory: ./sandbox-multiplatform-app
         run: ./gradlew wasmJsComposeCompilerCheck --rerun-tasks
+
+      - name: Sandbox Multiplatform Check Compiler Metrics iOS
+        working-directory: ./sandbox-multiplatform-app
+        run: ./gradlew iosArm64ComposeCompilerCheck --rerun-tasks
