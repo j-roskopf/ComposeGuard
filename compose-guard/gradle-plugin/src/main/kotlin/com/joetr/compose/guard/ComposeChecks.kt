@@ -98,7 +98,7 @@ internal object ComposeChecks {
             throw GradleException(
                 "New @dynamic parameters were added! \n" +
                     checkedParametersMap.keys.joinToString(separator = ",") + "\n" +
-                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "More info: https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md" +
                     "#default-parameter-expressions-that-are-dynamic",
             )
         }
@@ -117,7 +117,7 @@ internal object ComposeChecks {
             throw GradleException(
                 "New Composables were added that are restartable but not skippable! \n" +
                     difference.joinToString(",") + "\n" +
-                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "More info: https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md" +
                     "#functions-that-are-restartable-but-not-skippable",
             )
         }
@@ -154,7 +154,7 @@ internal object ComposeChecks {
                     unstableClassesUsedInComposables.map {
                         checkedUnstableClassesMap[it.type]
                     }.joinToString(",") + "\n" +
-                    "More info: https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md" +
+                    "More info: https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md" +
                     "#classes-that-are-unstable",
             )
         }

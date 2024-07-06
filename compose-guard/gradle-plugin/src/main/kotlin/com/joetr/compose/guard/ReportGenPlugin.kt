@@ -125,6 +125,14 @@ public class ReportGenPlugin : Plugin<Project> {
                 "${variant}$CHECK_TASK_NAME"
             }
 
+        // the compile task that our check task depends on
+        val compileTaskDependsOn =
+            if (project.isMultiplatformProject()) {
+                "compile${variant.capitalized()}Kotlin${target.capitalized()}"
+            } else {
+                "compile${variant.capitalized()}Kotlin"
+            }
+
         val variantTask =
             project.tasks.register<ComposeCompilerReportCheckTask>(
                 name = taskName,
@@ -141,17 +149,25 @@ public class ReportGenPlugin : Plugin<Project> {
                     },
                 )
                 composeCompilerCheckExtension.set(checkExtension)
+                compilationVariant.set(variant)
+                compilationTaskName.set(
+                    // in a multiplatform project, the structure of the folder is:
+                    // compose_reports/compileTask/<REPORT>
+                    // but in a normal android app, it is just:
+                    // compose_reports/<REPORT>
+                    if (project.isMultiplatformProject()) {
+                        compileTaskDependsOn
+                    } else {
+                        ""
+                    },
+                )
             }
 
         // make task depend on compile kotlin task
         variantTask.configure(
             object : Action<ComposeCompilerReportCheckTask> {
                 override fun execute(t: ComposeCompilerReportCheckTask) {
-                    if (project.isMultiplatformProject()) {
-                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin${target.capitalized()}"))
-                    } else {
-                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin"))
-                    }
+                    t.dependsOn(project.tasks.named(compileTaskDependsOn))
                 }
             },
         )

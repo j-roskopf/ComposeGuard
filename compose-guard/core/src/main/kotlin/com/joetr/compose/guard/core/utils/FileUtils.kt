@@ -27,7 +27,7 @@ import java.io.File
 import java.io.FileNotFoundException
 
 /**
- * Checks whether directory with [path] exists or not.
+ * Checks whether directory with [directory] exists or not.
  * Else throws [FileNotFoundException].
  */
 public inline fun ensureDirectory(
@@ -37,6 +37,33 @@ public inline fun ensureDirectory(
     if (!directory.isDirectory) {
         val message = lazyMessage()
         throw FileNotFoundException(message.toString())
+    }
+}
+
+/**
+ * Checks whether there are metrics for the given variant
+ */
+public fun ensureVariantsExistsInDirectory(
+    directory: File,
+    variant: String,
+) {
+    val files = directory.listFiles() ?: emptyArray()
+    val variantFiles =
+        files.filter {
+            it.name.contains(variant)
+        }.size
+
+    if (variantFiles <= 0) {
+        val message =
+            if (variant.isEmpty()) {
+                "Golden metrics do not exist! " +
+                    "Please generate them using the `<variant>ComposeCompilerGenerate` task"
+            } else {
+                "Golden metrics do not exist for variant $variant! " +
+                    "Please generate them using the `${variant}ComposeCompilerGenerate` task"
+            }
+
+        throw FileNotFoundException(message)
     }
 }
 

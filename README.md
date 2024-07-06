@@ -30,10 +30,10 @@ In an Android project, Compose Guard adds 3 tasks:
   - Deletes all compiler metrics
 
 In a Multiplatform project, Compose Guard adds the same 2 `Check` and `Generate` tasks (as well as a root `composeCompilerClean` task) for each supported target following the pattern `<target><variant if applicable>ComposeCompilerGenerate`
-* `<variant><target>ComposeCompilerGenerate` 
+* `<target><variant>ComposeCompilerGenerate` 
   - Examples: `./gradlew androidReleaseComposeCompilerGenerate`, `./gradlew jvmComposeCompilerGenerate`, ` ./gradlew iosArm64ComposeCompilerGenerate`, `./gradlew jsComposeCompilerGenerate`, `./gradlew wasmJsComposeCompilerGenerate`
   - Generate golden compose metrics to compare against
-* `<variant><target>ComposeCompilerCheck` 
+* `<target><variant>ComposeCompilerCheck` 
   - Examples: `./gradlew androidReleaseComposeCompilerCheck`, `./gradlew jvmComposeCompilerCheck`, `./gradlew iosArm64ComposeCompilerCheck`, `./gradlew jsComposeCompilerCheck`, `./gradlew wasmJsComposeCompilerCheck`
   - Generates new metrics and compares against golden values
 * `./gradlew composeCompilerClean`

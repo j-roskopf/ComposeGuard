@@ -45,7 +45,7 @@ class ComposeCompilerReportCheckTaskTest {
         // fails because no metrics exist generated
         assertThat(
             result.output,
-        ).contains("Golden metrics do not exist! Please generate them using the <variant>ComposeCompilerGenerate task")
+        ).contains("Golden metrics do not exist for variant release! Please generate them using the `releaseComposeCompilerGenerate` task")
     }
 
     @Test
@@ -411,5 +411,23 @@ class ComposeCompilerReportCheckTaskTest {
 
         assertThat(generateResult).task(generateTask).succeeded()
         assertThat(checkResult).task(checkTask).succeeded()
+    }
+
+    @Test
+    fun `same variant is used when running check`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val releaseGenerateTask = ":android:releaseComposeCompilerGenerate"
+
+        // generate golden
+        val generateResult = project.execute(releaseGenerateTask)
+        assertThat(generateResult).task(releaseGenerateTask).succeeded()
+
+        // check task fails for debug because no debug golden was generated
+        val debugCheckTask = ":android:debugComposeCompilerCheck"
+        val checkResult = project.executeAndFail(debugCheckTask)
+        assertThat(
+            checkResult.output,
+        ).contains("Golden metrics do not exist for variant debug! Please generate them using the `debugComposeCompilerGenerate` task")
+        assertThat(checkResult).task(debugCheckTask).failed()
     }
 }

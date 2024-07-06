@@ -37,20 +37,20 @@ public class ReportAndMetricsFileFinder(directory: File) {
             ?.filterNotNull()
             ?: emptyList()
 
-    public fun findBriefStatisticsJsonFile(): List<File> {
-        return allFiles.filter { it.name.endsWith(FileSuffixes.MODULE_REPORT_JSON) }
+    public fun findBriefStatisticsJsonFileForVariant(variant: String): List<File> {
+        return allFiles.filter { it.name.endsWith(FileSuffixes.MODULE_REPORT_JSON) && it.name.contains(variant) }
     }
 
-    public fun findDetailsStatisticsCsvFile(): List<File> {
-        return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_STATS_METRICS_CSV) }
+    public fun findDetailsStatisticsCsvFileForVariant(variant: String): List<File> {
+        return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_STATS_METRICS_CSV) && it.name.contains(variant) }
     }
 
-    public fun findComposablesReportTxtFile(): List<File> {
-        return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_REPORT_TXT) }
+    public fun findComposablesReportTxtFileForVariant(variant: String): List<File> {
+        return allFiles.filter { it.name.endsWith(FileSuffixes.COMPOSABLES_REPORT_TXT) && it.name.contains(variant) }
     }
 
-    public fun findClassesReportTxtFile(): List<File> {
-        return allFiles.filter { it.name.endsWith(FileSuffixes.CLASSES_REPORT_TXT) }
+    public fun findClassesReportTxtFileForVariant(variant: String): List<File> {
+        return allFiles.filter { it.name.endsWith(FileSuffixes.CLASSES_REPORT_TXT) && it.name.contains(variant) }
     }
 
     private object FileSuffixes {

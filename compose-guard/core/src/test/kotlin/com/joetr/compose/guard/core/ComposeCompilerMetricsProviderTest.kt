@@ -108,6 +108,7 @@ class ComposeCompilerMetricsProviderTest {
             ComposeCompilerMetricsProvider(
                 ComposeCompilerRawReportProvider.FromDirectory(
                     directory = reportDirectory,
+                    variant = "release",
                 ),
             )
 
