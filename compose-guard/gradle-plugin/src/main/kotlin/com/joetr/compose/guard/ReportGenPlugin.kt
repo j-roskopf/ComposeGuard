@@ -408,7 +408,7 @@ public class ReportGenPlugin : Plugin<Project> {
     }
 
     /**
-     * Checks for main / commonMain source sets that aren/t emptycd
+     * Checks for main / commonMain source sets that aren't empty
      */
     private fun Project.hasNonEmptyKotlinSourceSets(): Boolean {
         val kotlinSourceSet = extensions.getByType(KotlinProjectExtension::class.java).sourceSets
