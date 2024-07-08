@@ -34,11 +34,13 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -92,7 +94,9 @@ public class ReportGenPlugin : Plugin<Project> {
             project.tasks.register<ComposeCompilerReportGenerateTask>(
                 name = taskName,
             ) {
-                this.outputDirectory.set(project.layout.dir(reportExtension.outputDirectory))
+                if (project.hasNonEmptyKotlinSourceSets()) {
+                    this.outputDirectory.set(project.layout.dir(reportExtension.outputDirectory))
+                }
             }
 
         // make task depend on compile kotlin task
@@ -137,10 +141,16 @@ public class ReportGenPlugin : Plugin<Project> {
             project.tasks.register<ComposeCompilerReportCheckTask>(
                 name = taskName,
             ) {
-                outputDirectory.set(project.layout.dir(genExtension.outputDirectory))
+                if (project.hasNonEmptyKotlinSourceSets()) {
+                    outputDirectory.set(project.layout.dir(genExtension.outputDirectory))
+                }
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
                 checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
-                inputDirectory.set(checkExtension.outputDirectory.get())
+                inputDirectory.set(
+                    checkExtension.outputDirectory.get().takeIf {
+                        it.exists()
+                    },
+                )
                 multiplatformCompilationTarget.set(
                     if (project.isMultiplatformProject()) {
                         internalExtension.composeMultiplatformCompilationTarget.get()
@@ -160,6 +170,10 @@ public class ReportGenPlugin : Plugin<Project> {
                     } else {
                         ""
                     },
+                )
+
+                hasKotlinMainSourceSet.set(
+                    project.hasNonEmptyKotlinSourceSets(),
                 )
             }
 
@@ -391,5 +405,18 @@ public class ReportGenPlugin : Plugin<Project> {
 
     private fun Project.isMultiplatformProject(): Boolean {
         return pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")
+    }
+
+    /**
+     * Checks for main / commonMain source sets that aren't empty
+     */
+    private fun Project.hasNonEmptyKotlinSourceSets(): Boolean {
+        val kotlinSourceSet = extensions.getByType(KotlinProjectExtension::class.java).sourceSets
+        val containsNonEmptyMainSourceSet =
+            kotlinSourceSet.any {
+                (it.name == "main" || it.name == "commonMain") &&
+                    it.kotlin.isEmpty.not()
+            }
+        return containsNonEmptyMainSourceSet
     }
 }

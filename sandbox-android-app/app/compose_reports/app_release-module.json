@@ -1,5 +1,5 @@
 {
- "skippableComposables": 5,
+ "skippableComposables": 6,
  "restartableComposables": 6,
  "readonlyComposables": 0,
  "totalComposables": 6,
@@ -17,7 +17,7 @@
  "inferredUncertainClasses": 0,
  "effectivelyStableClasses": 1,
  "totalClasses": 2,
- "memoizedLambdas": 3,
+ "memoizedLambdas": 4,
  "singletonLambdas": 0,
  "singletonComposableLambdas": 3,
  "composableLambdas": 3,

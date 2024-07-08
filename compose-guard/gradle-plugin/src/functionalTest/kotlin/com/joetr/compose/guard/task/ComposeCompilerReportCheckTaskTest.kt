@@ -49,6 +49,18 @@ class ComposeCompilerReportCheckTaskTest {
     }
 
     @Test
+    fun `error not thrown if running check on module with no main source set`() {
+        val project =
+            BasicAndroidProject.getComposeProject(
+                includeEmptyModule = true,
+            )
+        val task = ":android-empty:releaseComposeCompilerCheck"
+
+        val checkResult = project.execute(task)
+        assertThat(checkResult).task(task).succeeded()
+    }
+
+    @Test
     fun `can detect when new restartable but not skippable composables are added`() {
         val project = BasicAndroidProject.getComposeProject()
         val generateTask = ":android:releaseComposeCompilerGenerate"

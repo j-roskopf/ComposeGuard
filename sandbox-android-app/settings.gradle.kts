@@ -17,5 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "ComposeGuardAndroidApplication"
 include(":app")
 include(":feature")
+include(":empty-source-set-feature")
 
 

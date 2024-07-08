@@ -39,6 +39,7 @@ object BasicAndroidProject {
     fun getComposeProject(
         additionalBuildScriptForAndroidSubProject: String = "",
         kotlinVersion: String = Plugins.KOTLIN_VERSION_1_9_22,
+        includeEmptyModule: Boolean = false,
     ): GradleProject {
         val includeKotlinCompilerExtensionVersion = kotlinVersion.startsWith("1")
         val script =
@@ -141,6 +142,36 @@ object BasicAndroidProject {
                                             """.trimIndent(),
                                     ),
                                 )
+                        }
+                    }
+
+                    if (includeEmptyModule) {
+                        withAndroidLibProject(
+                            name = "android-empty",
+                            packageName = "com.example.myapplication",
+                        ) {
+                            withBuildScript {
+                                plugins(plugins)
+                                android =
+                                    AndroidBlock(
+                                        namespace = "com.example.myapplication",
+                                        compileSdkVersion = 34,
+                                        defaultConfig =
+                                            DefaultConfig(
+                                                applicationId = "com.example.myapplication",
+                                                minSdkVersion = 21,
+                                                targetSdkVersion = 34,
+                                                versionCode = 1,
+                                                versionName = "1.0",
+                                            ),
+                                        compileOptions =
+                                            CompileOptions(
+                                                sourceCompatibility = JavaVersion.VERSION_17,
+                                                targetCompatibility = JavaVersion.VERSION_17,
+                                            ),
+                                    )
+                                withKotlin(script)
+                            }
                         }
                     }
                 },
