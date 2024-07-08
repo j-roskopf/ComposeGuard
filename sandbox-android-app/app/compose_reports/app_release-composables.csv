@@ -1,4 +1,4 @@
 package,name,composable,skippable,restartable,readonly,inline,isLambda,hasDefaults,defaultsGroup,groups,calls,
 com.example.myapplication.Greeting,Greeting,1,1,1,0,0,0,0,0,1,1,
-com.example.myapplication.ui.TestComposable,TestComposable,1,0,1,0,0,0,0,0,1,1,
+com.example.myapplication.ui.TestComposable,TestComposable,1,1,1,0,0,0,0,0,1,1,
 com.example.myapplication.ui.theme.MyApplicationTheme,MyApplicationTheme,1,1,1,0,0,0,1,0,4,5,

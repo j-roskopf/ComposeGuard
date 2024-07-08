@@ -36,17 +36,20 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.get
 import java.io.File
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:OutputDirectory
+    @get:Optional // not present on first run or on modules with empty source sets
     abstract val outputDirectory: DirectoryProperty
 
     @get:InputDirectory
-    @get:Optional // not present on first run
+    @get:Optional // not present on first run or on modules with empty source sets
     abstract val inputDirectory: DirectoryProperty
 
     @get:Input
+    @get:Optional // not present on first run or on modules with empty source sets
     abstract val genOutputDirectoryPath: Property<String>
 
     @get:Input
@@ -60,6 +63,9 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
+
+    @get:Input
+    abstract val hasKotlinMainSourceSet: Property<Boolean>
 
     @get:Input
     abstract val composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>
@@ -86,28 +92,30 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                 File(checkOutputDirectoryPath.get())
             }
 
-        ensureVariantsExistsInDirectory(genOutputDirectory.resolve(compilationTaskName.get()), compilationVariant.get())
+        if (hasKotlinMainSourceSet.get()) {
+            ensureVariantsExistsInDirectory(genOutputDirectory.resolve(compilationTaskName.get()), compilationVariant.get())
 
-        val goldenMetrics =
-            ComposeCompilerMetricsProvider(
-                ComposeCompilerRawReportProvider.FromDirectory(
-                    directory = genOutputDirectory,
-                    variant = compilationVariant.get(),
-                ),
+            val goldenMetrics =
+                ComposeCompilerMetricsProvider(
+                    ComposeCompilerRawReportProvider.FromDirectory(
+                        directory = genOutputDirectory,
+                        variant = compilationVariant.get(),
+                    ),
+                )
+
+            val checkedMetrics =
+                ComposeCompilerMetricsProvider(
+                    ComposeCompilerRawReportProvider.FromDirectory(
+                        directory = checkOutputDirectory,
+                        variant = compilationVariant.get(),
+                    ),
+                )
+
+            ComposeChecks.check(
+                checkedMetrics = checkedMetrics,
+                goldenMetrics = goldenMetrics,
+                composeCompilerCheckExtension = composeCompilerCheckExtension,
             )
-
-        val checkedMetrics =
-            ComposeCompilerMetricsProvider(
-                ComposeCompilerRawReportProvider.FromDirectory(
-                    directory = checkOutputDirectory,
-                    variant = compilationVariant.get(),
-                ),
-            )
-
-        ComposeChecks.check(
-            checkedMetrics = checkedMetrics,
-            goldenMetrics = goldenMetrics,
-            composeCompilerCheckExtension = composeCompilerCheckExtension,
-        )
+        }
     }
 }

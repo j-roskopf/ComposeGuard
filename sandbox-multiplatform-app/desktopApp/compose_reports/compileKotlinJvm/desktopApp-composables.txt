@@ -1,1 +1,3 @@
-restartable skippable fun DesktopOnlyApp()
+restartable skippable fun DesktopOnlyApp(
+  unused unstable test: Test
+)
