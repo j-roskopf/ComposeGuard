@@ -30,9 +30,10 @@ import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
 import com.joetr.compose.guard.core.utils.ensureVariantsExistsInDirectory
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -43,10 +44,6 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:OutputDirectory
     @get:Optional // not present on first run or on modules with empty source sets
     abstract val outputDirectory: DirectoryProperty
-
-    @get:InputDirectory
-    @get:Optional // not present on first run or on modules with empty source sets
-    abstract val inputDirectory: DirectoryProperty
 
     @get:Input
     @get:Optional // not present on first run or on modules with empty source sets
@@ -66,6 +63,10 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @get:Input
     abstract val hasKotlinMainSourceSet: Property<Boolean>
+
+    @get:InputFiles
+    @get:Optional
+    abstract val kotlinSourceSets: ListProperty<File>
 
     @get:Input
     abstract val composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>
