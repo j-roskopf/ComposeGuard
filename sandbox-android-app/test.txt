@@ -1,0 +1,21 @@
+Reusing configuration cache.
+> Task :feature:preBuild UP-TO-DATE
+> Task :feature:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:preDebugBuild UP-TO-DATE
+> Task :feature:generateDebugResValues UP-TO-DATE
+> Task :feature:processDebugManifest UP-TO-DATE
+> Task :feature:generateDebugResources UP-TO-DATE
+> Task :feature:packageDebugResources UP-TO-DATE
+> Task :feature:parseDebugLocalResources UP-TO-DATE
+> Task :feature:generateDebugRFile UP-TO-DATE
+
+> Task :feature:kspDebugKotlin
+w: [ksp] DeepCopyTypes: TestDataClass
+w: [ksp] DeepCopyTypes: 
+
+> Task :feature:compileDebugKotlin
+> Task :feature:debugComposeCompilerCheck UP-TO-DATE
+
+BUILD SUCCESSFUL in 1s
+8 actionable tasks: 2 executed, 6 up-to-date
+Configuration cache entry reused.

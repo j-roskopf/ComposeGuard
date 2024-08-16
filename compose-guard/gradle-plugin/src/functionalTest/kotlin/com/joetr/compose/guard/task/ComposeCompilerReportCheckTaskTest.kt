@@ -25,9 +25,13 @@ package com.joetr.compose.guard.task
 
 import assertk.assertThat
 import assertk.assertions.contains
+import assertk.assertions.exists
+import assertk.assertions.isNotEmpty
+import com.autonomousapps.kit.gradle.Plugin
 import com.joetr.compose.guard.task.infra.asserts.failed
 import com.joetr.compose.guard.task.infra.asserts.succeeded
 import com.joetr.compose.guard.task.infra.asserts.task
+import com.joetr.compose.guard.task.infra.asserts.upToDate
 import com.joetr.compose.guard.task.infra.execute
 import com.joetr.compose.guard.task.infra.executeAndFail
 import org.junit.Test
@@ -397,7 +401,7 @@ class ComposeCompilerReportCheckTaskTest {
 
             @Composable
             fun TestComposable(newUnstable: OtherUnstableClass) {
-                Text(text = newUnstable.value )
+                Text(text = newUnstable.value)
                 }
             """.trimIndent(),
         )
@@ -441,5 +445,100 @@ class ComposeCompilerReportCheckTaskTest {
             checkResult.output,
         ).contains("Golden metrics do not exist for variant debug! Please generate them using the `debugComposeCompilerGenerate` task")
         assertThat(checkResult).task(debugCheckTask).failed()
+    }
+
+    @Test
+    fun `check task is successful if build folder is deleted`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val releaseGenerateTask = ":android:releaseComposeCompilerGenerate"
+
+        // generate golden
+        val generateResult = project.execute(releaseGenerateTask)
+        assertThat(generateResult).task(releaseGenerateTask).succeeded()
+
+        // check succeeds
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        // delete build folder
+        val composeReportsOutput = project.buildDir(":android").resolve("compose_reports")
+
+        assertThat(composeReportsOutput.toFile()).exists()
+
+        composeReportsOutput.toFile().deleteRecursively()
+
+        val newCheckResult = project.execute(checkTask)
+        assertThat(newCheckResult).task(checkTask).succeeded()
+
+        assertThat(composeReportsOutput.toFile()).exists()
+
+        val children = composeReportsOutput.toFile().listFiles()
+        require(children != null)
+        assertThat(children).isNotEmpty()
+    }
+
+    @Test
+    fun `ksp not invalidated with compose check output deletion`() {
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalPluginsForAndroidSubProject =
+                    listOf(
+                        Plugin(
+                            id = "com.google.devtools.ksp",
+                            version = "1.9.22-1.0.16",
+                            apply = true,
+                        ),
+                    ),
+                additionalDependenciesForAndroidSubProject =
+                    """
+                    ksp("com.bennyhuo.kotlin:deepcopy-compiler-ksp:1.9.20-1.0.1")
+                    implementation("com.bennyhuo.kotlin:deepcopy-runtime:1.9.20-1.0.1")
+                    """.trimIndent(),
+            )
+
+        // generate golden
+        val debugGenerateTask = ":android:debugComposeCompilerGenerate"
+        val generateResult = project.execute("--configuration-cache", debugGenerateTask)
+        assertThat(generateResult).task(debugGenerateTask).succeeded()
+
+        // check succeeds
+        val checkTask = ":android:debugComposeCompilerCheck"
+        val checkResult = project.execute("--configuration-cache", checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        // ksp
+        val kspTask = ":android:kspDebugKotlin"
+        val kspResult = project.execute("--configuration-cache", kspTask)
+        assertThat(kspResult).task(kspTask).succeeded()
+
+        // delete build folder
+        val composeReportsOutput = project.buildDir(":android").resolve("compose_reports")
+        assertThat(composeReportsOutput.toFile()).exists()
+        composeReportsOutput.toFile().deleteRecursively()
+
+        // ksp
+        val newKspResult = project.execute("--configuration-cache", kspTask)
+        assertThat(newKspResult).task(kspTask).upToDate()
+    }
+
+    @Test
+    fun `up to date with subsequent reruns`() {
+        val project =
+            BasicAndroidProject.getComposeProject()
+
+        // generate golden
+        val debugGenerateTask = ":android:debugComposeCompilerGenerate"
+        val generateResult = project.execute("--configuration-cache", debugGenerateTask)
+        assertThat(generateResult).task(debugGenerateTask).succeeded()
+
+        // check succeeds
+        val checkTask = ":android:debugComposeCompilerCheck"
+        val checkResult = project.execute("--configuration-cache", checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        // check again
+        val newCheckResult = project.execute("--configuration-cache", checkTask)
+        assertThat(newCheckResult).task(checkTask).upToDate()
     }
 }

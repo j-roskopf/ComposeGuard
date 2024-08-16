@@ -33,11 +33,13 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
+import org.gradle.tooling.GradleConnector
 import java.io.File
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
@@ -52,11 +54,18 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
     abstract val multiplatformCompilationTarget: Property<String>
 
+    @get:InputDirectory
+    abstract val projectPath: DirectoryProperty
+
+    @get:Input
+    abstract val taskNameProperty: Property<String>
+
     @get:Input
     abstract val compilationVariant: Property<String>
 
     @get:Input
     abstract val compilationTaskName: Property<String>
+
 
     @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
@@ -104,19 +113,37 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                     ),
                 )
 
-            val checkedMetrics =
-                ComposeCompilerMetricsProvider(
-                    ComposeCompilerRawReportProvider.FromDirectory(
-                        directory = checkOutputDirectory,
-                        variant = compilationVariant.get(),
-                    ),
-                )
+            if (checkOutputDirectory.exists()) {
+                val checkedMetrics =
+                    ComposeCompilerMetricsProvider(
+                        ComposeCompilerRawReportProvider.FromDirectory(
+                            directory = checkOutputDirectory,
+                            variant = compilationVariant.get(),
+                        ),
+                    )
 
-            ComposeChecks.check(
-                checkedMetrics = checkedMetrics,
-                goldenMetrics = goldenMetrics,
-                composeCompilerCheckExtension = composeCompilerCheckExtension,
-            )
+                ComposeChecks.check(
+                    checkedMetrics = checkedMetrics,
+                    goldenMetrics = goldenMetrics,
+                    composeCompilerCheckExtension = composeCompilerCheckExtension,
+                )
+            } else {
+                GradleConnector.newConnector().forProjectDirectory(projectPath.asFile.get())
+                    .connect()
+                    .use {
+                        it.newBuild()
+                            .setStandardOutput(System.out)
+                            .setStandardError(System.err)
+                            .setStandardInput(System.`in`)
+                            .forTasks(taskNameProperty.get())
+                            .withArguments(
+                                // Re-running is necessary. In case devs deleted raw files and if task uses cache
+                                // then this task will explode 💣
+                                "--rerun-tasks",
+                            )
+                            .run()
+                    }
+            }
         }
     }
 }

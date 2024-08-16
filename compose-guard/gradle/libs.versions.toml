@@ -16,8 +16,8 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 junit-four =  { module = "junit:junit", version = "4.13.2" }
-assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version = "0.25" }
-testkit-support = { module =  "com.autonomousapps:gradle-testkit-support", version = "0.15"}
+assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version = "0.27.0" }
+testkit-support = { module =  "com.autonomousapps:gradle-testkit-support", version = "0.16"}
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
