@@ -21,3 +21,4 @@ data class Test(var name: String)
 fun AndroidOnlyApp(test: Test) {
 
 }
+

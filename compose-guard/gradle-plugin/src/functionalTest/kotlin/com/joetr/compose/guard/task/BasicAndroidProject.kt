@@ -26,6 +26,7 @@ package com.joetr.compose.guard.task
 import com.autonomousapps.kit.GradleProject
 import com.autonomousapps.kit.Source
 import com.autonomousapps.kit.SourceType
+import com.autonomousapps.kit.gradle.Plugin
 import com.autonomousapps.kit.gradle.android.AndroidBlock
 import com.autonomousapps.kit.gradle.android.CompileOptions
 import com.autonomousapps.kit.gradle.android.DefaultConfig
@@ -38,6 +39,8 @@ import org.gradle.api.JavaVersion
 object BasicAndroidProject {
     fun getComposeProject(
         additionalBuildScriptForAndroidSubProject: String = "",
+        additionalDependenciesForAndroidSubProject: String = "",
+        additionalPluginsForAndroidSubProject: List<Plugin> = emptyList(),
         kotlinVersion: String = Plugins.KOTLIN_VERSION_1_9_22,
         includeEmptyModule: Boolean = false,
     ): GradleProject {
@@ -57,6 +60,7 @@ object BasicAndroidProject {
                     implementation("androidx.compose.ui:ui-graphics")
                     implementation("androidx.compose.ui:ui-tooling-preview")
                     implementation("androidx.compose.material3:material3")
+                    $additionalDependenciesForAndroidSubProject
             }
             
             """.trimIndent() +
@@ -73,7 +77,7 @@ object BasicAndroidProject {
                 BuildFixture.ANDROID_APP_PLUGIN,
                 kotlinAndroid(kotlinVersion = kotlinVersion),
                 BuildFixture.REPORT_GEN_PLUGIN,
-            ) +
+            ) + additionalPluginsForAndroidSubProject +
                 if (kotlinVersion.startsWith("2")) {
                     listOf(composePlugin(kotlinVersion = kotlinVersion))
                 } else {

@@ -30,23 +30,22 @@ import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
 import com.joetr.compose.guard.core.utils.ensureVariantsExistsInDirectory
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
+import org.gradle.tooling.GradleConnector
 import java.io.File
+import kotlin.io.path.Path
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:OutputDirectory
     @get:Optional // not present on first run or on modules with empty source sets
     abstract val outputDirectory: DirectoryProperty
-
-    @get:InputDirectory
-    @get:Optional // not present on first run or on modules with empty source sets
-    abstract val inputDirectory: DirectoryProperty
 
     @get:Input
     @get:Optional // not present on first run or on modules with empty source sets
@@ -54,6 +53,9 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @get:Input
     abstract val multiplatformCompilationTarget: Property<String>
+
+    @get:Input
+    abstract val taskNameProperty: Property<String>
 
     @get:Input
     abstract val compilationVariant: Property<String>
@@ -67,20 +69,16 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
     abstract val hasKotlinMainSourceSet: Property<Boolean>
 
+    @get:InputFiles
+    @get:Optional
+    abstract val kotlinSourceSets: ListProperty<File>
+
     @get:Input
     abstract val composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>
 
     @TaskAction
     fun check() {
-        val genOutputDirectory =
-            if (multiplatformCompilationTarget.get().isNotEmpty()) {
-                File(
-                    genOutputDirectoryPath.get().plus(File.separator)
-                        .plus(multiplatformCompilationTarget.get()),
-                )
-            } else {
-                File(genOutputDirectoryPath.get())
-            }
+        val genOutputDirectory = File(genOutputDirectoryPath.get())
 
         val checkOutputDirectory =
             if (multiplatformCompilationTarget.get().isNotEmpty()) {
@@ -98,24 +96,51 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
             val goldenMetrics =
                 ComposeCompilerMetricsProvider(
                     ComposeCompilerRawReportProvider.FromDirectory(
-                        directory = genOutputDirectory,
+                        directory =
+                            if (multiplatformCompilationTarget.get().isNotEmpty()) {
+                                File(
+                                    genOutputDirectoryPath.get().plus(File.separator)
+                                        .plus(multiplatformCompilationTarget.get()),
+                                )
+                            } else {
+                                File(genOutputDirectoryPath.get())
+                            },
                         variant = compilationVariant.get(),
                     ),
                 )
 
-            val checkedMetrics =
-                ComposeCompilerMetricsProvider(
-                    ComposeCompilerRawReportProvider.FromDirectory(
-                        directory = checkOutputDirectory,
-                        variant = compilationVariant.get(),
-                    ),
-                )
+            if (checkOutputDirectory.exists()) {
+                val checkedMetrics =
+                    ComposeCompilerMetricsProvider(
+                        ComposeCompilerRawReportProvider.FromDirectory(
+                            directory = checkOutputDirectory,
+                            variant = compilationVariant.get(),
+                        ),
+                    )
 
-            ComposeChecks.check(
-                checkedMetrics = checkedMetrics,
-                goldenMetrics = goldenMetrics,
-                composeCompilerCheckExtension = composeCompilerCheckExtension,
-            )
+                ComposeChecks.check(
+                    checkedMetrics = checkedMetrics,
+                    goldenMetrics = goldenMetrics,
+                    composeCompilerCheckExtension = composeCompilerCheckExtension,
+                )
+            } else {
+                GradleConnector.newConnector()
+                    .forProjectDirectory(Path(checkOutputDirectoryPath.get()).parent.parent.toFile())
+                    .connect()
+                    .use {
+                        it.newBuild()
+                            .setStandardOutput(System.out)
+                            .setStandardError(System.err)
+                            .setStandardInput(System.`in`)
+                            .forTasks(taskNameProperty.get())
+                            .withArguments(
+                                // Re-running is necessary. In case devs deleted raw files and if task uses cache
+                                // then this task will explode 💣
+                                "--rerun-tasks",
+                            )
+                            .run()
+                    }
+            }
         }
     }
 }

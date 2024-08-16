@@ -48,6 +48,7 @@ import org.jetbrains.kotlin.gradle.targets.js.KotlinJsTarget
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import java.io.File
 
 private const val REPORT_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination="
 private const val METRIC_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination="
@@ -146,14 +147,10 @@ public class ReportGenPlugin : Plugin<Project> {
                 }
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
                 checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
-                inputDirectory.set(
-                    checkExtension.outputDirectory.get().takeIf {
-                        it.exists()
-                    },
-                )
+
                 multiplatformCompilationTarget.set(
                     if (project.isMultiplatformProject()) {
-                        internalExtension.composeMultiplatformCompilationTarget.get()
+                        project.tasks.withType(KotlinCompile::class.java).getAt(compileTaskDependsOn).name
                     } else {
                         ""
                     },
@@ -175,6 +172,9 @@ public class ReportGenPlugin : Plugin<Project> {
                 hasKotlinMainSourceSet.set(
                     project.hasNonEmptyKotlinSourceSets(),
                 )
+
+                kotlinSourceSets.set(project.getKotlinSources())
+                taskNameProperty.set(taskName)
             }
 
         // make task depend on compile kotlin task
@@ -182,6 +182,11 @@ public class ReportGenPlugin : Plugin<Project> {
             object : Action<ComposeCompilerReportCheckTask> {
                 override fun execute(t: ComposeCompilerReportCheckTask) {
                     t.dependsOn(project.tasks.named(compileTaskDependsOn))
+                    t.outputs.upToDateWhen {
+                        checkExtension.outputDirectory.get().listFiles()?.any {
+                            it.name.contains(variant.plus("-composables.txt"))
+                        } ?: false
+                    }
                 }
             },
         )
@@ -199,9 +204,9 @@ public class ReportGenPlugin : Plugin<Project> {
     }
 
     private fun Project.registerComposeParameters() {
-        val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
         val internalExtension = extensions.getByType<InternalComposeCompilerCheckExtension>()
         val genExtension = extensions.getByType<ComposeCompilerReportExtension>()
+        val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
 
         val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
 
@@ -414,9 +419,26 @@ public class ReportGenPlugin : Plugin<Project> {
         val kotlinSourceSet = extensions.getByType(KotlinProjectExtension::class.java).sourceSets
         val containsNonEmptyMainSourceSet =
             kotlinSourceSet.any {
-                (it.name == "main" || it.name == "commonMain") &&
+                (
+                    it.name == "main" ||
+                        it.name == "commonMain" ||
+                        it.name == "androidMain" ||
+                        it.name == "source" ||
+                        it.name == "jvmMain" ||
+                        it.name == "jsMain" ||
+                        it.name == "jsWasmMain" ||
+                        it.name == "iosMain" ||
+                        it.name == "wasmJsMain"
+                ) &&
                     it.kotlin.isEmpty.not()
             }
         return containsNonEmptyMainSourceSet
+    }
+
+    private fun Project.getKotlinSources(): List<File> {
+        val kotlinSourceSet = extensions.getByType(KotlinProjectExtension::class.java).sourceSets
+        return kotlinSourceSet.flatMap {
+            it.kotlin
+        }
     }
 }

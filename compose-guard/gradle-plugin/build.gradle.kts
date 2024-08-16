@@ -39,9 +39,7 @@ dependencies {
 
     functionalTestImplementation(libs.junit.four)
     functionalTestImplementation(libs.assertk)
-    //functionalTestImplementation(libs.testkit.support)
-    // todo joer remove if changes get upstreamed - https://github.com/autonomousapps/dependency-analysis-gradle-plugin/pull/1187
-    functionalTestImplementation(project(":gradle-testkit-support"))
+    functionalTestImplementation(libs.testkit.support)
     functionalTestImplementation(project(":gradle-plugin"))
 }
 
