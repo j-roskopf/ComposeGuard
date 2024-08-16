@@ -2,3 +2,4 @@ package,name,composable,skippable,restartable,readonly,inline,isLambda,hasDefaul
 com.example.myapplication.feature.MyComposable,MyComposable,1,1,1,0,0,0,1,0,2,1,
 com.example.myapplication.feature.Test,Test,1,1,1,0,0,0,0,0,1,1,
 com.example.myapplication.feature.Test2,Test2,1,1,1,0,0,0,0,0,1,1,
+com.example.myapplication.feature.Test3,Test3,1,1,1,0,0,0,0,0,1,1,

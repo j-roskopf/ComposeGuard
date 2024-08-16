@@ -40,6 +40,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
 import org.gradle.tooling.GradleConnector
 import java.io.File
+import kotlin.io.path.Path
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:OutputDirectory
@@ -52,9 +53,6 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @get:Input
     abstract val multiplatformCompilationTarget: Property<String>
-
-/*    @get:InputDirectory
-    abstract val projectPath: DirectoryProperty*/
 
     @get:Input
     abstract val taskNameProperty: Property<String>
@@ -80,15 +78,7 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @TaskAction
     fun check() {
-        val genOutputDirectory =
-            if (multiplatformCompilationTarget.get().isNotEmpty()) {
-                File(
-                    genOutputDirectoryPath.get().plus(File.separator)
-                        .plus(multiplatformCompilationTarget.get()),
-                )
-            } else {
-                File(genOutputDirectoryPath.get())
-            }
+        val genOutputDirectory = File(genOutputDirectoryPath.get())
 
         val checkOutputDirectory =
             if (multiplatformCompilationTarget.get().isNotEmpty()) {
@@ -106,7 +96,15 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
             val goldenMetrics =
                 ComposeCompilerMetricsProvider(
                     ComposeCompilerRawReportProvider.FromDirectory(
-                        directory = genOutputDirectory,
+                        directory =
+                            if (multiplatformCompilationTarget.get().isNotEmpty()) {
+                                File(
+                                    genOutputDirectoryPath.get().plus(File.separator)
+                                        .plus(multiplatformCompilationTarget.get()),
+                                )
+                            } else {
+                                File(genOutputDirectoryPath.get())
+                            },
                         variant = compilationVariant.get(),
                     ),
                 )
@@ -127,6 +125,7 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                 )
             } else {
                 GradleConnector.newConnector()
+                    .forProjectDirectory(Path(checkOutputDirectoryPath.get()).parent.parent.toFile())
                     .connect()
                     .use {
                         it.newBuild()
