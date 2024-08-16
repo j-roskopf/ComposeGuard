@@ -33,7 +33,6 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
@@ -54,8 +53,8 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
     abstract val multiplatformCompilationTarget: Property<String>
 
-    @get:InputDirectory
-    abstract val projectPath: DirectoryProperty
+/*    @get:InputDirectory
+    abstract val projectPath: DirectoryProperty*/
 
     @get:Input
     abstract val taskNameProperty: Property<String>
@@ -65,7 +64,6 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @get:Input
     abstract val compilationTaskName: Property<String>
-
 
     @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
@@ -128,7 +126,7 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                     composeCompilerCheckExtension = composeCompilerCheckExtension,
                 )
             } else {
-                GradleConnector.newConnector().forProjectDirectory(projectPath.asFile.get())
+                GradleConnector.newConnector()
                     .connect()
                     .use {
                         it.newBuild()

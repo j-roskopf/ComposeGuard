@@ -173,7 +173,7 @@ public class ReportGenPlugin : Plugin<Project> {
                 )
 
                 kotlinSourceSets.set(project.getKotlinSources())
-                projectPath.set(project.layout.projectDirectory)
+                // projectPath.set(project.layout.projectDirectory)
                 taskNameProperty.set(taskName)
             }
 
