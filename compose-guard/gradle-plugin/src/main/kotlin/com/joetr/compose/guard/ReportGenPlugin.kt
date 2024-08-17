@@ -60,7 +60,6 @@ public class ReportGenPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         // create extensions
         ComposeCompilerReportExtension.create(target)
-        InternalComposeCompilerCheckExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
 
         // register directories for storing metrics for generate + check tasks
@@ -121,7 +120,6 @@ public class ReportGenPlugin : Plugin<Project> {
     ) {
         val checkExtension = project.extensions.getByType<ComposeCompilerCheckExtension>()
         val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
-        val internalExtension = project.extensions.getByType<InternalComposeCompilerCheckExtension>()
 
         val taskName =
             if (project.isMultiplatformProject()) {
@@ -204,7 +202,6 @@ public class ReportGenPlugin : Plugin<Project> {
     }
 
     private fun Project.registerComposeParameters() {
-        val internalExtension = extensions.getByType<InternalComposeCompilerCheckExtension>()
         val genExtension = extensions.getByType<ComposeCompilerReportExtension>()
         val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
 
@@ -224,8 +221,6 @@ public class ReportGenPlugin : Plugin<Project> {
         project.tasks.withType(KotlinCompile::class.java).configureEach(
             object : Action<KotlinCompile<*>> {
                 override fun execute(t: KotlinCompile<*>) {
-                    internalExtension.composeMultiplatformCompilationTarget.set(t.name)
-
                     if (gradle.startParameter.taskNames.any {
                             it.contains(CHECK_TASK_NAME)
                         }

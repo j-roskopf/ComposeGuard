@@ -31,9 +31,9 @@ import com.autonomousapps.kit.gradle.android.AndroidBlock
 import com.autonomousapps.kit.gradle.android.CompileOptions
 import com.autonomousapps.kit.gradle.android.DefaultConfig
 import com.joetr.compose.guard.task.infra.BuildFixture
-import com.joetr.compose.guard.task.infra.BuildFixture.Companion.composePlugin
-import com.joetr.compose.guard.task.infra.BuildFixture.Companion.kotlinAndroid
 import com.joetr.compose.guard.task.infra.Plugins
+import com.joetr.compose.guard.task.infra.Plugins.composePlugin
+import com.joetr.compose.guard.task.infra.Plugins.kotlinAndroid
 import org.gradle.api.JavaVersion
 
 object BasicAndroidProject {
@@ -43,6 +43,7 @@ object BasicAndroidProject {
         additionalPluginsForAndroidSubProject: List<Plugin> = emptyList(),
         kotlinVersion: String = Plugins.KOTLIN_VERSION_1_9_22,
         includeEmptyModule: Boolean = false,
+        applyMultiplatform: Boolean = false,
     ): GradleProject {
         val includeKotlinCompilerExtensionVersion = kotlinVersion.startsWith("1")
         val script =
@@ -73,18 +74,24 @@ object BasicAndroidProject {
                 }
 
         val plugins =
-            listOf(
-                BuildFixture.ANDROID_APP_PLUGIN,
-                kotlinAndroid(kotlinVersion = kotlinVersion),
-                BuildFixture.REPORT_GEN_PLUGIN,
-            ) + additionalPluginsForAndroidSubProject +
+            if (applyMultiplatform) {
+                listOf(Plugin(id = "org.jetbrains.kotlin.multiplatform", apply = true))
+            } else {
+                listOf(kotlinAndroid(kotlinVersion = kotlinVersion))
+            } +
+                listOf(
+                    BuildFixture.ANDROID_APP_PLUGIN,
+                    BuildFixture.REPORT_GEN_PLUGIN,
+                ) + additionalPluginsForAndroidSubProject +
                 if (kotlinVersion.startsWith("2")) {
                     listOf(composePlugin(kotlinVersion = kotlinVersion))
                 } else {
                     emptyList()
                 }
+
         val project =
             BuildFixture().build(
+                applyMultiplatform = applyMultiplatform,
                 script =
                     """
                     buildscript {

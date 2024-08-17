@@ -74,26 +74,27 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(generateResult).task(generateTask).succeeded()
 
         // add new restartable but not skippable composable
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class Test(var name: String)
+                data class Test(var name: String)
 
-            @Composable
-            fun TestComposable(test: Test) {
-                Text(text = test.name)
-            }
-            
-            @Composable
-            fun NewTestComposable(test: Test) {
-                Text(text = test.name)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(test: Test) {
+                    Text(text = test.name)
+                }
+                
+                @Composable
+                fun NewTestComposable(test: Test) {
+                    Text(text = test.name)
+                }
+                """.trimIndent(),
+            )
 
         // assert check fails with new unstable class
         val checkTask = ":android:releaseComposeCompilerCheck"
@@ -113,29 +114,30 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(generateResult).task(generateTask).succeeded()
 
         // add new unstable class
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class Test(var name: String)
-            
-            // this is the new class
-            data class AnotherUnstableClass(var unstable: String)
+                data class Test(var name: String)
+                
+                // this is the new class
+                data class AnotherUnstableClass(var unstable: String)
 
-            @Composable
-            fun TestComposable(test: Test) {
-                Text(text = test.name)
-            }
-            
-            @Composable
-            fun AnotherTestComposable(test: AnotherUnstableClass) {
-                Text(text = test.unstable)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(test: Test) {
+                    Text(text = test.name)
+                }
+                
+                @Composable
+                fun AnotherTestComposable(test: AnotherUnstableClass) {
+                    Text(text = test.unstable)
+                }
+                """.trimIndent(),
+            )
 
         // assert check fails with new unstable class
         val checkTask = ":android:releaseComposeCompilerCheck"
@@ -161,22 +163,23 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(generateResult).task(generateTask).succeeded()
 
         // add new unstable class
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class Test(var name: String)
+                data class Test(var name: String)
 
-            @Composable
-            // added default parameter
-            fun TestComposable(test: Test = Test("default")) {
-                Text(text = test.name)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                // added default parameter
+                fun TestComposable(test: Test = Test("default")) {
+                    Text(text = test.name)
+                }
+                """.trimIndent(),
+            )
 
         // assert check fails with new unstable class
         val checkTask = ":android:releaseComposeCompilerCheck"
@@ -196,54 +199,56 @@ class ComposeCompilerReportCheckTaskTest {
         val generateTask = ":android:releaseComposeCompilerGenerate"
 
         // start with 3 dynamic properties
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class Test1(var name: String)
-            data class Test2(var name: String)
-            data class Test3(var name: String)
+                data class Test1(var name: String)
+                data class Test2(var name: String)
+                data class Test3(var name: String)
 
-            @Composable
-            fun TestComposable(
-                test1: Test1 = Test1("default"),
-                test2: Test2 = Test2("default"),
-                test3: Test3 = Test3("default"),
-            ) {
-                Text(text = test1.name)
-                Text(text = test2.name)
-                Text(text = test3.name)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(
+                    test1: Test1 = Test1("default"),
+                    test2: Test2 = Test2("default"),
+                    test3: Test3 = Test3("default"),
+                ) {
+                    Text(text = test1.name)
+                    Text(text = test2.name)
+                    Text(text = test3.name)
+                }
+                """.trimIndent(),
+            )
 
         // delete 2 and add another
         val generateResult = project.execute(generateTask)
         assertThat(generateResult).task(generateTask).succeeded()
 
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class Test1(var name: String)
-            data class Test4(var name: String)
+                data class Test1(var name: String)
+                data class Test4(var name: String)
 
-            @Composable
-            fun TestComposable(
-                test1: Test1 = Test1("default"),
-                test4: Test4 = Test4("default"),
-            ) {
-                Text(text = test1.name)
-                Text(text = test4.name)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(
+                    test1: Test1 = Test1("default"),
+                    test4: Test4 = Test4("default"),
+                ) {
+                    Text(text = test1.name)
+                    Text(text = test4.name)
+                }
+                """.trimIndent(),
+            )
 
         // assert check fails with new unstable class
         val checkTask = ":android:releaseComposeCompilerCheck"
@@ -280,22 +285,23 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(generateResult).task(generateTask).succeeded()
 
         // add new unstable class
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
-            
-            // this is the new class
-            data class AnotherUnstableClass(var unstable: String)
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
+                
+                // this is the new class
+                data class AnotherUnstableClass(var unstable: String)
 
-            @Composable
-            fun TestComposable(test: AnotherUnstableClass) {
-                Text(text = test.unstable)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(test: AnotherUnstableClass) {
+                    Text(text = test.unstable)
+                }
+                """.trimIndent(),
+            )
 
         // assert check fails with new unstable class
         val checkTask = ":android:releaseComposeCompilerCheck"
@@ -321,14 +327,15 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(generateResult).task(generateTask).succeeded()
 
         // add new unstable class
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/AnotherUnstableClass.kt").toFile().writeText(
-            """
-            package com.example.myapplication
-            
-            // this is the new class
-            data class AnotherUnstableClass(var unstable: String)
-            """.trimIndent(),
-        )
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/AnotherUnstableClass.kt")
+            .toFile().writeText(
+                """
+                package com.example.myapplication
+                
+                // this is the new class
+                data class AnotherUnstableClass(var unstable: String)
+                """.trimIndent(),
+            )
 
         // assert check succeeds because we don't want to trigger a failure if the new class is not used in composable
         val checkTask = ":android:releaseComposeCompilerCheck"
@@ -336,19 +343,20 @@ class ComposeCompilerReportCheckTaskTest {
         assertThat(checkResult).task(checkTask).succeeded()
 
         // now use the unstable class
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
-            
-            @Composable
-            fun TestComposable(test: AnotherUnstableClass) {
-                Text(text = test.unstable)
-            }
-            """.trimIndent(),
-        )
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
+                
+                @Composable
+                fun TestComposable(test: AnotherUnstableClass) {
+                    Text(text = test.unstable)
+                }
+                """.trimIndent(),
+            )
 
         val secondaryCheckResult = project.executeAndFail(":android:releaseComposeCompilerCheck", "--rerun-tasks")
         assertThat(secondaryCheckResult.output).contains("New unstable classes were added!")
@@ -368,43 +376,45 @@ class ComposeCompilerReportCheckTaskTest {
         val generateTask = ":android:releaseComposeCompilerGenerate"
 
         // add unstable class and dynamic property so that check doesn't fail and generate golden metrics
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class UnstableClass(var value: String)
-            data class OtherUnstableClass(var value: String)
+                data class UnstableClass(var value: String)
+                data class OtherUnstableClass(var value: String)
 
-            @Composable
-            fun TestComposable(firstUnstable: UnstableClass) {
-                Text(text = firstUnstable.value)
-            }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(firstUnstable: UnstableClass) {
+                    Text(text = firstUnstable.value)
+                }
+                """.trimIndent(),
+            )
         // Generate golden metrics with the new class included
         val generateResult = project.execute(generateTask)
         assertThat(generateResult).task(generateTask).succeeded()
 
         // modify the composable to introduce a new unstable parameter
-        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
-            """
-            package com.example.myapplication
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
 
-            import androidx.compose.material3.Text
-            import androidx.compose.runtime.Composable
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
 
-            data class UnstableClass(var value: String)
-            data class OtherUnstableClass(var value: String)
+                data class UnstableClass(var value: String)
+                data class OtherUnstableClass(var value: String)
 
-            @Composable
-            fun TestComposable(newUnstable: OtherUnstableClass) {
-                Text(text = newUnstable.value)
-                }
-            """.trimIndent(),
-        )
+                @Composable
+                fun TestComposable(newUnstable: OtherUnstableClass) {
+                    Text(text = newUnstable.value)
+                    }
+                """.trimIndent(),
+            )
 
         // Assert check fails with new unstable parameter
         val checkTask = ":android:releaseComposeCompilerCheck"

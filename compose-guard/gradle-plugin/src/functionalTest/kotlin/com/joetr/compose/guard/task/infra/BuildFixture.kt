@@ -27,31 +27,41 @@ import com.autonomousapps.kit.AbstractGradleProject
 import com.autonomousapps.kit.GradleProject
 import com.autonomousapps.kit.gradle.GradleProperties
 import com.autonomousapps.kit.gradle.Plugin
+import com.joetr.compose.guard.task.infra.Plugins.ANDROID_GRADLE_PLUGIN_VERSION
+import com.joetr.compose.guard.task.infra.Plugins.androidAppPlugin
+import com.joetr.compose.guard.task.infra.Plugins.composePlugin
+import com.joetr.compose.guard.task.infra.Plugins.kotlinAndroid
+import com.joetr.compose.guard.task.infra.Plugins.multiplatform
+import com.joetr.compose.guard.task.infra.Plugins.reportGenPlugin
 import org.intellij.lang.annotations.Language
-
-private const val ANDROID_GRADLE_PLUGIN_VERSION = "7.4.0"
 
 class BuildFixture : AbstractGradleProject() {
     fun build(
         script: String = "",
         builder: GradleProject.Builder.() -> Unit,
         kotlinVersion: String = Plugins.KOTLIN_VERSION_1_9_22,
+        applyMultiplatform: Boolean = false,
     ): GradleProject {
-        return minimumFixture(script = script, kotlinVersion = kotlinVersion).apply { builder() }
+        return minimumFixture(script = script, kotlinVersion = kotlinVersion, applyMultiplatform = applyMultiplatform).apply { builder() }
             .write()
     }
 
     private fun minimumFixture(
         @Language("kt") script: String = "",
         kotlinVersion: String,
+        applyMultiplatform: Boolean,
     ): GradleProject.Builder {
         val plugins =
-            listOf(
-                Plugin("com.android.library", ANDROID_GRADLE_PLUGIN_VERSION, apply = false),
-                androidAppPlugin(false),
-                kotlinAndroid(apply = false, kotlinVersion = kotlinVersion),
-                reportGenPlugin(false),
-            ) +
+            if (applyMultiplatform) {
+                listOf(multiplatform(apply = false, kotlinVersion = kotlinVersion))
+            } else {
+                listOf(kotlinAndroid(apply = false, kotlinVersion = kotlinVersion))
+            } +
+                listOf(
+                    Plugin("com.android.library", ANDROID_GRADLE_PLUGIN_VERSION, apply = false),
+                    androidAppPlugin(false),
+                    reportGenPlugin(false),
+                ) +
                 if (kotlinVersion.startsWith("2")) {
                     listOf(composePlugin(apply = false, kotlinVersion = kotlinVersion))
                 } else {
@@ -114,43 +124,5 @@ class BuildFixture : AbstractGradleProject() {
     companion object {
         val REPORT_GEN_PLUGIN = reportGenPlugin()
         val ANDROID_APP_PLUGIN = androidAppPlugin()
-
-        private fun androidAppPlugin(apply: Boolean = true): Plugin {
-            return Plugin(
-                id = "com.android.application",
-                version = if (apply.not()) ANDROID_GRADLE_PLUGIN_VERSION else null,
-                apply = apply,
-            )
-        }
-
-        internal fun kotlinAndroid(
-            apply: Boolean = true,
-            kotlinVersion: String,
-        ): Plugin {
-            return Plugin(
-                id = "org.jetbrains.kotlin.android",
-                version = if (apply.not()) kotlinVersion else null,
-                apply = apply,
-            )
-        }
-
-        private fun reportGenPlugin(apply: Boolean = true): Plugin {
-            return Plugin(
-                id = "com.joetr.compose.guard",
-                version = if (apply.not()) PLUGIN_UNDER_TEST_VERSION else null,
-                apply = apply,
-            )
-        }
-
-        internal fun composePlugin(
-            apply: Boolean = true,
-            kotlinVersion: String,
-        ): Plugin {
-            return Plugin(
-                id = "org.jetbrains.kotlin.plugin.compose",
-                version = if (apply.not()) kotlinVersion else null,
-                apply = apply,
-            )
-        }
     }
 }

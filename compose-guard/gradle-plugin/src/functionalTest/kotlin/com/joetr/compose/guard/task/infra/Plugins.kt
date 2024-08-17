@@ -23,8 +23,62 @@
  */
 package com.joetr.compose.guard.task.infra
 
+import com.autonomousapps.kit.AbstractGradleProject.Companion.PLUGIN_UNDER_TEST_VERSION
+import com.autonomousapps.kit.gradle.Plugin
+
 object Plugins {
     @JvmStatic val KOTLIN_VERSION_1_9_22: String = "1.9.22"
 
     @JvmStatic val KOTLIN_VERSION_2_0_0: String = "2.0.0"
+
+    @JvmStatic val ANDROID_GRADLE_PLUGIN_VERSION = "7.4.0"
+
+    internal fun androidAppPlugin(apply: Boolean = true): Plugin {
+        return Plugin(
+            id = "com.android.application",
+            version = if (apply.not()) ANDROID_GRADLE_PLUGIN_VERSION else null,
+            apply = apply,
+        )
+    }
+
+    internal fun kotlinAndroid(
+        apply: Boolean = true,
+        kotlinVersion: String,
+    ): Plugin {
+        return Plugin(
+            id = "org.jetbrains.kotlin.android",
+            version = if (apply.not()) kotlinVersion else null,
+            apply = apply,
+        )
+    }
+
+    internal fun reportGenPlugin(apply: Boolean = true): Plugin {
+        return Plugin(
+            id = "com.joetr.compose.guard",
+            version = if (apply.not()) PLUGIN_UNDER_TEST_VERSION else null,
+            apply = apply,
+        )
+    }
+
+    internal fun multiplatform(
+        apply: Boolean = true,
+        kotlinVersion: String,
+    ): Plugin {
+        return Plugin(
+            id = "org.jetbrains.kotlin.multiplatform",
+            version = if (apply.not()) kotlinVersion else null,
+            apply = apply,
+        )
+    }
+
+    internal fun composePlugin(
+        apply: Boolean = true,
+        kotlinVersion: String,
+    ): Plugin {
+        return Plugin(
+            id = "org.jetbrains.kotlin.plugin.compose",
+            version = if (apply.not()) kotlinVersion else null,
+            apply = apply,
+        )
+    }
 }
