@@ -1,6 +1,6 @@
 # Changelog
 
-# 2.2.2-alpha
+# 2.2.3-alpha
 
 * Multiplatform fixes
 * Better --configuration-cache support

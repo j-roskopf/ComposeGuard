@@ -43,36 +43,78 @@ import java.io.File
 import kotlin.io.path.Path
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
+    /**
+     * The output directory of this task - by default build/compose_reports
+     */
     @get:OutputDirectory
     @get:Optional // not present on first run or on modules with empty source sets
     abstract val outputDirectory: DirectoryProperty
 
+    /**
+     * The output directory of the generate task - by default module/compose_reports
+     */
     @get:Input
     @get:Optional // not present on first run or on modules with empty source sets
     abstract val genOutputDirectoryPath: Property<String>
 
+    /**
+     * Multiplatform compilation target. Used in a multiplatform project
+     * to detect location of the compose reports. In a multiplatform project,
+     * they live under compose_report/<multiplatformCompilationTarget>/<files>
+     */
     @get:Input
     abstract val multiplatformCompilationTarget: Property<String>
 
+    /**
+     * Task name - re-run when check metrics don't exist
+     */
     @get:Input
     abstract val taskNameProperty: Property<String>
 
+    /**
+     * Variant (blank if no variant) for android / multiplatform targets
+     *
+     * Debug / Release etc
+     */
     @get:Input
     abstract val compilationVariant: Property<String>
 
+    /**
+     * The kotlin compilation task name
+     *
+     * compileDebugKotlin etc
+     */
     @get:Input
     abstract val compilationTaskName: Property<String>
 
+    /**
+     * Output directory path
+     *
+     * TODO joer - can this be consolidated with the output directory property?
+     */
     @get:Input
     abstract val checkOutputDirectoryPath: Property<String>
 
+    /**
+     * If we have no main source sets, don't produce results
+     */
     @get:Input
     abstract val hasKotlinMainSourceSet: Property<Boolean>
 
+    /**
+     * All kotlin sources for the module
+     *
+     * Marked as an input so we can re-run when a change occurs
+     */
     @get:InputFiles
     @get:Optional
     abstract val kotlinSourceSets: ListProperty<File>
 
+    /**
+     * Configuration of this task
+     *
+     * Used to validate if we should error on certain conditions etc
+     */
     @get:Input
     abstract val composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>
 
