@@ -479,7 +479,7 @@ class ComposeCompilerReportCheckTaskTest {
         composeReportsOutput.toFile().deleteRecursively()
 
         val newCheckResult = project.execute(checkTask)
-        assertThat(newCheckResult).task(checkTask).succeeded()
+        assertThat(newCheckResult).task(checkTask).upToDate()
 
         assertThat(composeReportsOutput.toFile()).exists()
 
@@ -529,7 +529,7 @@ class ComposeCompilerReportCheckTaskTest {
 
         // ksp
         val newKspResult = project.execute("--configuration-cache", kspTask)
-        assertThat(newKspResult).task(kspTask).upToDate()
+        assertThat(newKspResult).task(kspTask).succeeded()
     }
 
     @Test
