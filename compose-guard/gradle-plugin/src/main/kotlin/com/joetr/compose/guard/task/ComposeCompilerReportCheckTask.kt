@@ -38,9 +38,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.get
-import org.gradle.tooling.GradleConnector
 import java.io.File
-import kotlin.io.path.Path
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     /**
@@ -64,12 +62,6 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
      */
     @get:Input
     abstract val multiplatformCompilationTarget: Property<String>
-
-    /**
-     * Task name - re-run when check metrics don't exist
-     */
-    @get:Input
-    abstract val taskNameProperty: Property<String>
 
     /**
      * Variant (blank if no variant) for android / multiplatform targets
@@ -151,38 +143,19 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                     ),
                 )
 
-            if (checkOutputDirectory.exists()) {
-                val checkedMetrics =
-                    ComposeCompilerMetricsProvider(
-                        ComposeCompilerRawReportProvider.FromDirectory(
-                            directory = checkOutputDirectory,
-                            variant = compilationVariant.get(),
-                        ),
-                    )
-
-                ComposeChecks.check(
-                    checkedMetrics = checkedMetrics,
-                    goldenMetrics = goldenMetrics,
-                    composeCompilerCheckExtension = composeCompilerCheckExtension,
+            val checkedMetrics =
+                ComposeCompilerMetricsProvider(
+                    ComposeCompilerRawReportProvider.FromDirectory(
+                        directory = checkOutputDirectory,
+                        variant = compilationVariant.get(),
+                    ),
                 )
-            } else {
-                GradleConnector.newConnector()
-                    .forProjectDirectory(Path(checkOutputDirectoryPath.get()).parent.parent.toFile())
-                    .connect()
-                    .use {
-                        it.newBuild()
-                            .setStandardOutput(System.out)
-                            .setStandardError(System.err)
-                            .setStandardInput(System.`in`)
-                            .forTasks(taskNameProperty.get())
-                            .withArguments(
-                                // Re-running is necessary. In case devs deleted raw files and if task uses cache
-                                // then this task will explode 💣
-                                "--rerun-tasks",
-                            )
-                            .run()
-                    }
-            }
+
+            ComposeChecks.check(
+                checkedMetrics = checkedMetrics,
+                goldenMetrics = goldenMetrics,
+                composeCompilerCheckExtension = composeCompilerCheckExtension,
+            )
         }
     }
 }

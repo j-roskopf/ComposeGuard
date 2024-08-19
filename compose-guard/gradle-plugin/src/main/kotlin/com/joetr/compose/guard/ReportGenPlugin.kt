@@ -172,7 +172,6 @@ public class ReportGenPlugin : Plugin<Project> {
                 )
 
                 kotlinSourceSets.set(project.getKotlinSources())
-                taskNameProperty.set(taskName)
             }
 
         // make task depend on compile kotlin task
@@ -185,6 +184,23 @@ public class ReportGenPlugin : Plugin<Project> {
                             it.name.contains(variant.plus("-composables.txt"))
                         } ?: false
                     }
+                }
+            },
+        )
+
+        project.tasks.withType(KotlinCompile::class.java).configureEach(
+            object : Action<KotlinCompile<*>> {
+                override fun execute(t: KotlinCompile<*>) {
+                    val outputDirectory =
+                        if (t.project.isMultiplatformProject()) {
+                            checkExtension.outputDirectory.get().toPath().resolve(
+                                project.tasks.withType(KotlinCompile::class.java).getAt(compileTaskDependsOn).name,
+                            ).toFile()
+                        } else {
+                            checkExtension.outputDirectory.get()
+                        }
+
+                    t.outputs.dir(outputDirectory)
                 }
             },
         )
