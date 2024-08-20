@@ -24,6 +24,7 @@
 package com.joetr.compose.guard.task
 
 import assertk.assertThat
+import assertk.assertions.contains
 import com.joetr.compose.guard.task.infra.asserts.artifactInSrc
 import com.joetr.compose.guard.task.infra.asserts.isType
 import com.joetr.compose.guard.task.infra.asserts.succeeded
@@ -80,5 +81,50 @@ class ComposeCompilerReportGenerateTaskTest {
         assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports").isType("csv")
         assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports").isType("txt")
         assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports").isType("json")
+    }
+
+    @Test
+    fun `all files compiled when generating golden`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        // add new unstable class and composable
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/AnotherTestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
+
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
+                
+                // this is the new class
+                data class AnotherUnstableClass(var unstable: String)
+
+                @Composable
+                fun AnotherTestComposable(test: AnotherUnstableClass) {
+                    Text(text = test.unstable)
+                }
+                """.trimIndent(),
+            )
+
+        val newGenerateResult = project.execute(generateTask)
+
+        assertThat(newGenerateResult).task(generateTask).succeeded()
+
+        assertThat(project).artifactInSrc("android", "android_release-classes.txt", "compose_reports").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-composables.csv", "compose_reports").isType("csv")
+        assertThat(project).artifactInSrc("android", "android_release-composables.txt", "compose_reports").isType("txt")
+        assertThat(project).artifactInSrc("android", "android_release-module.json", "compose_reports").isType("json")
+
+        val composableReport =
+            project.projectDir("android").resolve("compose_reports/android_release-composables.txt").toFile()
+                .readText()
+
+        // assert that both composables show up in golden
+        assertThat(composableReport).contains("fun TestComposable")
+        assertThat(composableReport).contains("fun AnotherTestComposable")
     }
 }

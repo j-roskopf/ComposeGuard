@@ -83,11 +83,21 @@ public class ReportGenPlugin : Plugin<Project> {
     ) {
         val reportExtension = ComposeCompilerReportExtension.get(project)
 
+        val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
+
         val taskName =
             if (project.isMultiplatformProject()) {
                 "${target}${variant.capitalized()}$GENERATE_TASK_NAME"
             } else {
                 "${variant}$GENERATE_TASK_NAME"
+            }
+
+        // the compile task that our check task depends on
+        val compileTaskDependsOn =
+            if (project.isMultiplatformProject()) {
+                "compile${variant.capitalized()}Kotlin${target.capitalized()}"
+            } else {
+                "compile${variant.capitalized()}Kotlin"
             }
 
         val variantTask =
@@ -103,11 +113,7 @@ public class ReportGenPlugin : Plugin<Project> {
         variantTask.configure(
             object : Action<ComposeCompilerReportGenerateTask> {
                 override fun execute(t: ComposeCompilerReportGenerateTask) {
-                    if (project.isMultiplatformProject()) {
-                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin${target.capitalized()}"))
-                    } else {
-                        t.dependsOn(project.tasks.named("compile${variant.capitalized()}Kotlin"))
-                    }
+                    t.dependsOn(project.tasks.named(compileTaskDependsOn))
                 }
             },
         )
@@ -172,6 +178,7 @@ public class ReportGenPlugin : Plugin<Project> {
                 )
 
                 kotlinSourceSets.set(project.getKotlinSources())
+                taskNameProperty.set(taskName)
             }
 
         // make task depend on compile kotlin task
@@ -184,23 +191,6 @@ public class ReportGenPlugin : Plugin<Project> {
                             it.name.contains(variant.plus("-composables.txt"))
                         } ?: false
                     }
-                }
-            },
-        )
-
-        project.tasks.withType(KotlinCompile::class.java).configureEach(
-            object : Action<KotlinCompile<*>> {
-                override fun execute(t: KotlinCompile<*>) {
-                    val outputDirectory =
-                        if (t.project.isMultiplatformProject()) {
-                            checkExtension.outputDirectory.get().toPath().resolve(
-                                project.tasks.withType(KotlinCompile::class.java).getAt(compileTaskDependsOn).name,
-                            ).toFile()
-                        } else {
-                            checkExtension.outputDirectory.get()
-                        }
-
-                    t.outputs.dir(outputDirectory)
                 }
             },
         )
@@ -241,6 +231,9 @@ public class ReportGenPlugin : Plugin<Project> {
                             it.contains(CHECK_TASK_NAME)
                         }
                     ) {
+                        // kotlin compile task should always re-run since compose compiler metrics only include
+                        // compiled code
+                        t.outputs.upToDateWhen { false }
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
@@ -257,6 +250,9 @@ public class ReportGenPlugin : Plugin<Project> {
                             it.contains(GENERATE_TASK_NAME)
                         }
                     ) {
+                        // kotlin compile task should always re-run since compose compiler metrics only include
+                        // compiled code
+                        t.outputs.upToDateWhen { false }
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
