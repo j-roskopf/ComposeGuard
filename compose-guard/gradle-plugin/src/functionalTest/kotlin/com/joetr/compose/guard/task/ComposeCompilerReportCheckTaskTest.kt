@@ -529,7 +529,7 @@ class ComposeCompilerReportCheckTaskTest {
 
         // ksp
         val newKspResult = project.execute("--configuration-cache", kspTask)
-        assertThat(newKspResult).task(kspTask).succeeded()
+        assertThat(newKspResult).task(kspTask).upToDate()
     }
 
     @Test
