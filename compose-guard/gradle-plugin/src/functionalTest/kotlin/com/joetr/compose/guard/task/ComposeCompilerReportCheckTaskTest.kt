@@ -479,7 +479,7 @@ class ComposeCompilerReportCheckTaskTest {
         composeReportsOutput.toFile().deleteRecursively()
 
         val newCheckResult = project.execute(checkTask)
-        assertThat(newCheckResult).task(checkTask).upToDate()
+        assertThat(newCheckResult).task(checkTask).succeeded()
 
         assertThat(composeReportsOutput.toFile()).exists()
 

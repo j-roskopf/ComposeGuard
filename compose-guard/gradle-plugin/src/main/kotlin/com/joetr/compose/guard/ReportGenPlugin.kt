@@ -114,6 +114,7 @@ public class ReportGenPlugin : Plugin<Project> {
             object : Action<ComposeCompilerReportGenerateTask> {
                 override fun execute(t: ComposeCompilerReportGenerateTask) {
                     t.dependsOn(project.tasks.named(compileTaskDependsOn))
+                    t.inputs.files(project.getKotlinSources())
                 }
             },
         )
@@ -233,7 +234,7 @@ public class ReportGenPlugin : Plugin<Project> {
                     ) {
                         // kotlin compile task should always re-run since compose compiler metrics only include
                         // compiled code
-                        t.outputs.upToDateWhen { false }
+                        project.extensions.extraProperties["kotlin.incremental"] = "false"
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
@@ -252,7 +253,7 @@ public class ReportGenPlugin : Plugin<Project> {
                     ) {
                         // kotlin compile task should always re-run since compose compiler metrics only include
                         // compiled code
-                        t.outputs.upToDateWhen { false }
+                        project.extensions.extraProperties["kotlin.incremental"] = "false"
                         t.kotlinOptions.freeCompilerArgs +=
                             listOf(
                                 "-P",
