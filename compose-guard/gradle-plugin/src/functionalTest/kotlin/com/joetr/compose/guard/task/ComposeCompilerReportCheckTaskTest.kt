@@ -551,4 +551,78 @@ class ComposeCompilerReportCheckTaskTest {
         val newCheckResult = project.execute("--configuration-cache", checkTask)
         assertThat(newCheckResult).task(checkTask).upToDate()
     }
+
+    @Test
+    fun `can clean and check multiple times`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/42
+
+        val project =
+            BasicAndroidProject.getComposeProject()
+
+        val debugGenerateTask = ":android:debugComposeCompilerGenerate"
+        val generateResult = project.execute("--build-cache", debugGenerateTask)
+        assertThat(generateResult).task(debugGenerateTask).succeeded()
+
+        val cleanTask = ":android:clean"
+        val cleanResult = project.execute(cleanTask)
+        assertThat(cleanResult).task(cleanTask).succeeded()
+
+        val checkTask = ":android:debugComposeCompilerCheck"
+        val checkResult = project.execute("--build-cache", checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        val newCleanResult = project.execute(cleanTask)
+        assertThat(newCleanResult).task(cleanTask).succeeded()
+
+        val newCheckResult = project.execute("--build-cache", checkTask)
+        assertThat(newCheckResult).task(checkTask).succeeded()
+    }
+
+    @Test
+    fun `fails after rebuilding folder from check task`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/41#issuecomment-2295743503
+
+        val project =
+            BasicAndroidProject.getComposeProject()
+
+        val debugGenerateTask = ":android:releaseComposeCompilerGenerate"
+        val generateResult = project.execute(debugGenerateTask)
+        assertThat(generateResult).task(debugGenerateTask).succeeded()
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
+
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
+
+                data class UnstableClass(var value: String)
+                data class OtherUnstableClass(var value: String)
+
+                @Composable
+                fun TestComposable(newUnstable: OtherUnstableClass) {
+                    Text(text = newUnstable.value)
+                    }
+                """.trimIndent(),
+            )
+
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult).task(checkTask).failed()
+
+        // delete build folder
+        val composeReportsOutput = project.buildDir(":android").resolve("compose_reports")
+        assertThat(composeReportsOutput.toFile()).exists()
+        composeReportsOutput.toFile().deleteRecursively()
+
+        val newCheckResult = project.executeAndFail(checkTask)
+        assertThat(newCheckResult.output).contains("New unstable classes were added!")
+        assertThat(newCheckResult.output).contains(
+            "ClassDetail(className=OtherUnstableClass, stability=UNSTABLE, runtimeStability=UNSTABLE, fields=[Field(status=stable," +
+                " details=var value: String)], rawContent=RawContent(content=unstable class OtherUnstableClass",
+        )
+        assertThat(newCheckResult).task(checkTask).failed()
+    }
 }
