@@ -350,4 +350,54 @@ class ComposeCompilerReportCheckTaskConfigurationTest {
         val checkResult = project.execute(checkTask)
         assertThat(checkResult).task(checkTask).succeeded()
     }
+
+    @Test
+    fun `kotlin compile not configured when disabled`() {
+        val composeMetricsBuildFile =
+            """
+            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+                compilerOptions.freeCompilerArgs.addAll(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${"$"}{project.layout.projectDirectory.asFile.absolutePath.plus("/").plus("newComposeReports")}",
+                )
+            }
+            
+            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+                compilerOptions.freeCompilerArgs.addAll(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${"$"}{project.layout.projectDirectory.asFile.absolutePath.plus("/").plus("newComposeReports")}",
+                )
+            }
+            """.trimIndent()
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """                    
+                    composeGuard {
+                        configureKotlinTasks.set(false)
+                    }
+                    
+                    composeGuardGenerate {
+                        outputDirectory = layout.projectDirectory.dir("newComposeReports").asFile
+                    }
+                    
+                    $composeMetricsBuildFile
+                    
+                    """.trimIndent(),
+            )
+
+        val compileTask = ":android:compileReleaseKotlin"
+        val compileResult = project.execute(compileTask)
+        assertThat(compileResult).task(compileTask).succeeded()
+
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        val composableReport =
+            project.projectDir("android").resolve("newComposeReports/android_release-composables.txt").toFile()
+                .readText()
+
+        assertThat(composableReport).contains("fun TestComposable")
+    }
 }

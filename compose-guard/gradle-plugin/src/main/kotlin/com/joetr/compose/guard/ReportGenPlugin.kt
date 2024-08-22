@@ -61,6 +61,7 @@ public class ReportGenPlugin : Plugin<Project> {
         // create extensions
         ComposeCompilerReportExtension.create(target)
         ComposeCompilerCheckExtension.create(target)
+        ComposeCompilerExtension.create(target)
 
         // register directories for storing metrics for generate + check tasks
         target.registerComposeParameters()
@@ -82,8 +83,6 @@ public class ReportGenPlugin : Plugin<Project> {
         variant: String,
     ) {
         val reportExtension = ComposeCompilerReportExtension.get(project)
-
-        val genExtension = project.extensions.getByType<ComposeCompilerReportExtension>()
 
         val taskName =
             if (project.isMultiplatformProject()) {
@@ -180,6 +179,7 @@ public class ReportGenPlugin : Plugin<Project> {
 
                 kotlinSourceSets.set(project.getKotlinSources())
                 taskNameProperty.set(taskName)
+                genFiles.set(genExtension.outputDirectory.get().listFiles()?.toList())
             }
 
         // make task depend on compile kotlin task
@@ -211,6 +211,7 @@ public class ReportGenPlugin : Plugin<Project> {
     private fun Project.registerComposeParameters() {
         val genExtension = extensions.getByType<ComposeCompilerReportExtension>()
         val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
+        val composeGuardExtension = extensions.getByType<ComposeCompilerExtension>()
 
         val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
 
@@ -225,51 +226,55 @@ public class ReportGenPlugin : Plugin<Project> {
             },
         )
 
-        project.tasks.withType(KotlinCompile::class.java).configureEach(
-            object : Action<KotlinCompile<*>> {
-                override fun execute(t: KotlinCompile<*>) {
-                    if (gradle.startParameter.taskNames.any {
-                            it.contains(CHECK_TASK_NAME)
+        if (composeGuardExtension.configureKotlinTasks.get()) {
+            project.tasks.withType(KotlinCompile::class.java).configureEach(
+                object : Action<KotlinCompile<*>> {
+                    override fun execute(t: KotlinCompile<*>) {
+                        if (composeGuardExtension.configureKotlinTasks.get()) {
+                            if (gradle.startParameter.taskNames.any {
+                                    it.contains(CHECK_TASK_NAME)
+                                }
+                            ) {
+                                // kotlin compile task should always re-run since compose compiler metrics only include
+                                // compiled code
+                                project.extensions.extraProperties["kotlin.incremental"] = "false"
+                                t.kotlinOptions.freeCompilerArgs +=
+                                    listOf(
+                                        "-P",
+                                        REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath +
+                                            if (project.isMultiplatformProject()) "/${t.name}" else "",
+                                    )
+                                t.kotlinOptions.freeCompilerArgs +=
+                                    listOf(
+                                        "-P",
+                                        METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath +
+                                            if (project.isMultiplatformProject()) "/${t.name}" else "",
+                                    )
+                            } else if (gradle.startParameter.taskNames.any {
+                                    it.contains(GENERATE_TASK_NAME)
+                                }
+                            ) {
+                                // kotlin compile task should always re-run since compose compiler metrics only include
+                                // compiled code
+                                project.extensions.extraProperties["kotlin.incremental"] = "false"
+                                t.kotlinOptions.freeCompilerArgs +=
+                                    listOf(
+                                        "-P",
+                                        REPORT_PARAM + genExtension.outputDirectory.get().absolutePath +
+                                            if (project.isMultiplatformProject()) "/${t.name}" else "",
+                                    )
+                                t.kotlinOptions.freeCompilerArgs +=
+                                    listOf(
+                                        "-P",
+                                        METRIC_PARAM + genExtension.outputDirectory.get().absolutePath +
+                                            if (project.isMultiplatformProject()) "/${t.name}" else "",
+                                    )
+                            }
                         }
-                    ) {
-                        // kotlin compile task should always re-run since compose compiler metrics only include
-                        // compiled code
-                        project.extensions.extraProperties["kotlin.incremental"] = "false"
-                        t.kotlinOptions.freeCompilerArgs +=
-                            listOf(
-                                "-P",
-                                REPORT_PARAM + checkExtension.outputDirectory.get().absolutePath +
-                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
-                            )
-                        t.kotlinOptions.freeCompilerArgs +=
-                            listOf(
-                                "-P",
-                                METRIC_PARAM + checkExtension.outputDirectory.get().absolutePath +
-                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
-                            )
-                    } else if (gradle.startParameter.taskNames.any {
-                            it.contains(GENERATE_TASK_NAME)
-                        }
-                    ) {
-                        // kotlin compile task should always re-run since compose compiler metrics only include
-                        // compiled code
-                        project.extensions.extraProperties["kotlin.incremental"] = "false"
-                        t.kotlinOptions.freeCompilerArgs +=
-                            listOf(
-                                "-P",
-                                REPORT_PARAM + genExtension.outputDirectory.get().absolutePath +
-                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
-                            )
-                        t.kotlinOptions.freeCompilerArgs +=
-                            listOf(
-                                "-P",
-                                METRIC_PARAM + genExtension.outputDirectory.get().absolutePath +
-                                    if (project.isMultiplatformProject()) "/${t.name}" else "",
-                            )
                     }
-                }
-            },
-        )
+                },
+            )
+        }
     }
 
     /**

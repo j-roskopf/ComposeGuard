@@ -83,11 +83,22 @@ composeGuardCheck {
 }
 ```
 
-Additionally, the output directory of the golden metrics has the ability to be configured as well.
+The output directory of the golden metrics has the ability to be configured as well.
 
 ```kotlin
 composeGuardGenerate {
     outputDirectory = layout.projectDirectory.dir("custom_dir").asFile
+}
+```
+
+Additionally, if you would prefer complete control over how the metrics are generated, you can disable this plugin from configuring the Kotlin compile task.
+This is intended advanced users that prefer compiler performance over easy baseline generation.
+With this set, the plugin no longer configures anything in the Kotlin compile task. 
+So an end user would be responsible for generating the golden metrics and the check metrics before running the check task.
+
+```kotlin
+composeGuard { 
+    configureKotlinTasks = false // defaults to true
 }
 ```
 

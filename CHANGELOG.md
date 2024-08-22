@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.2.7-alpha
+
+* Added support for `configureKotlinTasks`
+
 # 2.2.3-alpha
 
 * Multiplatform fixes

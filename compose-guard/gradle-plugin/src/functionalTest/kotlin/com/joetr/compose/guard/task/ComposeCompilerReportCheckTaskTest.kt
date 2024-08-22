@@ -35,6 +35,8 @@ import com.joetr.compose.guard.task.infra.asserts.upToDate
 import com.joetr.compose.guard.task.infra.execute
 import com.joetr.compose.guard.task.infra.executeAndFail
 import org.junit.Test
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 class ComposeCompilerReportCheckTaskTest {
     @Test
@@ -458,6 +460,50 @@ class ComposeCompilerReportCheckTaskTest {
     }
 
     @Test
+    fun `check task is successful if files inside build folder are deleted`() {
+        val project = BasicAndroidProject.getComposeProject()
+        val releaseGenerateTask = ":android:releaseComposeCompilerGenerate"
+
+        // generate golden
+        val generateResult = project.execute(releaseGenerateTask)
+        assertThat(generateResult).task(releaseGenerateTask).succeeded()
+
+        // check succeeds
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        // delete build folder
+        val classesTxt = project.buildDir(":android").resolve("compose_reports").resolve("android_release-classes.txt")
+        val composablesCsv = project.buildDir(":android").resolve("compose_reports").resolve("android_release-composables.csv")
+        val composablesTxt = project.buildDir(":android").resolve("compose_reports").resolve("android_release-composables.txt")
+        val modulesJson = project.buildDir(":android").resolve("compose_reports").resolve("android_release-module.json")
+
+        assertThat(classesTxt.toFile()).exists()
+        assertThat(composablesCsv.toFile()).exists()
+        assertThat(composablesTxt.toFile()).exists()
+        assertThat(modulesJson.toFile()).exists()
+
+        classesTxt.toFile().delete()
+        composablesCsv.toFile().delete()
+        composablesTxt.toFile().delete()
+        modulesJson.toFile().delete()
+
+        assert(classesTxt.toFile().exists().not())
+        assert(composablesCsv.toFile().exists().not())
+        assert(composablesTxt.toFile().exists().not())
+        assert(modulesJson.toFile().exists().not())
+
+        val newCheckResult = project.execute(checkTask)
+        assertThat(newCheckResult).task(checkTask).succeeded()
+
+        assertThat(classesTxt.toFile()).exists()
+        assertThat(composablesCsv.toFile()).exists()
+        assertThat(composablesTxt.toFile()).exists()
+        assertThat(modulesJson.toFile()).exists()
+    }
+
+    @Test
     fun `check task is successful if build folder is deleted`() {
         val project = BasicAndroidProject.getComposeProject()
         val releaseGenerateTask = ":android:releaseComposeCompilerGenerate"
@@ -623,6 +669,57 @@ class ComposeCompilerReportCheckTaskTest {
             "ClassDetail(className=OtherUnstableClass, stability=UNSTABLE, runtimeStability=UNSTABLE, fields=[Field(status=stable," +
                 " details=var value: String)], rawContent=RawContent(content=unstable class OtherUnstableClass",
         )
+        assertThat(newCheckResult).task(checkTask).failed()
+    }
+
+    @Test
+    fun `if baseline is manually edited, check task still executes`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/41#issuecomment-2304314164
+
+        val project =
+            BasicAndroidProject.getComposeProject()
+
+        val debugGenerateTask = ":android:releaseComposeCompilerGenerate"
+        val generateResult = project.execute(debugGenerateTask)
+        assertThat(generateResult).task(debugGenerateTask).succeeded()
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile()
+            .writeText(
+                """
+                package com.example.myapplication
+
+                import androidx.compose.material3.Text
+                import androidx.compose.runtime.Composable
+
+                data class UnstableClass(var value: String)
+                data class OtherUnstableClass(var value: String)
+
+                @Composable
+                fun TestComposable(newUnstable: OtherUnstableClass) {
+                    Text(text = newUnstable.value)
+                    }
+                """.trimIndent(),
+            )
+
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult).task(checkTask).failed()
+
+        // manually edit composables txt
+        val composablesTxtFile = project.projectDir(":android").resolve("compose_reports").resolve("android_release-composables.txt")
+        val composableTxtContent =
+            composablesTxtFile.readText().replace(
+                """
+                restartable scheme("[androidx.compose.ui.UiComposable]") fun TestComposable(
+                  unstable newUnstable: OtherUnstableClass
+                )
+                """.trimIndent(),
+                "",
+            )
+        composablesTxtFile.writeText(composableTxtContent)
+
+        val newCheckResult = project.executeAndFail(checkTask)
         assertThat(newCheckResult).task(checkTask).failed()
     }
 }
