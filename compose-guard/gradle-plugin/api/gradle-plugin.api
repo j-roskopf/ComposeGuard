@@ -13,6 +13,16 @@ public final class com/joetr/compose/guard/ComposeCompilerCheckExtension$Compani
 	public final fun get (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerCheckExtension;
 }
 
+public abstract interface class com/joetr/compose/guard/ComposeCompilerExtension {
+	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerExtension$Companion;
+	public abstract fun getConfigureKotlinTasks ()Lorg/gradle/api/provider/Property;
+}
+
+public final class com/joetr/compose/guard/ComposeCompilerExtension$Companion {
+	public final fun create (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerExtension;
+	public final fun get (Lorg/gradle/api/Project;)Lcom/joetr/compose/guard/ComposeCompilerExtension;
+}
+
 public abstract interface class com/joetr/compose/guard/ComposeCompilerReportExtension {
 	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerReportExtension$Companion;
 	public abstract fun getOutputDirectory ()Lorg/gradle/api/provider/Property;

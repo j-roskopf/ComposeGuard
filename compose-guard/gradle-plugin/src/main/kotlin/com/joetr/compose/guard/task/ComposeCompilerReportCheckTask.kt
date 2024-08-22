@@ -115,6 +115,10 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     @get:Input
     abstract val taskNameProperty: Property<String>
 
+    @get:InputFiles
+    @get:Optional
+    abstract val genFiles: ListProperty<File>
+
     @TaskAction
     fun check() {
         val genOutputDirectory = File(genOutputDirectoryPath.get())
@@ -148,7 +152,12 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                     ),
                 )
 
-            if (checkOutputDirectory.exists()) {
+            val containsReport =
+                checkOutputDirectory.listFiles()?.any {
+                    it.name.contains("-composables.txt")
+                } ?: false
+
+            if (checkOutputDirectory.exists() && containsReport) {
                 val checkedMetrics =
                     ComposeCompilerMetricsProvider(
                         ComposeCompilerRawReportProvider.FromDirectory(
