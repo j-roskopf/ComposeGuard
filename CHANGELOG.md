@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.3.0
+
+* Move out of alpha versioning (this version is no different from 2.2.7-alpha)
+
 # 2.2.7-alpha
 
 * Added support for `configureKotlinTasks`
