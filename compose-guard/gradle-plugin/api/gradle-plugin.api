@@ -6,6 +6,7 @@ public abstract interface class com/joetr/compose/guard/ComposeCompilerCheckExte
 	public abstract fun getErrorOnNewUnstableParams ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoreUnstableParamsOnSkippableComposables ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOutputDirectory ()Lorg/gradle/api/provider/Property;
+	public abstract fun getReportAllOnMissingBaseline ()Lorg/gradle/api/provider/Property;
 }
 
 public final class com/joetr/compose/guard/ComposeCompilerCheckExtension$Companion {

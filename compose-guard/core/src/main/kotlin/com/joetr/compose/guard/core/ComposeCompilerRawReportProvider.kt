@@ -37,6 +37,13 @@ public sealed interface ComposeCompilerRawReportProvider {
     public val composableReportFiles: List<File>
     public val classesReportFiles: List<File>
 
+    public class Empty(
+        override val briefStatisticsJsonFiles: List<File> = emptyList(),
+        override val detailedStatisticsCsvFiles: List<File> = emptyList(),
+        override val composableReportFiles: List<File> = emptyList(),
+        override val classesReportFiles: List<File> = emptyList(),
+    ) : ComposeCompilerRawReportProvider
+
     /**
      * Provides report from individual files
      */

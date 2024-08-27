@@ -80,6 +80,12 @@ composeGuardCheck {
      * you may not care about new unstable params if the composable is already skippable
      */
     ignoreUnstableParamsOnSkippableComposables = true // defaults to false
+
+    /**
+     * If baseline metrics are missing, the check task will no longer fail and will instead just report
+     * all checks. Baseline metrics will be effectively ignored when this is set.
+     */
+    reportAllOnMissingBaseline = true // defaults to false
 }
 ```
 

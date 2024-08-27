@@ -36,32 +36,39 @@ internal object ComposeChecks {
         goldenMetrics: ComposeCompilerMetricsProvider,
         composeCompilerCheckExtension: Property<ComposeCompilerCheckExtension>,
     ) {
+        val errors = mutableListOf<String>()
+
         if (composeCompilerCheckExtension.get().errorOnNewDynamicProperties.get()) {
-            checkDynamicDefaultExpressions(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
+            errors += checkDynamicDefaultExpressions(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
         }
         if (composeCompilerCheckExtension.get().errorOnNewUnstableClasses.get()) {
-            checkUnstableClasses(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
+            errors += checkUnstableClasses(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
         }
         if (composeCompilerCheckExtension.get().errorOnNewRestartableButNotSkippableComposables.get()) {
-            checkRestartableButNotSkippable(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
+            errors += checkRestartableButNotSkippable(checkedMetrics = checkedMetrics, goldenMetrics = goldenMetrics)
         }
         if (composeCompilerCheckExtension.get().errorOnNewUnstableParams.get()) {
-            checkUnstableParams(
-                checkedMetrics = checkedMetrics,
-                goldenMetrics = goldenMetrics,
-                ignoreUnstableParamsOnSkippableComposables =
-                    composeCompilerCheckExtension
-                        .get()
-                        .ignoreUnstableParamsOnSkippableComposables
-                        .get(),
-            )
+            errors +=
+                checkUnstableParams(
+                    checkedMetrics = checkedMetrics,
+                    goldenMetrics = goldenMetrics,
+                    ignoreUnstableParamsOnSkippableComposables =
+                        composeCompilerCheckExtension
+                            .get()
+                            .ignoreUnstableParamsOnSkippableComposables
+                            .get(),
+                )
+        }
+
+        if (errors.isNotEmpty()) {
+            throw GradleException(errors.joinToString("\n\n"))
         }
     }
 
     private fun checkDynamicDefaultExpressions(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
-    ) {
+    ): List<String> {
         val checkedParametersMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
         checkedMetrics.getComposablesReport().composables.forEach { composable ->
             composable.params.filter {
@@ -94,39 +101,44 @@ internal object ComposeChecks {
 
         checkedParametersMap.keys.removeAll(goldenParametersMap.keys)
 
-        if (checkedParametersMap.isNotEmpty()) {
-            throw GradleException(
+        return if (checkedParametersMap.isNotEmpty()) {
+            listOf(
                 "New @dynamic parameters were added! \n" +
                     checkedParametersMap.keys.joinToString(separator = ",") + "\n" +
                     "More info: https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md" +
                     "#default-parameter-expressions-that-are-dynamic",
             )
+        } else {
+            emptyList()
         }
     }
 
     private fun checkRestartableButNotSkippable(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
-    ) {
-        if (checkedMetrics.getComposablesReport().restartableButNotSkippableComposables.size >
+    ): List<String> {
+        return if (checkedMetrics.getComposablesReport().restartableButNotSkippableComposables.size >
             goldenMetrics.getComposablesReport().restartableButNotSkippableComposables.size
         ) {
             val difference =
                 checkedMetrics.getComposablesReport().restartableButNotSkippableComposables -
                     goldenMetrics.getComposablesReport().restartableButNotSkippableComposables.toSet()
-            throw GradleException(
+
+            listOf(
                 "New Composables were added that are restartable but not skippable! \n" +
                     difference.joinToString(",") + "\n" +
                     "More info: https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md" +
                     "#functions-that-are-restartable-but-not-skippable",
             )
+        } else {
+            emptyList()
         }
     }
 
     private fun checkUnstableClasses(
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
-    ) {
+    ): List<String> {
         val goldenUnstableClassesMap =
             goldenMetrics.getClassesReport().unstableClasses.associateBy {
                 it.className
@@ -148,8 +160,8 @@ internal object ComposeChecks {
                 checkedUnstableClassesMap.containsKey(it.type)
             }
 
-        if (unstableClassesUsedInComposables.isNotEmpty()) {
-            throw GradleException(
+        return if (unstableClassesUsedInComposables.isNotEmpty()) {
+            listOf(
                 "New unstable classes were added! \n" +
                     unstableClassesUsedInComposables.map {
                         checkedUnstableClassesMap[it.type]
@@ -157,6 +169,8 @@ internal object ComposeChecks {
                     "More info: https://github.com/JetBrains/kotlin/blob/master/plugins/compose/design/compiler-metrics.md" +
                     "#classes-that-are-unstable",
             )
+        } else {
+            emptyList()
         }
     }
 
@@ -168,7 +182,7 @@ internal object ComposeChecks {
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
         ignoreUnstableParamsOnSkippableComposables: Boolean,
-    ) {
+    ): List<String> {
         val checkedUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
         checkedMetrics.getComposablesReport().composables.forEach { composable ->
             composable.params.filter {
@@ -211,11 +225,13 @@ internal object ComposeChecks {
 
         val newUnstableParamsMap = checkedUnstableParamsMap.filterKeys { it !in goldenUnstableParamsMap.keys }
 
-        if (newUnstableParamsMap.isNotEmpty()) {
-            throw GradleException(
+        return if (newUnstableParamsMap.isNotEmpty()) {
+            listOf(
                 "New unstable parameters were added in the following @Composables! \n" +
                     newUnstableParamsMap.keys.joinToString(separator = "\n") { it.toString() },
             )
+        } else {
+            emptyList()
         }
     }
 }
