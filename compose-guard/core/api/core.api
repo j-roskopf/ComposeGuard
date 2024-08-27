@@ -16,6 +16,16 @@ public abstract interface class com/joetr/compose/guard/core/ComposeCompilerRawR
 	public abstract fun getDetailedStatisticsCsvFiles ()Ljava/util/List;
 }
 
+public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider$Empty : com/joetr/compose/guard/core/ComposeCompilerRawReportProvider {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getBriefStatisticsJsonFiles ()Ljava/util/List;
+	public fun getClassesReportFiles ()Ljava/util/List;
+	public fun getComposableReportFiles ()Ljava/util/List;
+	public fun getDetailedStatisticsCsvFiles ()Ljava/util/List;
+}
+
 public final class com/joetr/compose/guard/core/ComposeCompilerRawReportProvider$FromDirectory : com/joetr/compose/guard/core/ComposeCompilerRawReportProvider {
 	public fun <init> (Ljava/io/File;Ljava/lang/String;)V
 	public fun getBriefStatisticsJsonFiles ()Ljava/util/List;

@@ -96,6 +96,12 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
     abstract val hasKotlinMainSourceSet: Property<Boolean>
 
     /**
+     * If set, don't error on missing baseline, and just report all errors
+     */
+    @get:Input
+    abstract val reportAllOnMissingBaseline: Property<Boolean>
+
+    /**
      * All kotlin sources for the module
      *
      * Marked as an input so we can re-run when a change occurs
@@ -134,23 +140,34 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
             }
 
         if (hasKotlinMainSourceSet.get()) {
-            ensureVariantsExistsInDirectory(genOutputDirectory.resolve(compilationTaskName.get()), compilationVariant.get())
+            if (reportAllOnMissingBaseline.get().not()) {
+                // if reportAllOnMissingBaseline is not enabled, verify baseline exists
+                ensureVariantsExistsInDirectory(genOutputDirectory.resolve(compilationTaskName.get()), compilationVariant.get())
+            }
+
+            val goldenDirectory =
+                if (multiplatformCompilationTarget.get().isNotEmpty()) {
+                    File(
+                        genOutputDirectoryPath.get().plus(File.separator)
+                            .plus(multiplatformCompilationTarget.get()),
+                    )
+                } else {
+                    File(genOutputDirectoryPath.get())
+                }
 
             val goldenMetrics =
-                ComposeCompilerMetricsProvider(
-                    ComposeCompilerRawReportProvider.FromDirectory(
-                        directory =
-                            if (multiplatformCompilationTarget.get().isNotEmpty()) {
-                                File(
-                                    genOutputDirectoryPath.get().plus(File.separator)
-                                        .plus(multiplatformCompilationTarget.get()),
-                                )
-                            } else {
-                                File(genOutputDirectoryPath.get())
-                            },
-                        variant = compilationVariant.get(),
-                    ),
-                )
+                if (reportAllOnMissingBaseline.get()) {
+                    ComposeCompilerMetricsProvider(
+                        ComposeCompilerRawReportProvider.Empty(),
+                    )
+                } else {
+                    ComposeCompilerMetricsProvider(
+                        ComposeCompilerRawReportProvider.FromDirectory(
+                            directory = goldenDirectory,
+                            variant = compilationVariant.get(),
+                        ),
+                    )
+                }
 
             val containsReport =
                 checkOutputDirectory.listFiles()?.any {

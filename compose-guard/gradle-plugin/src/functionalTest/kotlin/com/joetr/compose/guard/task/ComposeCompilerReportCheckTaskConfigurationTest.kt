@@ -32,6 +32,8 @@ import com.joetr.compose.guard.task.infra.asserts.task
 import com.joetr.compose.guard.task.infra.execute
 import com.joetr.compose.guard.task.infra.executeAndFail
 import org.junit.Test
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 class ComposeCompilerReportCheckTaskConfigurationTest {
     @Test
@@ -399,5 +401,106 @@ class ComposeCompilerReportCheckTaskConfigurationTest {
                 .readText()
 
         assertThat(composableReport).contains("fun TestComposable")
+    }
+
+    @Test
+    fun `if no baseline, check reports all issues when reportAllOnMissingBaseline disabled`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/53
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+
+        // assert check failed because there are no metrics
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
+    fun `if no baseline, check reports no issues when reportAllOnMissingBaseline enabled and there are no errors`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/53
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """                    
+                    composeGuardCheck {
+                        reportAllOnMissingBaseline.set(true)
+                    }
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class NormalClass(val value: String)
+
+            @Composable
+            fun TestComposable(normalClass: NormalClass) {
+                Text(text = normalClass.value )
+                }
+            """.trimIndent(),
+        )
+
+        // assert check succeeds
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+    }
+
+    @Test
+    fun `if no baseline, check reports all issues when reportAllOnMissingBaseline enabled`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/53
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """                    
+                    composeGuardCheck {
+                        reportAllOnMissingBaseline.set(true)
+                    }
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableClass(var value: String)
+            data class OtherUnstableClass(var value: String)
+
+            @Composable
+            fun TestComposable(newUnstable: OtherUnstableClass = OtherUnstableClass("test")) {
+                Text(text = newUnstable.value )
+                }
+                
+            @Composable
+            fun NewTestComposable(newUnstable: OtherUnstableClass) {
+                Text(text = newUnstable.value )
+                }
+            """.trimIndent(),
+        )
+
+        // assert check fails with all checks
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New @dynamic parameters were added!")
+        assertThat(checkResult.output).contains("New unstable classes were added!")
+        assertThat(checkResult.output).contains("New Composables were added that are restartable but not skippable!")
+        assertThat(checkResult.output).contains("New unstable parameters were added in the following @Composables!")
+        assertThat(checkResult).task(checkTask).failed()
     }
 }

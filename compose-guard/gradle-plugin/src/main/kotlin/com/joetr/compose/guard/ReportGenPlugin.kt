@@ -176,6 +176,7 @@ public class ReportGenPlugin : Plugin<Project> {
                 hasKotlinMainSourceSet.set(
                     project.hasNonEmptyKotlinSourceSets(),
                 )
+                reportAllOnMissingBaseline.set(checkExtension.reportAllOnMissingBaseline)
 
                 kotlinSourceSets.set(project.getKotlinSources())
                 taskNameProperty.set(taskName)

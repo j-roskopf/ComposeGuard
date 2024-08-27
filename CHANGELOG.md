@@ -1,5 +1,14 @@
 # Changelog
 
+# 2.3.1
+
+* Add opt in flag for reporting all errors on check task
+```kts
+composeGuardCheck {
+    reportAllOnMissingBaseline = true // defaults to false
+}
+```
+
 # 2.3.0
 
 * Move out of alpha versioning (this version is no different from 2.2.7-alpha)

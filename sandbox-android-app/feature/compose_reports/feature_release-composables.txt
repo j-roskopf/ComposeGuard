@@ -6,3 +6,9 @@ restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MyComposa
 restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Test(
   unstable test: TestDataClass
 )
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Test2(
+  unstable test: TestDataClass
+)
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Test3(
+  unstable test: TestDataClass
+)
