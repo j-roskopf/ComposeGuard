@@ -1,6 +1,6 @@
 # Changelog
 
-# 2.3.1
+# 2.3.2
 
 * Add opt in flag for reporting all errors on check task
 ```kts

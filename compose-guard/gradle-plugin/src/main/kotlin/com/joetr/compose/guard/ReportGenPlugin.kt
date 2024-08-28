@@ -146,7 +146,7 @@ public class ReportGenPlugin : Plugin<Project> {
             project.tasks.register<ComposeCompilerReportCheckTask>(
                 name = taskName,
             ) {
-                if (project.hasNonEmptyKotlinSourceSets()) {
+                if (project.hasNonEmptyKotlinSourceSets() && project.layout.dir(genExtension.outputDirectory).get().asFile.exists()) {
                     outputDirectory.set(project.layout.dir(genExtension.outputDirectory))
                 }
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
