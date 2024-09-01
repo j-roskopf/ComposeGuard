@@ -419,6 +419,48 @@ class ComposeCompilerReportCheckTaskConfigurationTest {
     }
 
     @Test
+    fun `if baseline, when reportAllOnMissingBaseline enabled baseline is still used`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/53
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """                    
+                    composeGuardCheck {
+                        reportAllOnMissingBaseline.set(true)
+                    }
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            data class UnstableParamClass(var value: String)
+
+            @Composable
+            fun TestComposable(unstableClass: UnstableParamClass) {
+                Text(text = unstableClass.value )
+                }
+            """.trimIndent(),
+        )
+
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+        val generateResult = project.execute(generateTask)
+
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+
+        assertThat(checkResult).task(checkTask).succeeded()
+        assertThat(generateResult).task(generateTask).succeeded()
+    }
+
+    @Test
     fun `if no baseline, check reports no issues when reportAllOnMissingBaseline enabled and there are no errors`() {
         // https://github.com/j-roskopf/ComposeGuard/issues/53
 

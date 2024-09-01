@@ -83,7 +83,7 @@ composeGuardCheck {
 
     /**
      * If baseline metrics are missing, the check task will no longer fail and will instead just report
-     * all checks. Baseline metrics will be effectively ignored when this is set.
+     * all checks. 
      */
     reportAllOnMissingBaseline = true // defaults to false
 }

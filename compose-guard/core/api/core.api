@@ -261,5 +261,6 @@ public final class com/joetr/compose/guard/core/utils/FileUtilsKt {
 	public static final fun ensureDirectory (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
 	public static final fun ensureDirectoryIsNotEmpty (Ljava/io/File;Lkotlin/jvm/functions/Function0;)V
 	public static final fun ensureVariantsExistsInDirectory (Ljava/io/File;Ljava/lang/String;)V
+	public static final fun variantsExistsInDirectory (Ljava/io/File;Ljava/lang/String;)Z
 }
 

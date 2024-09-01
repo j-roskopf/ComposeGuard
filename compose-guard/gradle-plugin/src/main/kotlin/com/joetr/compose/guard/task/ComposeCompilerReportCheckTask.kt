@@ -28,6 +28,7 @@ import com.joetr.compose.guard.ComposeCompilerCheckExtension
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
 import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
 import com.joetr.compose.guard.core.utils.ensureVariantsExistsInDirectory
+import com.joetr.compose.guard.core.utils.variantsExistsInDirectory
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.ListProperty
@@ -156,16 +157,17 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
                 }
 
             val goldenMetrics =
-                if (reportAllOnMissingBaseline.get()) {
-                    ComposeCompilerMetricsProvider(
-                        ComposeCompilerRawReportProvider.Empty(),
-                    )
-                } else {
+                if (variantsExistsInDirectory(genOutputDirectory.resolve(compilationTaskName.get()), compilationVariant.get())) {
+                    // use it
                     ComposeCompilerMetricsProvider(
                         ComposeCompilerRawReportProvider.FromDirectory(
                             directory = goldenDirectory,
                             variant = compilationVariant.get(),
                         ),
+                    )
+                } else {
+                    ComposeCompilerMetricsProvider(
+                        ComposeCompilerRawReportProvider.Empty(),
                     )
                 }
 
