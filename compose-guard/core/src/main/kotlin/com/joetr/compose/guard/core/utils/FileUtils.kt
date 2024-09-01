@@ -67,6 +67,19 @@ public fun ensureVariantsExistsInDirectory(
     }
 }
 
+public fun variantsExistsInDirectory(
+    directory: File,
+    variant: String,
+): Boolean {
+    val files = directory.listFiles() ?: emptyArray()
+    val variantFiles =
+        files.filter {
+            it.name.contains(variant)
+        }.size
+
+    return variantFiles > 0
+}
+
 public inline fun ensureDirectoryIsNotEmpty(
     directory: File,
     lazyMessage: () -> Any,
