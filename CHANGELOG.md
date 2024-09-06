@@ -1,6 +1,10 @@
 # Changelog
 
-# 2.3.2
+# 2.3.4
+
+Internal updates. Should have no impact to consumers.
+
+# 2.3.3
 
 * Add opt in flag for reporting all errors on check task
 ```kts
