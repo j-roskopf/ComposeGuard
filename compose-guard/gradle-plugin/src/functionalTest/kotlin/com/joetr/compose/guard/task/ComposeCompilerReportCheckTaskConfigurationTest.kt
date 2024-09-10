@@ -29,6 +29,7 @@ import com.joetr.compose.guard.task.infra.Plugins
 import com.joetr.compose.guard.task.infra.asserts.failed
 import com.joetr.compose.guard.task.infra.asserts.succeeded
 import com.joetr.compose.guard.task.infra.asserts.task
+import com.joetr.compose.guard.task.infra.asserts.upToDate
 import com.joetr.compose.guard.task.infra.execute
 import com.joetr.compose.guard.task.infra.executeAndFail
 import org.junit.Test
@@ -394,7 +395,7 @@ class ComposeCompilerReportCheckTaskConfigurationTest {
 
         val generateTask = ":android:releaseComposeCompilerGenerate"
         val generateResult = project.execute(generateTask)
-        assertThat(generateResult).task(generateTask).succeeded()
+        assertThat(generateResult).task(generateTask).upToDate()
 
         val composableReport =
             project.projectDir("android").resolve("newComposeReports/android_release-composables.txt").toFile()
