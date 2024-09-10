@@ -214,20 +214,29 @@ public class ReportGenPlugin : Plugin<Project> {
         val checkExtension = extensions.getByType<ComposeCompilerCheckExtension>()
         val composeGuardExtension = extensions.getByType<ComposeCompilerExtension>()
 
-        val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
-
-        // if output directory doesn't exist, re-run kotlin compile task
-        tasks.withType(KotlinJvmCompile::class.java).configureEach(
-            object : Action<KotlinJvmCompile> {
-                override fun execute(t: KotlinJvmCompile) {
-                    t.outputs.upToDateWhen {
-                        isGenDirectoryNotEmpty
-                    }
-                }
-            },
-        )
-
         if (composeGuardExtension.configureKotlinTasks.get()) {
+            // if output directory doesn't exist, re-run kotlin compile task
+            tasks.withType(KotlinJvmCompile::class.java).configureEach(
+                object : Action<KotlinJvmCompile> {
+                    override fun execute(t: KotlinJvmCompile) {
+                        val isCheckTask =
+                            gradle.startParameter.taskNames.any {
+                                it.contains(CHECK_TASK_NAME)
+                            }
+                        val isWriteTask =
+                            gradle.startParameter.taskNames.any {
+                                it.contains(GENERATE_TASK_NAME)
+                            }
+                        if (composeGuardExtension.configureKotlinTasks.get() && (isWriteTask || isCheckTask)) {
+                            val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
+                            t.outputs.upToDateWhen {
+                                isGenDirectoryNotEmpty
+                            }
+                        }
+                    }
+                },
+            )
+
             project.tasks.withType(KotlinCompile::class.java).configureEach(
                 object : Action<KotlinCompile<*>> {
                     override fun execute(t: KotlinCompile<*>) {
