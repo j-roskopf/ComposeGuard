@@ -1,8 +1,17 @@
 # Changelog
 
+# 2.3.6
+
+* Fix configuration cache issue
+
+# 2.3.5
+
+* Don't configure `KotlinJvmCompile` if `configureKotlinTasks` is disabled
+* Check for write / check task in start parameters before setting output up to date with kotlin compile task
+
 # 2.3.4
 
-Internal updates. Should have no impact to consumers.
+* Internal updates. Should have no impact to consumers.
 
 # 2.3.3
 
