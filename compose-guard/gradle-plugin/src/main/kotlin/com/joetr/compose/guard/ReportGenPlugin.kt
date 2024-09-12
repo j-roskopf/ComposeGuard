@@ -228,8 +228,8 @@ public class ReportGenPlugin : Plugin<Project> {
                                 it.contains(GENERATE_TASK_NAME)
                             }
                         if (composeGuardExtension.configureKotlinTasks.get() && (isWriteTask || isCheckTask)) {
-                            val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
                             t.outputs.upToDateWhen {
+                                val isGenDirectoryNotEmpty = genExtension.outputDirectory.get().list()?.isNotEmpty() == true
                                 isGenDirectoryNotEmpty
                             }
                         }
