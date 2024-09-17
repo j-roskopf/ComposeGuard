@@ -146,9 +146,6 @@ public class ReportGenPlugin : Plugin<Project> {
             project.tasks.register<ComposeCompilerReportCheckTask>(
                 name = taskName,
             ) {
-                if (project.hasNonEmptyKotlinSourceSets() && project.layout.dir(genExtension.outputDirectory).get().asFile.exists()) {
-                    outputDirectory.set(project.layout.dir(genExtension.outputDirectory))
-                }
                 genOutputDirectoryPath.set(genExtension.outputDirectory.get().absolutePath)
                 checkOutputDirectoryPath.set(checkExtension.outputDirectory.get().absolutePath)
 
@@ -180,7 +177,6 @@ public class ReportGenPlugin : Plugin<Project> {
 
                 kotlinSourceSets.set(project.getKotlinSources())
                 taskNameProperty.set(taskName)
-                genFiles.set(genExtension.outputDirectory.get().listFiles()?.toList())
             }
 
         // make task depend on compile kotlin task
