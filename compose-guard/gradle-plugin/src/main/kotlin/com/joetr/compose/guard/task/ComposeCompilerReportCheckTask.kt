@@ -30,11 +30,9 @@ import com.joetr.compose.guard.core.ComposeCompilerRawReportProvider
 import com.joetr.compose.guard.core.utils.ensureVariantsExistsInDirectory
 import com.joetr.compose.guard.core.utils.variantsExistsInDirectory
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
@@ -44,13 +42,6 @@ import java.io.File
 import kotlin.io.path.Path
 
 internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
-    /**
-     * The output directory of this task - by default build/compose_reports
-     */
-    @get:InputDirectory
-    @get:Optional // not present on first run or on modules with empty source sets
-    abstract val outputDirectory: DirectoryProperty
-
     /**
      * The output directory of the generate task - by default module/compose_reports
      */
@@ -121,10 +112,6 @@ internal abstract class ComposeCompilerReportCheckTask : DefaultTask() {
 
     @get:Input
     abstract val taskNameProperty: Property<String>
-
-    @get:InputFiles
-    @get:Optional
-    abstract val genFiles: ListProperty<File>
 
     @TaskAction
     fun check() {
