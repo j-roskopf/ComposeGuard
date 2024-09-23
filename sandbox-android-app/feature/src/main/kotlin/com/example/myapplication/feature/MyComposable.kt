@@ -16,18 +16,3 @@ fun MyComposable(modifier: Modifier = Modifier, testClass: TestDataClass = TestD
 @DeepCopy
 data class TestDataClass(var name: String)
 
-@Composable
-fun Test(test: TestDataClass) {
-    Text(test.name)
-}
-
-@Composable
-fun Test2(test: TestDataClass) {
-    Text(test.name)
-}
-
-@Composable
-fun Test3(test: TestDataClass) {
-    Text(test.name)
-}
-

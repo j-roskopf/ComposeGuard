@@ -41,6 +41,14 @@ object Plugins {
         )
     }
 
+    internal fun androidLibraryPlugin(apply: Boolean = true): Plugin {
+        return Plugin(
+            id = "com.android.library",
+            version = if (apply.not()) ANDROID_GRADLE_PLUGIN_VERSION else null,
+            apply = apply,
+        )
+    }
+
     internal fun kotlinAndroid(
         apply: Boolean = true,
         kotlinVersion: String,

@@ -44,19 +44,21 @@ internal object ComposableReportParser : Parser<String, ComposablesReport> {
      *
      * Link with further explanation with this regex selected:
      *
-     * https://regex101.com/r/gI9mqs/2
+     * https://regex101.com/r/gI9mqs/3
      */
     private val REGEX_COMPOSABLE_PARAMETERS =
         (
-            // 1st capture group, matches the optional unused at the beginning
-            "(unused )?" +
-                // 2nd capture group, matches the required stable or unstable
-                "(stable|unstable)" +
-                // 3rd capture group, matches name + type (including optional question mark on type)
+            // 1st capture group, matches 0 or more spaces at beginning
+            "(\\s*)" +
+                // 2nd capture group, matches the optional unused at the beginning
+                "(unused )?" +
+                // 3rd capture group, matches the required stable or unstable (or missing to imply runtime)
+                "(stable|unstable)?" +
+                // 4th capture group, matches name + type (including optional question mark on type)
                 "(.*:\\s\\w*\\??)" +
-                // 4th optional capture group, matches the equal sign in case of default parameter
+                // 5th optional capture group, matches the equal sign in case of default parameter
                 "(\\s=\\s|)?" +
-                // 5th capture group, matches the optional @static or @dynamic on default properties
+                // 6th capture group, matches the optional @static or @dynamic on default properties
                 "(@static|@dynamic|)?" +
                 // captures remaining value
                 ".*"
@@ -117,10 +119,10 @@ internal object ComposableReportParser : Parser<String, ComposablesReport> {
                 .map {
                     ComposableDetail.Parameter(
                         raw = it[0],
-                        unused = it[1].isNotEmpty(),
-                        condition = ConditionMapper.from(it[2]),
-                        details = it[3],
-                        stabilityStatus = StabilityStatusMapper.from(it[5]),
+                        unused = it[2].isNotEmpty(),
+                        condition = ConditionMapper.from(it[3]),
+                        details = it[4],
+                        stabilityStatus = StabilityStatusMapper.from(it[6]),
                     )
                 }.toList()
 

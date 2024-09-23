@@ -546,4 +546,124 @@ class ComposeCompilerReportCheckTaskConfigurationTest {
         assertThat(checkResult.output).contains("New unstable parameters were added in the following @Composables!")
         assertThat(checkResult).task(checkTask).failed()
     }
+
+    @Test
+    fun `assumeRuntimeStabilityAsUnstable correctly errors out when runtime stability parameters are added`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/62
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """                    
+                    composeGuardCheck {
+                        assumeRuntimeStabilityAsUnstable.set(true)
+                    }
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            @Composable
+            fun TestComposable(value: String) {
+                Text(text = value )
+                }
+               
+            """.trimIndent(),
+        )
+
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+            import com.example.myapplication.feature.TestClassFromAnotherModule
+
+            @Composable
+            fun TestComposable(value: String, testClassFromAnotherModule: TestClassFromAnotherModule) {
+                Text(text = testClassFromAnotherModule.name )
+                Text(text = value)
+                }
+               
+            """.trimIndent(),
+        )
+
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.executeAndFail(checkTask)
+        assertThat(checkResult.output).contains("New unstable parameters were added in the following @Composables!")
+        assertThat(checkResult.output).contains("Please note, since `assumeRuntimeStabilityAsUnstable` is enabled")
+        assertThat(checkResult.output).contains(
+            "FunctionAndParameter(functionName=TestComposable, " +
+                "parameterName=testClassFromAnotherModule, parameterType=TestClassFromAnotherModule)",
+        )
+        assertThat(checkResult).task(checkTask).failed()
+    }
+
+    @Test
+    fun `assumeRuntimeStabilityAsUnstable does not error out when runtime stability parameters are added if not configured`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/62
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalBuildScriptForAndroidSubProject =
+                    """                    
+                    composeGuardCheck {
+                        assumeRuntimeStabilityAsUnstable.set(false)
+                    }
+                    """.trimIndent(),
+                kotlinVersion = Plugins.KOTLIN_VERSION_2_0_0,
+            )
+
+        // modify the composable to introduce a new unstable parameter
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+
+            @Composable
+            fun TestComposable(value: String) {
+                Text(text = value )
+                }
+               
+            """.trimIndent(),
+        )
+
+        val generateTask = ":android:releaseComposeCompilerGenerate"
+        val generateResult = project.execute(generateTask)
+        assertThat(generateResult).task(generateTask).succeeded()
+
+        project.projectDir("android").resolve("src/main/kotlin/com/example/myapplication/TestComposable.kt").toFile().writeText(
+            """
+            package com.example.myapplication
+
+            import androidx.compose.material3.Text
+            import androidx.compose.runtime.Composable
+            import com.example.myapplication.feature.TestClassFromAnotherModule
+
+            @Composable
+            fun TestComposable(value: String, testClassFromAnotherModule: TestClassFromAnotherModule) {
+                Text(text = testClassFromAnotherModule.name )
+                Text(text = value)
+                }
+               
+            """.trimIndent(),
+        )
+
+        val checkTask = ":android:releaseComposeCompilerCheck"
+        val checkResult = project.execute(checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+    }
 }

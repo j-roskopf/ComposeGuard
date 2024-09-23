@@ -29,6 +29,7 @@ import com.autonomousapps.kit.gradle.GradleProperties
 import com.autonomousapps.kit.gradle.Plugin
 import com.joetr.compose.guard.task.infra.Plugins.ANDROID_GRADLE_PLUGIN_VERSION
 import com.joetr.compose.guard.task.infra.Plugins.androidAppPlugin
+import com.joetr.compose.guard.task.infra.Plugins.androidLibraryPlugin
 import com.joetr.compose.guard.task.infra.Plugins.composePlugin
 import com.joetr.compose.guard.task.infra.Plugins.kotlinAndroid
 import com.joetr.compose.guard.task.infra.Plugins.multiplatform
@@ -124,5 +125,6 @@ class BuildFixture : AbstractGradleProject() {
     companion object {
         val REPORT_GEN_PLUGIN = reportGenPlugin()
         val ANDROID_APP_PLUGIN = androidAppPlugin()
+        val ANDROID_LIB_PLUGIN = androidLibraryPlugin()
     }
 }
