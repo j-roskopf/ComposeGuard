@@ -38,6 +38,7 @@ public interface ComposeCompilerCheckExtension {
     public val errorOnNewRestartableButNotSkippableComposables: Property<Boolean>
     public val ignoreUnstableParamsOnSkippableComposables: Property<Boolean>
     public val reportAllOnMissingBaseline: Property<Boolean>
+    public val assumeRuntimeStabilityAsUnstable: Property<Boolean>
 
     public companion object {
         private const val NAME = "composeGuardCheck"
@@ -54,6 +55,7 @@ public interface ComposeCompilerCheckExtension {
                 errorOnNewRestartableButNotSkippableComposables.convention(true)
                 ignoreUnstableParamsOnSkippableComposables.convention(false)
                 reportAllOnMissingBaseline.convention(false)
+                assumeRuntimeStabilityAsUnstable.convention(false)
             }
 
         /**

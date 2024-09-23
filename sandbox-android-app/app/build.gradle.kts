@@ -5,7 +5,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose").version("2.0.0")
 }
 
-
+composeGuardCheck {
+    assumeRuntimeStabilityAsUnstable.set(true)
+}
 
 android {
     namespace = "com.example.myapplication"
@@ -45,10 +47,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
-
-composeCompiler {
-    enableStrongSkippingMode.set(true)
 }
 
 dependencies {

@@ -24,6 +24,7 @@
 package com.joetr.compose.guard
 
 import com.joetr.compose.guard.core.ComposeCompilerMetricsProvider
+import com.joetr.compose.guard.core.model.Condition
 import com.joetr.compose.guard.core.model.Condition.UNSTABLE
 import com.joetr.compose.guard.core.model.StabilityStatus
 import com.joetr.compose.guard.core.model.composables.ComposableDetail
@@ -56,6 +57,11 @@ internal object ComposeChecks {
                         composeCompilerCheckExtension
                             .get()
                             .ignoreUnstableParamsOnSkippableComposables
+                            .get(),
+                    assumeRuntimeStabilityAsUnstable =
+                        composeCompilerCheckExtension
+                            .get()
+                            .assumeRuntimeStabilityAsUnstable
                             .get(),
                 )
         }
@@ -182,16 +188,20 @@ internal object ComposeChecks {
         checkedMetrics: ComposeCompilerMetricsProvider,
         goldenMetrics: ComposeCompilerMetricsProvider,
         ignoreUnstableParamsOnSkippableComposables: Boolean,
+        assumeRuntimeStabilityAsUnstable: Boolean,
     ): List<String> {
         val checkedUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
         checkedMetrics.getComposablesReport().composables.forEach { composable ->
             composable.params.filter {
-                it.condition == UNSTABLE &&
-                    if (ignoreUnstableParamsOnSkippableComposables) {
-                        composable.isSkippable.not()
-                    } else {
-                        true
-                    }
+                (assumeRuntimeStabilityAsUnstable && it.condition == Condition.MISSING) ||
+                    (
+                        it.condition == UNSTABLE &&
+                            if (ignoreUnstableParamsOnSkippableComposables) {
+                                composable.isSkippable.not()
+                            } else {
+                                true
+                            }
+                    )
             }.forEach { param ->
                 checkedUnstableParamsMap[
                     ComposableDetail.FunctionAndParameter(
@@ -206,12 +216,15 @@ internal object ComposeChecks {
         val goldenUnstableParamsMap = mutableMapOf<ComposableDetail.FunctionAndParameter, String>()
         goldenMetrics.getComposablesReport().composables.forEach { composable ->
             composable.params.filter {
-                it.condition == UNSTABLE &&
-                    if (ignoreUnstableParamsOnSkippableComposables) {
-                        composable.isSkippable.not()
-                    } else {
-                        true
-                    }
+                (assumeRuntimeStabilityAsUnstable && it.condition == Condition.MISSING) ||
+                    (
+                        it.condition == UNSTABLE &&
+                            if (ignoreUnstableParamsOnSkippableComposables) {
+                                composable.isSkippable.not()
+                            } else {
+                                true
+                            }
+                    )
             }.forEach { param ->
                 goldenUnstableParamsMap[
                     ComposableDetail.FunctionAndParameter(
@@ -228,7 +241,13 @@ internal object ComposeChecks {
         return if (newUnstableParamsMap.isNotEmpty()) {
             listOf(
                 "New unstable parameters were added in the following @Composables! \n" +
-                    newUnstableParamsMap.keys.joinToString(separator = "\n") { it.toString() },
+                    if (assumeRuntimeStabilityAsUnstable) {
+                        "Please note, since `assumeRuntimeStabilityAsUnstable` is enabled, " +
+                            "Compose Guard may not correctly be able to infer" +
+                            " the stability of parameters from across module boundaries \n"
+                    } else {
+                        ""
+                    } + newUnstableParamsMap.keys.joinToString(separator = "\n") { it.toString() },
             )
         } else {
             emptyList()

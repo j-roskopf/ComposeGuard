@@ -86,6 +86,13 @@ composeGuardCheck {
      * all checks. 
      */
     reportAllOnMissingBaseline = true // defaults to false
+
+    /**
+     * Stability cannot be automatically inferred across module boundaries. With this option enabled,
+     * any properties marked as 'runtime' stability will be inferred to be unstable. If you can guarantee properties
+     * as stable across module boundaries, mark them as so. 
+     */
+    assumeRuntimeStabilityAsUnstable = true // defaults to false
 }
 ```
 

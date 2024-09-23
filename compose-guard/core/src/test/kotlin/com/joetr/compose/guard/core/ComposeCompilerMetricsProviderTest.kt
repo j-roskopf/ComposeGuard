@@ -35,7 +35,7 @@ class ComposeCompilerMetricsProviderTest {
     @Rule
     var folder: TemporaryFolder = TemporaryFolder()
 
-    lateinit var reportDirectory: File
+    private lateinit var reportDirectory: File
 
     @Before
     fun before() {

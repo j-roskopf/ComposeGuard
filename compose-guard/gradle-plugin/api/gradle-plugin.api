@@ -1,5 +1,6 @@
 public abstract interface class com/joetr/compose/guard/ComposeCompilerCheckExtension {
 	public static final field Companion Lcom/joetr/compose/guard/ComposeCompilerCheckExtension$Companion;
+	public abstract fun getAssumeRuntimeStabilityAsUnstable ()Lorg/gradle/api/provider/Property;
 	public abstract fun getErrorOnNewDynamicProperties ()Lorg/gradle/api/provider/Property;
 	public abstract fun getErrorOnNewRestartableButNotSkippableComposables ()Lorg/gradle/api/provider/Property;
 	public abstract fun getErrorOnNewUnstableClasses ()Lorg/gradle/api/provider/Property;

@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.3.8
+
+* Add `assumeRuntimeStabilityAsUnstable` under check extension. See README.md for more info
+
 # 2.3.6
 
 * Fix configuration cache issue

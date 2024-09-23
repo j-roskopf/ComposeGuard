@@ -1,8 +1,12 @@
 restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Greeting(
   stable name: String
+  unused stable unusedName: String
   stable modifier: Modifier? = @static Companion
 )
-restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun TestComposable(
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun NewComposable(
+  someDataClassFromAnotherModule: SomeDataClassFromAnotherModule
+)
+restartable scheme("[androidx.compose.ui.UiComposable]") fun TestComposable(
   unstable test: Test
 )
 restartable skippable scheme("[0, [0]]") fun MyApplicationTheme(
