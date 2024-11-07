@@ -12,6 +12,7 @@
   <a href="https://mailchi.mp/kotlinweekly/kotlin-weekly-408"><img alt="Kotlin Weekly" src="https://img.shields.io/badge/News-Kotlin_Weekly_%23408-palevioletred?logo=kotlin"/></a>
   <a href="https://jetc.dev/issues/215#github-j-roskopf--composeguard"><img alt="Jetpack Compose Newsletter" src="https://img.shields.io/badge/News-Jetpack_Compose_Newsletter_%23215-palevioletred?logo=jetpackcompose"/></a>
   <a href="https://jetc.dev/issues/216#compose-guard-detecting-regressions-in-jetpack-compose"><img alt="Jetpack Compose Newsletter" src="https://img.shields.io/badge/News-Jetpack_Compose_Newsletter_%23216-palevioletred?logo=jetpackcompose"/></a>
+    <a href="https://hitsofcode.com/github/j-roskopf/ComposeGuard/view?branch=main"><img src="https://hitsofcode.com/github/j-roskopf/ComposeGuard?branch=main"/></a>
 </p><br>
 
 
