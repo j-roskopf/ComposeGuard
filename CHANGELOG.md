@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.4.0
+
+* Allow running compose guard and KSP tasks of different flavors at the same time
+
 # 2.3.8
 
 * Add `assumeRuntimeStabilityAsUnstable` under check extension. See README.md for more info

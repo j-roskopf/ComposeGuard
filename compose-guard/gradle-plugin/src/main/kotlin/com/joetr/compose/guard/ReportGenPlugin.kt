@@ -48,7 +48,6 @@ import org.jetbrains.kotlin.gradle.targets.js.KotlinJsTarget
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.io.File
 
 private const val REPORT_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination="
 private const val METRIC_PARAM = "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination="
@@ -113,7 +112,6 @@ public class ReportGenPlugin : Plugin<Project> {
             object : Action<ComposeCompilerReportGenerateTask> {
                 override fun execute(t: ComposeCompilerReportGenerateTask) {
                     t.dependsOn(project.tasks.named(compileTaskDependsOn))
-                    t.inputs.files(project.getKotlinSources())
                 }
             },
         )
@@ -175,7 +173,6 @@ public class ReportGenPlugin : Plugin<Project> {
                 )
                 reportAllOnMissingBaseline.set(checkExtension.reportAllOnMissingBaseline)
 
-                kotlinSourceSets.set(project.getKotlinSources())
                 taskNameProperty.set(taskName)
             }
 
@@ -452,12 +449,5 @@ public class ReportGenPlugin : Plugin<Project> {
                     it.kotlin.isEmpty.not()
             }
         return containsNonEmptyMainSourceSet
-    }
-
-    private fun Project.getKotlinSources(): List<File> {
-        val kotlinSourceSet = extensions.getByType(KotlinProjectExtension::class.java).sourceSets
-        return kotlinSourceSet.flatMap {
-            it.kotlin
-        }
     }
 }

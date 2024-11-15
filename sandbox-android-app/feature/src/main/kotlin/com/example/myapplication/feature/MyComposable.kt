@@ -13,6 +13,14 @@ fun MyComposable(modifier: Modifier = Modifier, testClass: TestDataClass = TestD
     )
 }
 
+@Composable
+fun MyNewComposable(modifier: Modifier = Modifier, testClass: TestDataClass = TestDataClass("default"), nonDefaultParameter: Int) {
+    Text(
+        modifier = modifier,
+        text = testClass.name.plus(nonDefaultParameter),
+    )
+}
+
 @DeepCopy
 data class TestDataClass(var name: String)
 
