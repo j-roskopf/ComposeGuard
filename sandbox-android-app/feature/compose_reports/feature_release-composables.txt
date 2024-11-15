@@ -3,3 +3,8 @@ restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MyComposa
   unstable testClass: TestDataClass? = @dynamic TestDataClass("default")
   stable nonDefaultParameter: Int
 )
+restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun MyNewComposable(
+  stable modifier: Modifier? = @static Companion
+  unstable testClass: TestDataClass? = @dynamic TestDataClass("default")
+  stable nonDefaultParameter: Int
+)

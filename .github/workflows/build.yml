@@ -63,6 +63,10 @@ jobs:
         working-directory: ./sandbox-android-app
         run: ./gradlew releaseComposeCompilerCheck --rerun-tasks
 
+      - name: Sandbox Android Check Compiler Metrics
+        working-directory: ./sandbox-android-app
+        run: ./gradlew releaseComposeCompilerCheck kspDebugKotlin --rerun-tasks
+
       - name: Grant Permission to Execute Sandbox Multiplatform
         working-directory: ./sandbox-multiplatform-app
         run: chmod +x gradlew

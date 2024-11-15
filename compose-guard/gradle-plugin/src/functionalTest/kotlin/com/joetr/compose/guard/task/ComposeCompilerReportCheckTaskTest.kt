@@ -722,4 +722,45 @@ class ComposeCompilerReportCheckTaskTest {
         val newCheckResult = project.executeAndFail(checkTask)
         assertThat(newCheckResult).task(checkTask).failed()
     }
+
+    @Test
+    fun `can run ksp in parallel`() {
+        // https://github.com/j-roskopf/ComposeGuard/issues/65
+
+        val project =
+            BasicAndroidProject.getComposeProject(
+                additionalPluginsForAndroidSubProject =
+                    listOf(
+                        Plugin(
+                            id = "com.google.devtools.ksp",
+                            version = "1.9.22-1.0.16",
+                            apply = true,
+                        ),
+                    ),
+                additionalDependenciesForAndroidSubProject =
+                    """
+                    ksp("com.bennyhuo.kotlin:deepcopy-compiler-ksp:1.9.20-1.0.1")
+                    implementation("com.bennyhuo.kotlin:deepcopy-runtime:1.9.20-1.0.1")
+                    """.trimIndent(),
+            )
+
+        // generate golden
+        val debugGenerateTask = ":android:debugComposeCompilerGenerate"
+        val generateResult = project.execute("--configuration-cache", debugGenerateTask)
+        assertThat(generateResult).task(debugGenerateTask).succeeded()
+
+        // check succeeds
+        val checkTask = ":android:debugComposeCompilerCheck"
+        val checkResult = project.execute("--configuration-cache", checkTask)
+        assertThat(checkResult).task(checkTask).succeeded()
+
+        // ksp
+        val kspTask = ":android:kspReleaseKotlin"
+        val kspResult = project.execute("--configuration-cache", kspTask)
+        assertThat(kspResult).task(kspTask).succeeded()
+
+        val kspAndCheckResult = project.execute(checkTask, kspTask, "--rerun-tasks")
+        assertThat(kspAndCheckResult).task(kspTask).succeeded()
+        assertThat(kspAndCheckResult).task(checkTask).succeeded()
+    }
 }
