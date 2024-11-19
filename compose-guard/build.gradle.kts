@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val GROUP: String by project
@@ -25,12 +27,23 @@ subprojects {
     apply(plugin = "com.diffplug.spotless")
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
-            target("**/*.kt")
-            targetExclude("${layout.buildDirectory}/**/*.kt")
-            targetExclude("bin/**/*.kt")
-
+            target("src/**/*.kt")
             ktlint()
+            indentWithSpaces()
+            endWithNewline()
             licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+        }
+
+        format("misc") {
+            target("*.md", ".gitignore", "*.xml", "*.gradle")
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+
+        kotlinGradle {
+            ktlint()
+            trimTrailingWhitespace()
+            endWithNewline()
         }
     }
 }
