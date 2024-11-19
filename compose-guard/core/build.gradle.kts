@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 val GROUP: String by project
 val VERSION_NAME: String by project
 val YEAR: String by project
@@ -53,7 +55,6 @@ mavenPublishing {
         }
     }
 }
-
 
 dependencies {
     implementation(kotlin("stdlib"))

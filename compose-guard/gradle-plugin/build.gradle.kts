@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 val GROUP: String by project
 val VERSION_NAME: String by project
 val YEAR: String by project
@@ -9,7 +11,6 @@ val DEVELOPER_NAME: String by project
 val DEVELOPER_URL: String by project
 val PROJECT_CONNECTION: String by project
 val DEVELOPER_CONNECTION: String by project
-
 
 plugins {
     `kotlin-dsl`
