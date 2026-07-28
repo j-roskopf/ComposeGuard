@@ -1,6 +1,6 @@
 restartable skippable fun ImageViewerCommon(
   dependencies: Dependencies
-  externalEvents: Flow<ExternalImageViewerEvent>? = @dynamic emptyFlow()
+  unstable externalEvents: Flow<ExternalImageViewerEvent>? = @dynamic emptyFlow()
 )
 restartable skippable scheme("[0, [0]]") fun ImageViewerTheme(
   stable content: Function2<Composer, Int, Unit>
@@ -8,8 +8,8 @@ restartable skippable scheme("[0, [0]]") fun ImageViewerTheme(
 restartable skippable fun CameraScreen(
   stable onBack: Function0<Unit>
 )
-restartable skippable fun CircularButton(
-  stable image: Painter
+restartable fun CircularButton(
+  unstable image: Painter
   stable onClick: Function0<Unit>
 )
 restartable skippable fun FullscreenImage(
@@ -22,13 +22,13 @@ restartable skippable fun FullscreenImageBar(
   localization: Localization
   unused stable pictureName: String?
   stable onBack: Function0<Unit>
-  unused filters: List<FilterType>
-  unused selectedFilters: Set<FilterType>
+  unused unstable filters: List<FilterType>
+  unused unstable selectedFilters: Set<FilterType>
   unused stable onSelectFilter: Function1<FilterType, Unit>
 )
-restartable skippable fun FilterButtons(
-  filters: List<FilterType>
-  selectedFilters: Set<FilterType>
+restartable fun FilterButtons(
+  unstable filters: List<FilterType>
+  unstable selectedFilters: Set<FilterType>
   stable onSelectFilter: Function1<FilterType, Unit>
 )
 restartable skippable fun FilterButton(
@@ -40,15 +40,15 @@ fun getFilterImage(
   stable active: Boolean
   stable type: FilterType
 ): Painter
-restartable skippable fun GalleryScreen(
-  galleryPage: GalleryPage
-  unused photoGallery: PhotoGallery
+restartable fun GalleryScreen(
+  unstable galleryPage: GalleryPage
+  unused unstable photoGallery: PhotoGallery
   dependencies: Dependencies
   stable onClickPreviewPicture: Function1<PictureData, Unit>
   stable onMakeNewMemory: Function0<Unit>
 )
-restartable skippable fun SquaresGalleryView(
-  images: List<PictureData>
+restartable fun SquaresGalleryView(
+  unstable images: List<PictureData>
   selectedImage: PictureData
   stable onSelect: Function1<PictureData, Unit>
 )
@@ -56,8 +56,8 @@ restartable skippable fun MakeNewMemoryMiniature(
   stable <this>: BoxScope
   stable onClick: Function0<Unit>
 )
-restartable skippable fun SquareMiniature(
-  image: ImageBitmap
+restartable fun SquareMiniature(
+  unstable image: ImageBitmap
   stable isHighlighted: Boolean
   stable onClick: Function0<Unit>
 )
@@ -78,14 +78,14 @@ restartable skippable fun LoadingScreen(
 restartable skippable fun MemoryScreen(
   memoryPage: MemoryPage
   dependencies: Dependencies
-  unused photoGallery: PhotoGallery
+  unused unstable photoGallery: PhotoGallery
   localization: Localization
   stable onSelectRelatedMemory: Function1<PictureData, Unit>
   stable onBack: Function0<Unit>
   stable onHeaderClick: Function1<PictureData, Unit>
 )
-restartable skippable fun MemoryHeader(
-  bitmap: ImageBitmap?
+restartable fun MemoryHeader(
+  unstable bitmap: ImageBitmap?
   stable onClick: Function0<Unit>
 )
 restartable skippable fun MagicButtonOverlay(
@@ -110,9 +110,9 @@ restartable skippable fun RelatedMemory(
   galleryEntry: PictureData
   stable onSelectRelatedMemory: Function1<PictureData, Unit>
 )
-restartable skippable fun Miniature(
+restartable fun Miniature(
   stable picture: Picture
-  image: ImageBitmap?
+  unstable image: ImageBitmap?
   stable onClickSelect: Function0<Unit>
   stable onClickFullScreen: Function0<Unit>
   stable onClickInfo: Function0<Unit>
@@ -134,7 +134,7 @@ restartable skippable fun Thumbnail(
 restartable skippable fun ThumbnailImage(
   stable modifier: Modifier
   picture: PictureData
-  stable filter: Function1<ImageBitmap, ImageBitmap>? = @static $composer.startReplaceableGroup(777581432)
+  stable filter: Function1<ImageBitmap, ImageBitmap>? = @static $composer.startReplaceableGroup(-1664778682)
 val tmp0_group = $composer.cache(false) {
   {     it  :   ImageBitmap   ->
     it

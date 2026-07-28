@@ -7,6 +7,8 @@ plugins {
     id("com.joetr.compose.guard")
 }
 
+val ktorVersion = extra["ktor.version"]
+
 val copyJsResources = tasks.create("copyJsResourcesWorkaround", Copy::class.java) {
     from(project(":shared").file("src/commonMain/composeResources"))
     into("build/processedResources/js/main")
@@ -74,8 +76,8 @@ kotlin {
         val jsMain by getting {
             dependsOn(jsWasmMain)
             dependencies {
-                implementation("io.ktor:ktor-client-core:2.3.3")
-                implementation("io.ktor:ktor-client-js:2.3.3")
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
         }
         val wasmJsMain by getting {

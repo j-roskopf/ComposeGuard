@@ -4,6 +4,12 @@ stable class drawable {
 stable class string {
   <runtime stability> = Stable
 }
+stable class array {
+  <runtime stability> = Stable
+}
+stable class plurals {
+  <runtime stability> = Stable
+}
 stable class font {
   <runtime stability> = Stable
 }
