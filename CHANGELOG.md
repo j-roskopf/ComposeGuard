@@ -1,5 +1,10 @@
 # Changelog
 
+# 2.5.0
+
+* Upgrade Gradle, AGP, and dependencies
+* Update build workflow to supported GitHub Actions versions
+
 # 2.4.0
 
 * Allow running compose guard and KSP tasks of different flavors at the same time

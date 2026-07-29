@@ -1,0 +1,31 @@
+{
+    "andy-status": {
+        "enabled": true,
+        "PreInvocation": [
+            {
+                "type": "command",
+                "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" working empty",
+                "timeout": 5
+            }
+        ],
+        "Stop": [
+            {
+                "type": "command",
+                "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" done empty fully-idle",
+                "timeout": 5
+            }
+        ],
+        "PreToolUse": [
+            {
+                "matcher": "ask_question|ask_permission",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" blocked allow",
+                        "timeout": 5
+                    }
+                ]
+            }
+        ]
+    }
+}
