@@ -1,5 +1,6 @@
 @file:Suppress("ktlint:standard:property-naming")
 
+import org.gradle.plugins.signing.Sign
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val GROUP: String by project
@@ -24,6 +25,14 @@ tasks.withType<KotlinCompile> {
 }
 
 subprojects {
+    tasks.withType<Sign>().configureEach {
+        onlyIf { project.hasProperty("signing.keyId") }
+    }
+    plugins.withId("signing") {
+        configure<SigningExtension> {
+            isRequired = project.hasProperty("signing.keyId")
+        }
+    }
     apply(plugin = "com.diffplug.spotless")
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {

@@ -31,7 +31,7 @@ object Plugins {
 
     @JvmStatic val KOTLIN_VERSION_2_0_0: String = "2.0.0"
 
-    @JvmStatic val ANDROID_GRADLE_PLUGIN_VERSION = "7.4.0"
+    @JvmStatic val ANDROID_GRADLE_PLUGIN_VERSION = "8.4.2"
 
     internal fun androidAppPlugin(apply: Boolean = true): Plugin {
         return Plugin(

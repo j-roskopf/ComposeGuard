@@ -1,8 +1,0 @@
-unstable class TestDataClass {
-  stable var name: String
-  <runtime stability> = Unstable
-}
-unstable class SomeDataClassFromAnotherModule {
-  stable var text: String
-  <runtime stability> = Unstable
-}

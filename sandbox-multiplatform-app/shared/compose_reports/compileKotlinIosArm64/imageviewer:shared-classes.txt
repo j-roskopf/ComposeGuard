@@ -4,6 +4,12 @@ stable class drawable {
 stable class string {
   <runtime stability> = Stable
 }
+stable class array {
+  <runtime stability> = Stable
+}
+stable class plurals {
+  <runtime stability> = Stable
+}
 stable class font {
   <runtime stability> = Stable
 }
@@ -29,25 +35,25 @@ runtime class FullScreenPage {
   runtime val pictureData: PictureData
   <runtime stability> = Uncertain(PictureData)
 }
-stable class GalleryPage {
-  runtime val photoGallery: PhotoGallery
-  runtime val externalEvents: Flow<ExternalImageViewerEvent>
+unstable class GalleryPage {
+  unstable val photoGallery: PhotoGallery
+  unstable val externalEvents: Flow<ExternalImageViewerEvent>
   stable var galleryStyle$delegate: MutableState<GalleryStyle>
   stable var currentPictureIndex$delegate: MutableState<Int>
-  <runtime stability> = 
+  <runtime stability> = Unstable
 }
-runtime class GalleryEntryWithMetadata {
+unstable class GalleryEntryWithMetadata {
   stable val id: GalleryId
   stable val picture: Picture
-  runtime val thumbnail: ImageBitmap
-  <runtime stability> = Uncertain(ImageBitmap)
+  unstable val thumbnail: ImageBitmap
+  <runtime stability> = Unstable
 }
-stable class PhotoGallery {
+unstable class PhotoGallery {
   runtime val deps: Dependencies
-  runtime val _galleryStateFlow: MutableStateFlow<List<GalleryEntryWithMetadata>>
-  runtime val galleryStateFlow: StateFlow<List<GalleryEntryWithMetadata>>
+  unstable val _galleryStateFlow: MutableStateFlow<List<GalleryEntryWithMetadata>>
+  unstable val galleryStateFlow: StateFlow<List<GalleryEntryWithMetadata>>
   stable val mockedResponse: String
-  <runtime stability> = 
+  <runtime stability> = Unstable
 }
 stable class Picture {
   stable val big: String

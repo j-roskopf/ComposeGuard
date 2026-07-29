@@ -147,7 +147,7 @@ restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Thumbnail
 restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun ThumbnailImage(
   stable modifier: Modifier
   picture: PictureData
-  stable filter: Function1<ImageBitmap, ImageBitmap>? = @static $composer.startReplaceableGroup(777581432)
+  stable filter: Function1<ImageBitmap, ImageBitmap>? = @static $composer.startReplaceableGroup(-1664778682)
 val tmp0_group = $composer.cache(false) {
   {     it  :   ImageBitmap   ->
     it

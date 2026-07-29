@@ -1,0 +1,54 @@
+{
+    "hooks": {
+        "UserPromptSubmit": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" working"
+                    }
+                ]
+            }
+        ],
+        "Stop": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" done"
+                    }
+                ]
+            }
+        ],
+        "PermissionRequest": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" blocked"
+                    }
+                ]
+            }
+        ],
+        "Notification": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" blocked"
+                    }
+                ],
+                "matcher": "permission_prompt|agent_needs_input|elicitation_dialog"
+            },
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$HOME/.andy/bin/andy-status-hook.sh\" done"
+                    }
+                ],
+                "matcher": "idle_prompt|agent_completed"
+            }
+        ]
+    }
+}
