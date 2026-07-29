@@ -1,9 +1,10 @@
 # Changelog
 
-# 2.5.0
+# 2.6.0
 
 * Upgrade Gradle, AGP, and dependencies
-* Update build workflow to supported GitHub Actions versions
+* Update build and release workflows to supported GitHub Actions versions
+* Fix a regression that caused release artifacts to be published unsigned (2.5.0 was never actually released to Maven Central because of this)
 
 # 2.4.0
 

@@ -25,12 +25,13 @@ tasks.withType<KotlinCompile> {
 }
 
 subprojects {
+    val hasSigningCredentials = project.hasProperty("signing.keyId") || project.hasProperty("signingInMemoryKey")
     tasks.withType<Sign>().configureEach {
-        onlyIf { project.hasProperty("signing.keyId") }
+        onlyIf { hasSigningCredentials }
     }
     plugins.withId("signing") {
         configure<SigningExtension> {
-            isRequired = project.hasProperty("signing.keyId")
+            isRequired = hasSigningCredentials
         }
     }
     apply(plugin = "com.diffplug.spotless")
